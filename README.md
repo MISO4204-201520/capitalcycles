@@ -1,4 +1,3 @@
 # capitalcycles
 
-Sitio Web:
-http://yedgar.github.io/capitalcycles.github.io
+Entrega 1 - Página Web: <a href="https://github.com/MISO4204-201520/capitalcycles/wiki" target="_blank">Home</a>
