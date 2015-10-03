@@ -22,12 +22,19 @@ public class Menu {
 	@Column(name="URL")
 	private String url;
 	
-	@Column(name="visible")
+	@Column(name="VISIBLE")
 	private Boolean visible;
 
 	@ManyToMany(mappedBy="menus")
 	private List<Rol> roles;
 		
+	@ManyToOne
+	@JoinColumn(name="MENU_PADRE")
+	private Menu padre;
+	
+	@OneToMany(mappedBy="padre")
+	private List<Menu> submenus;
+	
 	public Integer getId() {
 		return id;
 	}

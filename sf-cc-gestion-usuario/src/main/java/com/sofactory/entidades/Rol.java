@@ -10,6 +10,7 @@ public class Rol {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ID")
 	private Integer id;
 	
 	@Column(name="NOMBRE", unique=true)
