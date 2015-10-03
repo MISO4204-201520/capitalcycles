@@ -21,7 +21,7 @@ public class GestionarUsuarioService extends Application {
 	@GET
 	@Produces("application/json")
 	public List<?> encontrarTodos() {
-		List<Usuario> usuarios = usuarioBeanLocal.encontrarTodos();
+		List<Usuario> usuarios = usuarioBeanLocal.encontrarTodos(Usuario.class);
 		return usuarios;
 	}
 

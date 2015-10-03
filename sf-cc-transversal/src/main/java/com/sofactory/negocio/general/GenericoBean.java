@@ -124,4 +124,28 @@ public abstract class GenericoBean<T> {
 
 		}
 	}
+	
+	/**
+	 * Método que sirve para encontrar un registro por columna
+	 * 
+	 * @param clase,
+	 *            es la tabla a buscar en la base de datos
+	 * @param columna,
+	 *            es la columna de la tabla a buscar
+	 * @param valor, es el valor de la columna a buscar el registro
+	 * @return el registro por columna
+	 */
+	public List<T> encontrarPorColumna(Class<T> clase, String columna, String valor){
+		List<T> lista = null;
+		try {
+			TypedQuery<T> typedQuery = em.createQuery("SELECT t FROM " + clase.getSimpleName() + " t WHERE t."+columna+"= :valor ", clase);
+			typedQuery.setParameter("valor", valor);
+			lista = typedQuery.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return lista;
+	}
 }

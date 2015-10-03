@@ -1,14 +1,8 @@
 package com.sofactory.negocio.interfaces;
 
-import java.util.List;
-
 import com.sofactory.entidades.Usuario;
-import com.sofactory.excepciones.RegistroYaExisteException;
+import com.sofactory.negocio.general.MetodosGenerales;
 
-public interface UsuarioBeanLocal {
-	void insertar(Usuario usuario) throws RegistroYaExisteException;
-
-	List<Usuario> encontrarTodos();
-
+public interface UsuarioBeanLocal extends MetodosGenerales<Usuario>{
 	String saludo();
 }
