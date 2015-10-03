@@ -1,15 +1,9 @@
 package com.sofactory.entidades;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,6 +23,15 @@ public abstract class Usuario implements Serializable {
 	@Column(name = "PASSWORD")
 	protected String password;
 
+	@ManyToMany
+	@JoinTable(
+			name="GU_USUARIO_ROL",
+			joinColumns={@JoinColumn(name="ID_USUARIO")},
+			inverseJoinColumns={@JoinColumn(name="ID_ROL")},
+			uniqueConstraints=@UniqueConstraint(columnNames={"ID_USUARIO","ID_ROL"}))
+	protected List<Rol> roles;
+	
+	
 	public Long getCodigo() {
 		return codigo;
 	}
