@@ -2,12 +2,10 @@ package com.sofactory.entidades;
 
 import java.util.List;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="RE_RECORRIDO")
+//@Entity
+//@Table(name="RE_RECORRIDO")
 public class Recorrido {
 
 	@Id

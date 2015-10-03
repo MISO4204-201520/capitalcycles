@@ -2,12 +2,10 @@ package com.sofactory.entidades;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="RE_RUTA")
+//@Entity
+//@Table(name="RE_RUTA")
 public class Ruta {
 	
 	@Id
@@ -19,7 +17,7 @@ public class Ruta {
 	
 	private Recorrido recorrido;
 	
-	private Usuario usuario;
+//	private Usuario usuario;
 
 	public Long getId() {
 		return id;
@@ -53,11 +51,11 @@ public class Ruta {
 		this.recorrido = recorrido;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+//	public Usuario getUsuario() {
+//		return usuario;
+//	}
+//
+//	public void setUsuario(Usuario usuario) {
+//		this.usuario = usuario;
+//	}
 }
