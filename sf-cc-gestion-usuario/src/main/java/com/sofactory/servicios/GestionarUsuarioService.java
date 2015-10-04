@@ -8,7 +8,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Application;
 
 import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.entidades.Persona;
@@ -19,7 +18,7 @@ import com.sofactory.excepciones.RegistroYaExisteException;
 import com.sofactory.negocio.interfaces.UsuarioBeanLocal;
 
 @Path("gestionarUsuarioService")
-public class GestionarUsuarioService extends Application {
+public class GestionarUsuarioService {
 
 	@EJB
 	private UsuarioBeanLocal usuarioBeanLocal;
