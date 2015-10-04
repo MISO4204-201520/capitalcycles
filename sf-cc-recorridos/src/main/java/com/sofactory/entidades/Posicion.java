@@ -3,13 +3,17 @@ package com.sofactory.entidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
-//@Entity
-//@Inheritance(strategy=InheritanceType.JOINED)
-//@Table(name="RE_POSICION")
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@Table(name="RE_POSICION")
 public class Posicion implements Serializable {
 	
 	/**
@@ -25,7 +29,7 @@ public class Posicion implements Serializable {
 	
 	private BigDecimal longitud;
 	
-	private Ruta ruta;
+//	private Ruta ruta;
 	
 	public Long getId() {
 		return id;
@@ -51,11 +55,11 @@ public class Posicion implements Serializable {
 		this.longitud = longitud;
 	}
 
-	public Ruta getRuta() {
-		return ruta;
-	}
-
-	public void setRuta(Ruta ruta) {
-		this.ruta = ruta;
-	}
+//	public Ruta getRuta() {
+//		return ruta;
+//	}
+//
+//	public void setRuta(Ruta ruta) {
+//		this.ruta = ruta;
+//	}
 }

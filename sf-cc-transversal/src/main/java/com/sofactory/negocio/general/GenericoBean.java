@@ -13,7 +13,7 @@ import com.sofactory.excepciones.RegistroYaExisteException;
 
 public abstract class GenericoBean<T> {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="CapitalCyclesPU")
 	protected EntityManager em;
 
 	/**

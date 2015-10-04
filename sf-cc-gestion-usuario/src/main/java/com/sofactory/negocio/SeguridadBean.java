@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 
@@ -22,13 +20,7 @@ import com.sofactory.negocio.interfaces.SeguridadBeanLocal;
 @Local({SeguridadBeanLocal.class})
 public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBeanLocal {
 
-	private static final String GESTION_USUARIO_PU = "GestionUsuarioPU";
-
 	private static final String LLAVE_PASSWORD = "llavePassword?.";
-	
-	@PersistenceContext(unitName = GESTION_USUARIO_PU)
-	protected EntityManager em;
-	
 	
 	public RespuestaSeguridadDTO esValidoUsuario(String login, String credencial){
 		RespuestaSeguridadDTO respuestaDTO = new RespuestaSeguridadDTO(0, "OK");

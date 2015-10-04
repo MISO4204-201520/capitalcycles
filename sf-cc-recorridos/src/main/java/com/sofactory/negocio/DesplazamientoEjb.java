@@ -3,8 +3,6 @@ package com.sofactory.negocio;
 import java.util.ArrayList;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.sofactory.entidades.PosicionTiempo;
@@ -15,9 +13,6 @@ import com.sofactory.negocio.interfaces.DesplazamientoEjbLocal;
 
 @Stateless
 public class DesplazamientoEjb extends GenericoBean<Ruta> implements DesplazamientoEjbLocal  {
-
-	@PersistenceContext(unitName="RecorridosPU")
-	private EntityManager em;
 
 	@Override
 	public void iniciarDesplazamiento(Long idRuta) {
