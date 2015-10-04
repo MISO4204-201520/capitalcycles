@@ -42,6 +42,7 @@ public class RutaService {
 	@Path("puntos")
 	public Response getPuntos() {
 		String response = null;
+		
 		try {
 			List<Posicion> list = rutaBeanLocal.encontrarTodos(Posicion.class);
 			response = toJSONString(list);
