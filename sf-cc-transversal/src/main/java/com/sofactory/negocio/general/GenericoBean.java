@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 
+import com.sofactory.excepciones.CorreoInvalidoException;
 import com.sofactory.excepciones.ReferenciaException;
 import com.sofactory.excepciones.RegistroYaExisteException;
 
@@ -65,13 +66,16 @@ public abstract class GenericoBean<T> {
 	 *            es el objeto a guardar
 	 * @throws RegistroYaExisteException,
 	 *             si el usuario ya existe
+	 * @throws CorreoInvalidoException, si el correo es invalido
 	 */
-	public void insertar(T t) throws RegistroYaExisteException {
+	public void insertar(T t) throws RegistroYaExisteException,CorreoInvalidoException {
 		try {
 			 em.persist(t);
 		} catch (Exception e) {
-			if (e.getCause() != null && e.getCause().getCause() != null
-					&& e.getCause().getCause() instanceof ConstraintViolationException) {
+			if (e instanceof ConstraintViolationException){
+				throw new CorreoInvalidoException("Correo invalido", e);
+			}
+			else if (e.getCause() != null && e.getCause().getCause() != null) {
 				throw new RegistroYaExisteException("El registro ya existe en la base de datos", e);
 			}
 		} finally {

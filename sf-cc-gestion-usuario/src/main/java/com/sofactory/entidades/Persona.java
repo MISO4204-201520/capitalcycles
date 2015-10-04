@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 import com.sofactory.enums.Genero;
 
@@ -30,6 +31,10 @@ public class Persona extends Usuario implements Serializable {
 	private Genero genero;
 
 	@Column(name = "CORREO")
+	@Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+	        +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+	        +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+	             message="Correo inválido")
 	private String correo;
 
 	public String getNombres() {
