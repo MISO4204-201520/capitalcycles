@@ -3,7 +3,6 @@ package com.sofactory.negocio.general;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 
@@ -13,7 +12,6 @@ import com.sofactory.excepciones.RegistroYaExisteException;
 
 public abstract class GenericoBean<T> {
 
-	@PersistenceContext(unitName="CapitalCyclesPU")
 	protected EntityManager em;
 
 	/**
