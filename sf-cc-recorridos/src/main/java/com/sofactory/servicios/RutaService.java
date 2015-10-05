@@ -44,7 +44,7 @@ public class RutaService {
 		String response = null;
 		
 		try {
-			List<Posicion> list = rutaBeanLocal.encontrarTodos(Posicion.class);
+			List<Posicion> list = rutaBeanLocal.encontrarTodos(Posicion.class, "id", "ASC");
 			response = toJSONString(list);
 		} catch (Exception err) {
 			response = "{\"status\":\"401\","

@@ -66,4 +66,12 @@ public abstract class Usuario implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public List<Rol> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Rol> roles) {
+		this.roles = roles;
+	}
 }

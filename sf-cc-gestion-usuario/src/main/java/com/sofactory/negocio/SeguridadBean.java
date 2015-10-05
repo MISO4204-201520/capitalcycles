@@ -2,8 +2,11 @@ package com.sofactory.negocio;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 
@@ -21,7 +24,15 @@ import com.sofactory.negocio.interfaces.SeguridadBeanLocal;
 public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBeanLocal {
 
 	private static final String LLAVE_PASSWORD = "llavePassword?.";
+
+	@PersistenceContext(unitName="GestionUsuarioPU")
+	private EntityManager em;
 	
+	@PostConstruct
+	private void iniciar(){
+		super.em = this.em;
+	}
+
 	public RespuestaSeguridadDTO esValidoUsuario(String login, String credencial){
 		RespuestaSeguridadDTO respuestaDTO = new RespuestaSeguridadDTO(0, "OK");
 		List<Usuario> usuarios = encontrarPorColumna(Usuario.class, "login", login);

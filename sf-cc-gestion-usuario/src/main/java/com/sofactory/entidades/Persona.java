@@ -26,7 +26,7 @@ public class Persona extends Usuario implements Serializable {
 	@Column(name = "CELULAR")
 	private String celular;
 
-	@Column(name = "Genero")
+	@Column(name = "GENERO")
 	@Enumerated(EnumType.STRING)
 	private Genero genero;
 

@@ -19,13 +19,15 @@ public abstract class GenericoBean<T> {
 	 * 
 	 * @param clase,
 	 *            es la tabla a buscar en la base de datos
+	 * @param columnaOrden, es la columna a ordenar
+	 * @param tipoOrden, es el tipo de orden ASC o DESC
 	 * @return lista que representa los registros de la base de datos de una
 	 *         tabla
 	 */
-	public List<T> encontrarTodos(Class<T> clase) {
+	public List<T> encontrarTodos(Class<T> clase, String columnaOrden, String tipoOrden) {
 		List<T> lista = null;
 		try {
-			TypedQuery<T> typedQuery = em.createQuery("SELECT t FROM " + clase.getSimpleName() + " t", clase);
+			TypedQuery<T> typedQuery = em.createQuery("SELECT t FROM " + clase.getSimpleName() + " t ORDER BY t."+columnaOrden+" "+tipoOrden, clase);
 			lista = typedQuery.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
