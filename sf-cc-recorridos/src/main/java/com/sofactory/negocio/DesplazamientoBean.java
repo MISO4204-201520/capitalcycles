@@ -9,10 +9,10 @@ import com.sofactory.entidades.PosicionTiempo;
 import com.sofactory.entidades.Recorrido;
 import com.sofactory.entidades.Ruta;
 import com.sofactory.negocio.general.GenericoBean;
-import com.sofactory.negocio.interfaces.DesplazamientoEjbLocal;
+import com.sofactory.negocio.interfaces.DesplazamientoBeanLocal;
 
 @Stateless
-public class DesplazamientoEjb extends GenericoBean<Ruta> implements DesplazamientoEjbLocal  {
+public class DesplazamientoBean extends GenericoBean<Ruta> implements DesplazamientoBeanLocal  {
 
 	@Override
 	public void iniciarDesplazamiento(Long idRuta) {
@@ -21,7 +21,7 @@ public class DesplazamientoEjb extends GenericoBean<Ruta> implements Desplazamie
 		if (recorrido==null){
 			recorrido = new Recorrido();
 			recorrido.setDesplazamientos(new ArrayList<Ruta>());
-			recorrido.setRuta(ruta);
+			recorrido.setRutaPlaneada(ruta);
 		}
 		
 		Ruta desplazamiento = new Ruta();

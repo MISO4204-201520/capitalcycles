@@ -5,6 +5,7 @@
 		<groupId>com.sofactory</groupId>
 		<artifactId>sf-cc-raiz</artifactId>
 		<version>1.0-SNAPSHOT</version>
+    	<relativePath>../sf-cc-raiz/pom.xml</relativePath>
 	</parent>
 	<artifactId>sf-cc-nucleo</artifactId>
 	<packaging>ear</packaging>
@@ -16,7 +17,22 @@
 				<version>2.10</version>
 				<configuration>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
-					<outputDirectory>C:\wildfly-9.0.1.Final\standalone\deployments</outputDirectory>
+					<outputDirectory>C:\camilo_nino\wildfly-9.0.1.Final\standalone\deployments</outputDirectory>
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <fileNameMapping>no-version</fileNameMapping>
+                    <filtering>true</filtering>
+					<modules>
+						<webModule>							
+							<groupId>com.sofactory</groupId>
+							<artifactId>sf-cc-gestion-usuario</artifactId>
+							<excluded>${gestionUsuario.excludes}</excluded>
+						</webModule>
+						<webModule>							
+							<groupId>com.sofactory</groupId>
+							<artifactId>sf-cc-recorridos</artifactId>
+							<excluded>${recorridos.excludes}</excluded>
+						</webModule>
+					</modules>
 				</configuration>
 			</plugin>
 		</plugins>

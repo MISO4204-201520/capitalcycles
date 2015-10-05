@@ -2,19 +2,36 @@ package com.sofactory.entidades;
 
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-//@Entity
-//@Table(name="RE_RECORRIDO")
+@Entity
+@Table(name="RE_RECORRIDO")
 public class Recorrido {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="ID")
 	private Long id;
 	
+	@Column(name="NUMERO_USUARIOS")
+	@NotNull
 	private Integer numeroUsuarios;
 	
-	private Ruta ruta;
+	@ManyToOne
+	@JoinColumn(name="RUTA_PLANEADA_ID")
+	@NotNull
+	private Ruta rutaPlaneada;
 	
+	@OneToMany(mappedBy="recorrido")
 	private List<Ruta> desplazamientos;
 
 	public Long getId() {
@@ -33,12 +50,12 @@ public class Recorrido {
 		this.numeroUsuarios = numeroUsuarios;
 	}
 
-	public Ruta getRuta() {
-		return ruta;
+	public Ruta getRutaPlaneada() {
+		return rutaPlaneada;
 	}
 
-	public void setRuta(Ruta ruta) {
-		this.ruta = ruta;
+	public void setRutaPlaneada(Ruta rutaPlaneada) {
+		this.rutaPlaneada = rutaPlaneada;
 	}
 
 	public List<Ruta> getDesplazamientos() {

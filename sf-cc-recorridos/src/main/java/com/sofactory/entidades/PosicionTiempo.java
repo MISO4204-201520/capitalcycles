@@ -2,14 +2,18 @@ package com.sofactory.entidades;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="RE_POSICION_TIEMPO")
 public class PosicionTiempo extends Posicion {
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Column(name="RUTA_ID", columnDefinition="DATETIME")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date tiempo;
 
 	public Date getTiempo() {

@@ -5,13 +5,13 @@ import javax.ws.rs.Path;
 
 import com.sofactory.entidades.Posicion;
 import com.sofactory.entidades.Ruta;
-import com.sofactory.negocio.interfaces.DesplazamientoEjbLocal;
+import com.sofactory.negocio.interfaces.DesplazamientoBeanLocal;
 
 @Path("desplazamiento")
 public class DesplazamientoServicio {
 	
 	@EJB
-	private DesplazamientoEjbLocal desplazamientoEjb;
+	private DesplazamientoBeanLocal desplazamientoEjb;
 	
 	public void iniciarDesplazamiento(Ruta ruta){
 		desplazamientoEjb.iniciarDesplazamiento(ruta.getId());
