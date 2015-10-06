@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintViolationException;
 
-import com.sofactory.excepciones.CorreoInvalidoException;
 import com.sofactory.excepciones.ReferenciaException;
 import com.sofactory.excepciones.RegistroYaExisteException;
 
@@ -66,14 +65,14 @@ public abstract class GenericoBean<T> {
 	 *            es el objeto a guardar
 	 * @throws RegistroYaExisteException,
 	 *             si el usuario ya existe
-	 * @throws CorreoInvalidoException, si el correo es invalido
+	 * @throws ConstraintViolationException, si algun campo es invalido
 	 */
-	public void insertar(T t) throws RegistroYaExisteException,CorreoInvalidoException {
+	public void insertar(T t) throws RegistroYaExisteException, ConstraintViolationException{
 		try {
 			 em.persist(t);
 		} catch (Exception e) {
 			if (e instanceof ConstraintViolationException){
-				throw new CorreoInvalidoException("Correo invalido", e);
+				throw new ConstraintViolationException(((ConstraintViolationException)e).getConstraintViolations());
 			}
 			else if (e.getCause() != null && e.getCause().getCause() != null) {
 				throw new RegistroYaExisteException("El registro ya existe en la base de datos", e);
@@ -89,14 +88,17 @@ public abstract class GenericoBean<T> {
 	 * 
 	 * @param t,
 	 *            es el objeto a guardar o actualizar
+	 * @throws ConstraintViolationException, si algun campo es invalido
 	 * @return t, es el objeto actualizado
 	 */
-	public T insertarOActualizar(T t) {
+	public T insertarOActualizar(T t) throws ConstraintViolationException{
 		T newT = null;
 		try {
 			newT = em.merge(t);
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (e instanceof ConstraintViolationException){
+				throw new ConstraintViolationException(((ConstraintViolationException)e).getConstraintViolations());
+			}
 		} finally {
 
 		}

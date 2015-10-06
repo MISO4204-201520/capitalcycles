@@ -4,5 +4,5 @@ import com.sofactory.entidades.Usuario;
 import com.sofactory.negocio.general.MetodosGenerales;
 
 public interface UsuarioBeanLocal extends MetodosGenerales<Usuario>{
-	String saludo();
+	Usuario encontrarPorLogin(Long codigo, String login);
 }
