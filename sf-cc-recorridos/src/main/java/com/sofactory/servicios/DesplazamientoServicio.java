@@ -1,23 +1,59 @@
 package com.sofactory.servicios;
 
 import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-import com.sofactory.entidades.Posicion;
-import com.sofactory.entidades.Ruta;
+import com.sofactory.dtos.RegistrarPosicionDTO;
+import com.sofactory.dtos.RespuestaDTO;
+import com.sofactory.entidades.PosicionTiempo;
 import com.sofactory.negocio.interfaces.DesplazamientoBeanLocal;
 
 @Path("desplazamiento")
 public class DesplazamientoServicio {
-	
+
 	@EJB
-	private DesplazamientoBeanLocal desplazamientoEjb;
-	
-	public void iniciarDesplazamiento(Ruta ruta){
-		desplazamientoEjb.iniciarDesplazamiento(ruta.getId());
-	}
-	
-	public void registrarPosicion(Posicion posicion){
+	private DesplazamientoBeanLocal desplazamientoBean;
+
+	@POST
+	@Path("iniciarDesplazamiento")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public RespuestaDTO iniciarDesplazamiento(@PathParam("idRuta")Long idRuta){
+		RespuestaDTO response = new RespuestaDTO();
+		try {
+			desplazamientoBean.iniciarDesplazamiento(idRuta);
+			response.setMensaje("OK");
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setMensaje("ERROR-"+e.getMessage());
+		}
 		
+		return response;
+	}
+
+	@POST
+	@Path("registrarPosicion")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public RespuestaDTO registrarPosicion(RegistrarPosicionDTO dto){
+		RespuestaDTO response = new RespuestaDTO();
+		try {
+			PosicionTiempo pt = new PosicionTiempo();
+			pt.setLatitud(dto.getLatitud());
+			pt.setLongitud(dto.getLongitud());
+			pt.setTiempo(dto.getTiempo());
+			desplazamientoBean.registrarPosicion(pt, dto.getIdRuta());
+			response.setMensaje("OK");
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setMensaje("ERROR-"+e.getMessage());
+		}
+		
+		return response;
 	}
 }

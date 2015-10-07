@@ -34,6 +34,7 @@
 						<configuration>
 							<files>
 								<file>../sf-cc-transversal/src/main/resources/feature-excludes.properties</file>
+								<file>../sf-cc-transversal/src/main/resources/user-conf.properties</file>
 							</files>
 						</configuration>
 					</execution>

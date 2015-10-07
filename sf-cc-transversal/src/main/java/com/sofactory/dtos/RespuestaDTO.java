@@ -1,9 +1,13 @@
 package com.sofactory.dtos;
 
-public abstract class RespuestaDTO {
+public class RespuestaDTO {
 	protected int codigo;
 	protected String mensaje;
 	
+	public RespuestaDTO() {
+		super();
+	}
+
 	public RespuestaDTO(int codigo, String mensaje) {
 		this.codigo = codigo;
 		this.mensaje = mensaje;
