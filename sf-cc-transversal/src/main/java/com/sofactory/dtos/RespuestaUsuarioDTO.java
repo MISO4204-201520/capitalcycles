@@ -7,6 +7,8 @@ public class RespuestaUsuarioDTO extends RespuestaDTO{
 
 	private List<UsuarioDTO> usuarios;
 	
+	public RespuestaUsuarioDTO (){}
+	
 	public RespuestaUsuarioDTO(int codigo, String mensaje) {
 		super(codigo, mensaje);
 		usuarios = new ArrayList<UsuarioDTO>();

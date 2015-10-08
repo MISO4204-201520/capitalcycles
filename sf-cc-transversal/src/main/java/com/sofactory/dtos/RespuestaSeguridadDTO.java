@@ -6,6 +6,8 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 	private String nombres;
 	private String apellidos;
 	
+	public RespuestaSeguridadDTO(){}
+	
 	public RespuestaSeguridadDTO(int codigo, String mensaje) {
 		super(codigo, mensaje);
 	}
