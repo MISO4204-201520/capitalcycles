@@ -156,8 +156,8 @@
 					<driver-class>com.mysql.jdbc.Driver</driver-class>
 					<driver>mysql</driver>
 					<security>
-						<user-name>${user.db}</user-name>
-						<password>${pass.db}</password>
+						<user-name>user.db</user-name>
+						<password>pass.db</password>
 					</security>
 					<validation>
 						<valid-connection-checker
