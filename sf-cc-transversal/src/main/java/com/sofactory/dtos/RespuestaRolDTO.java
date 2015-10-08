@@ -6,6 +6,10 @@ import java.util.List;
 public class RespuestaRolDTO extends RespuestaDTO{
 	private List<RolDTO> roles;
 	
+	public RespuestaRolDTO(){
+		super(0, "");
+	}
+	
 	public RespuestaRolDTO(int codigo, String mensaje) {
 		super(codigo, mensaje);
 		roles = new ArrayList<RolDTO>();

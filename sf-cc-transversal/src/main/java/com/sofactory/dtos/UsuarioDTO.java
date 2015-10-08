@@ -6,12 +6,15 @@ import java.util.List;
 public class UsuarioDTO{
 	private Long codigo;
 	private String login;
+	private String credencial;
 	private String nombres;
 	private String apellidos;
 	private String celular;
 	private String genero;
 	private String correo;
 	private List<RolDTO> roles;
+	
+	public UsuarioDTO(){}
 	
 	public UsuarioDTO(Long codigo, String login, String nombres, String apellidos, String celular, String genero,
 			String correo) {
@@ -24,6 +27,20 @@ public class UsuarioDTO{
 		this.correo = correo;
 		roles = new ArrayList<RolDTO>();
 	}
+	
+	public UsuarioDTO(Long codigo, String login, String credencial, String nombres, String apellidos, String celular, String genero,
+			String correo) {
+		this.codigo = codigo;
+		this.credencial = credencial;
+		this.login = login;
+		this.nombres = nombres;
+		this.apellidos = apellidos;
+		this.celular = celular;
+		this.genero = genero;
+		this.correo = correo;
+		roles = new ArrayList<RolDTO>();
+	}
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -71,5 +88,11 @@ public class UsuarioDTO{
 	}
 	public void setRoles(List<RolDTO> roles) {
 		this.roles = roles;
+	}
+	public String getCredencial() {
+		return credencial;
+	}
+	public void setCredencial(String credencial) {
+		this.credencial = credencial;
 	}
 }

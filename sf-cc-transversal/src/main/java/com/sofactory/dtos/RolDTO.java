@@ -4,6 +4,8 @@ public class RolDTO{
 	private Integer id;
 	private String nombre;
 	
+	public RolDTO(){}
+	
 	public RolDTO(Integer id, String nombre) {
 		this.id = id;
 		this.nombre = nombre;
