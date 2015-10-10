@@ -41,4 +41,20 @@ public class RolBean  extends GenericoBean<Rol> implements RolBeanLocal {
 		}
 		return roles;
 	}
+
+	public Rol encontrarPorNombre(Integer id, String nombre) {
+		Rol rol = null;
+		try {
+			TypedQuery<Rol> typedQuery = em.createQuery("SELECT r FROM Rol r WHERE r.id <> :id AND r.nombre = :nombre ", Rol.class);
+			typedQuery.setParameter("id", id);
+			typedQuery.setParameter("nombre", nombre);
+			List<Rol> lista = typedQuery.getResultList();
+			if (lista!=null && !lista.isEmpty()){
+				rol = lista.get(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return rol;
+	}
 }

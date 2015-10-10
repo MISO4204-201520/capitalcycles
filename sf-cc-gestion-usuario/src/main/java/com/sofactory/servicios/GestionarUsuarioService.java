@@ -241,7 +241,6 @@ public class GestionarUsuarioService {
 					//Validar si el login nuevo es unico en el sistema
 					if (usuarioBeanLocal.encontrarPorLogin(usuarioDTO.getCodigo(),usuarioDTO.getLogin())==null){
 						//Validar Codigo Rol
-						//Validar Codigo Rol
 						boolean estanRoles=true;
 						List<Rol> roles = new ArrayList<>();
 						for(RolDTO r: usuarioDTO.getRoles()){
@@ -320,5 +319,95 @@ public class GestionarUsuarioService {
 		}
 
 		return respuestaUsuarioDTO;
+	}
+	
+	@POST
+	@Path("crearRol")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaRolDTO crear(RolDTO rolDTO) {
+
+		RespuestaRolDTO respuestaRolDTO = new RespuestaRolDTO(0, "OK");
+		if (rolDTO.getNombre()!=null && !rolDTO.getNombre().isEmpty()){
+			try {
+				Rol rol = new Rol();
+				rol.setNombre(rolDTO.getNombre());
+				rolBeanLocal.insertar(rol);	
+			} catch (RegistroYaExisteException e) {
+				respuestaRolDTO.setCodigo(2);
+				respuestaRolDTO.setMensaje(e.getMensaje());
+			} catch(ConstraintViolationException e){
+				respuestaRolDTO.setCodigo(3);
+				respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+			} catch(IllegalArgumentException e){
+				respuestaRolDTO.setCodigo(3);
+				respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+			} catch(Exception e){
+				if (e.getCause()!=null && e.getCause() instanceof ConstraintViolationException){
+					respuestaRolDTO.setCodigo(3);
+					respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+				}else{
+					respuestaRolDTO.setCodigo(5);
+					respuestaRolDTO.setMensaje("Hubo un error en el sistema");
+				}
+			} 
+		}else{
+			respuestaRolDTO.setCodigo(1);
+			respuestaRolDTO.setMensaje("Faltan Campos Obligatorios");
+		}
+
+		return respuestaRolDTO;
+	}
+	
+	@PUT
+	@Path("actualizarRol")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaRolDTO actualizarRol(RolDTO rolDTO) {
+
+		RespuestaRolDTO respuestaRolDTO = new RespuestaRolDTO(0, "OK");
+		if (rolDTO.getNombre()!=null && !rolDTO.getNombre().isEmpty()){
+			try {
+				//Validar si el registro ya existe en el sistema
+				Rol rolActualizar = rolBeanLocal.encontrarPorId(Rol.class, rolDTO.getId());
+				if (rolActualizar!=null){
+					//Validar si el login nuevo es unico en el sistema
+					if (rolBeanLocal.encontrarPorNombre(rolDTO.getId(), rolDTO.getNombre())==null){
+						Rol rol = rolActualizar;
+						rol.setNombre(rolDTO.getNombre());
+						rolBeanLocal.insertarOActualizar(rol);
+						RolDTO rolActDTO = new RolDTO(rol.getId(), 
+																rol.getNombre());
+						respuestaRolDTO.getRoles().add(rolActDTO);
+					}else{
+						respuestaRolDTO.setCodigo(5);
+						respuestaRolDTO.setMensaje("El rol ya existe en el sistema");
+					}
+				}else{
+					respuestaRolDTO.setCodigo(6);
+					respuestaRolDTO.setMensaje("El rol no existe en el sistema");
+				}
+			} catch(ConstraintViolationException e){
+				respuestaRolDTO.setCodigo(2);
+				respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+			} catch(IllegalArgumentException e){
+				respuestaRolDTO.setCodigo(2);
+				respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+			} catch(Exception e){
+				if (e.getCause()!=null && e.getCause().getCause()!=null && e.getCause().getCause().getCause()!=null
+						&& e.getCause().getCause().getCause() instanceof ConstraintViolationException){
+					respuestaRolDTO.setCodigo(2);
+					respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+				}else{
+					respuestaRolDTO.setCodigo(4);
+					respuestaRolDTO.setMensaje("Hubo un error en el sistema");
+				}
+			} 
+		}else{
+			respuestaRolDTO.setCodigo(1);
+			respuestaRolDTO.setMensaje("Faltan Campos Obligatorios");
+		}
+
+		return respuestaRolDTO;
 	}
 }
