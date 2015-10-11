@@ -6,6 +6,7 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 	private String credencial;
 	private String nombres;
 	private String apellidos;
+	private String correo;
 	
 	public RespuestaSeguridadDTO(){}
 	
@@ -51,5 +52,13 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 }

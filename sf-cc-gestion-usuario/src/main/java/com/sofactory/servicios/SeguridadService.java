@@ -86,4 +86,20 @@ public class SeguridadService {
 
 		return respuestaUsuarioDTO;
 	}
+	
+	@POST
+	@Path("obtenerUsuarioSesion")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaSeguridadDTO obtenerUsuarioSesion(UsuarioDTO usuarioDTO){
+		return seguridadBeanLocal.obtenerUsuarioSesion(usuarioDTO.getCodigo());
+	}
+	
+	@POST
+	@Path("cerrarSesion")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaSeguridadDTO cerrarSesion(UsuarioDTO usuarioDTO){
+		return seguridadBeanLocal.cerrarSesion(usuarioDTO.getCodigo());
+	}
 }

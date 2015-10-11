@@ -6,4 +6,6 @@ import com.sofactory.negocio.general.MetodosGenerales;
 
 public interface SeguridadBeanLocal extends MetodosGenerales<Usuario>{
 	RespuestaSeguridadDTO esValidoUsuario(String login, String credencial);
+	RespuestaSeguridadDTO obtenerUsuarioSesion(Long codigoUsuario);
+	RespuestaSeguridadDTO cerrarSesion(Long codigoUsuario);
 }
