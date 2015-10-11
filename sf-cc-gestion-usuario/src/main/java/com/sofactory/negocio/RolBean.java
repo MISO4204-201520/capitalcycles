@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.sofactory.entidades.Rol;
+import com.sofactory.enums.Estado;
 import com.sofactory.negocio.general.GenericoBean;
 import com.sofactory.negocio.interfaces.RolBeanLocal;
 
@@ -31,8 +32,9 @@ public class RolBean  extends GenericoBean<Rol> implements RolBeanLocal {
 	public List<Rol> encontrarRolesPorUsuario(Long codigoUsuario){
 		List<Rol> roles = null;
 		try {
-			TypedQuery<Rol> typedQuery = em.createQuery("SELECT r FROM Rol r JOIN r.usuarios u WHERE u.codigo = :codigo", Rol.class);
+			TypedQuery<Rol> typedQuery = em.createQuery("SELECT r FROM Rol r JOIN r.usuarios u WHERE u.codigo = :codigo AND (r.estado IS NULL OR r.estado = :estado) ", Rol.class);
 			typedQuery.setParameter("codigo", codigoUsuario);
+			typedQuery.setParameter("estado", Estado.ACTIVO);
 			roles = typedQuery.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();

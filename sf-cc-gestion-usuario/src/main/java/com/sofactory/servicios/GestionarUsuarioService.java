@@ -30,7 +30,7 @@ import com.sofactory.negocio.interfaces.UsuarioBeanLocal;
 
 @Path("gestionarUsuarioService")
 public class GestionarUsuarioService {
-
+	
 	@EJB
 	private UsuarioBeanLocal usuarioBeanLocal;
 
@@ -46,22 +46,24 @@ public class GestionarUsuarioService {
 			List<Usuario> usuarios = usuarioBeanLocal.encontrarTodos(Usuario.class, "login", "ASC");
 			for (Usuario u:usuarios){
 				if (u instanceof Persona){
-					Persona p = (Persona)u;
-					UsuarioDTO usuarioDTO = new UsuarioDTO(p.getCodigo(), 
-															p.getLogin(), 
-															p.getNombres(), 
-															p.getApellidos(),
-															p.getCelular(), 
-															p.getGenero()!=null?p.getGenero().name():null,
-															p.getCorreo());
-					List<Rol> roles = rolBeanLocal.encontrarRolesPorUsuario(u.getCodigo());
-					if (roles!=null){
-						for (Rol rol:roles){
-							RolDTO rolDTO = new RolDTO(rol.getId(), rol.getNombre());
-							usuarioDTO.getRoles().add(rolDTO);
+					if (u.getEstado()==null || u.getEstado().equals(Estado.ACTIVO)){
+						Persona p = (Persona)u;
+						UsuarioDTO usuarioDTO = new UsuarioDTO(p.getCodigo(), 
+								p.getLogin(), 
+								p.getNombres(), 
+								p.getApellidos(),
+								p.getCelular(), 
+								p.getGenero()!=null?p.getGenero().name():null,
+										p.getCorreo());
+						List<Rol> roles = rolBeanLocal.encontrarRolesPorUsuario(u.getCodigo());
+						if (roles!=null){
+							for (Rol rol:roles){
+								RolDTO rolDTO = new RolDTO(rol.getId(), rol.getNombre());
+								usuarioDTO.getRoles().add(rolDTO);
+							}
 						}
+						respuestaUsuarioDTO.getUsuarios().add(usuarioDTO);	
 					}
-					respuestaUsuarioDTO.getUsuarios().add(usuarioDTO);
 				}
 			}
 		}catch(Exception e){
@@ -96,7 +98,7 @@ public class GestionarUsuarioService {
 						break;
 					}
 				}
-				
+
 				if (estanRoles){
 					Persona persona = new Persona();
 					persona.setLogin(usuarioDTO.getLogin());
@@ -152,8 +154,10 @@ public class GestionarUsuarioService {
 		try{
 			List<Rol> roles = rolBeanLocal.encontrarTodos(Rol.class, "id", "ASC");
 			for (Rol r:roles){
-				RolDTO rolDTO = new RolDTO(r.getId(), r.getNombre());
-				respuestaRolDTO.getRoles().add(rolDTO);
+				if (r.getEstado()==null || r.getEstado().equals(Estado.ACTIVO)){
+					RolDTO rolDTO = new RolDTO(r.getId(), r.getNombre());
+					respuestaRolDTO.getRoles().add(rolDTO);	
+				}
 			}
 		}catch(Exception e){
 			respuestaRolDTO.setCodigo(1);
@@ -162,7 +166,7 @@ public class GestionarUsuarioService {
 		}
 		return respuestaRolDTO;
 	}
-	
+
 	@GET
 	@Path("encontrarUsuarioPorCodigo/{codigo}")
 	@Produces("application/json")
@@ -170,16 +174,16 @@ public class GestionarUsuarioService {
 		RespuestaUsuarioDTO respuestaUsuarioDTO = new RespuestaUsuarioDTO(0, "OK");
 		try{
 			Usuario usuario = usuarioBeanLocal.encontrarPorId(Usuario.class, new Long(codigo));
-			if (usuario!=null){
+			if (usuario!=null && (usuario.getEstado()==null || usuario.getEstado().equals(Estado.ACTIVO))){
 				if (usuario instanceof Persona){
 					Persona p = (Persona)usuario;
 					UsuarioDTO usuarioDTO = new UsuarioDTO(p.getCodigo(), 
-															p.getLogin(), 
-															p.getNombres(), 
-															p.getApellidos(),
-															p.getCelular(), 
-															p.getGenero()!=null?p.getGenero().name():null,
-															p.getCorreo());
+							p.getLogin(), 
+							p.getNombres(), 
+							p.getApellidos(),
+							p.getCelular(), 
+							p.getGenero()!=null?p.getGenero().name():null,
+									p.getCorreo());
 					List<Rol> roles = rolBeanLocal.encontrarRolesPorUsuario(new Long(codigo));
 					if (roles!=null){
 						for (Rol rol:roles){
@@ -193,7 +197,6 @@ public class GestionarUsuarioService {
 				respuestaUsuarioDTO.setCodigo(2);
 				respuestaUsuarioDTO.setMensaje("El usuario no existe en el sistema");
 			}
-			
 		}catch(Exception e){
 			respuestaUsuarioDTO.setCodigo(1);
 			respuestaUsuarioDTO.setMensaje("Hubo un error en el sistema");
@@ -201,7 +204,7 @@ public class GestionarUsuarioService {
 		}
 		return respuestaUsuarioDTO;
 	}
-	
+
 	@GET
 	@Path("encontrarRolPorId/{id}")
 	@Produces("application/json")
@@ -209,14 +212,14 @@ public class GestionarUsuarioService {
 		RespuestaRolDTO respuestaRolDTO = new RespuestaRolDTO(0, "OK");
 		try{
 			Rol rol = rolBeanLocal.encontrarPorId(Rol.class, new Integer(id));
-			if (rol!=null){
+			if (rol!=null && (rol.getEstado()==null || rol.getEstado().equals(Estado.ACTIVO))){
 				RolDTO rolDTO = new RolDTO(rol.getId(), rol.getNombre());
 				respuestaRolDTO.getRoles().add(rolDTO);
 			}else{
 				respuestaRolDTO.setCodigo(2);
 				respuestaRolDTO.setMensaje("El rol no existe en el sistema");
 			}
-			
+
 		}catch(Exception e){
 			respuestaRolDTO.setCodigo(1);
 			respuestaRolDTO.setMensaje("Hubo un error en el sistema");
@@ -224,7 +227,7 @@ public class GestionarUsuarioService {
 		}
 		return respuestaRolDTO;
 	}
-	
+
 	@PUT
 	@Path("actualizar")
 	@Consumes("application/json")
@@ -254,7 +257,7 @@ public class GestionarUsuarioService {
 								break;
 							}
 						}
-						
+
 						if (estanRoles){
 							if (usuarioActualizar instanceof Persona){
 								Persona persona = (Persona)usuarioActualizar;
@@ -273,12 +276,12 @@ public class GestionarUsuarioService {
 								}
 								usuarioBeanLocal.insertarOActualizar(persona);
 								UsuarioDTO usuarioActDTO = new UsuarioDTO(persona.getCodigo(), 
-																		persona.getLogin(), 
-																		persona.getNombres(), 
-																		persona.getApellidos(),
-																		persona.getCelular(), 
-																		persona.getGenero()!=null?persona.getGenero().name():null,
-																		persona.getCorreo());
+										persona.getLogin(), 
+										persona.getNombres(), 
+										persona.getApellidos(),
+										persona.getCelular(), 
+										persona.getGenero()!=null?persona.getGenero().name():null,
+												persona.getCorreo());
 								List<RolDTO> rolesDTO = new ArrayList<RolDTO>();
 								for(Rol r:persona.getRoles()){
 									RolDTO rolDTO = new RolDTO(r.getId(), r.getNombre());
@@ -286,7 +289,7 @@ public class GestionarUsuarioService {
 								}
 								usuarioActDTO.setRoles(rolesDTO);
 								respuestaUsuarioDTO.getUsuarios().add(usuarioActDTO);
-								
+
 							}
 						}else{
 							respuestaUsuarioDTO.setCodigo(3);
@@ -323,7 +326,7 @@ public class GestionarUsuarioService {
 
 		return respuestaUsuarioDTO;
 	}
-	
+
 	@DELETE
 	@Path("eliminar")
 	@Consumes("application/json")
@@ -361,7 +364,7 @@ public class GestionarUsuarioService {
 
 		return respuestaUsuarioDTO;
 	}
-	
+
 	@POST
 	@Path("crearRol")
 	@Consumes("application/json")
@@ -399,7 +402,7 @@ public class GestionarUsuarioService {
 
 		return respuestaRolDTO;
 	}
-	
+
 	@PUT
 	@Path("actualizarRol")
 	@Consumes("application/json")
@@ -418,7 +421,7 @@ public class GestionarUsuarioService {
 						rol.setNombre(rolDTO.getNombre());
 						rolBeanLocal.insertarOActualizar(rol);
 						RolDTO rolActDTO = new RolDTO(rol.getId(), 
-																rol.getNombre());
+								rol.getNombre());
 						respuestaRolDTO.getRoles().add(rolActDTO);
 					}else{
 						respuestaRolDTO.setCodigo(4);
@@ -434,6 +437,42 @@ public class GestionarUsuarioService {
 			} catch(IllegalArgumentException e){
 				respuestaRolDTO.setCodigo(2);
 				respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+			} catch(Exception e){
+				if (e.getCause()!=null && e.getCause().getCause()!=null && e.getCause().getCause().getCause()!=null
+						&& e.getCause().getCause().getCause() instanceof ConstraintViolationException){
+					respuestaRolDTO.setCodigo(2);
+					respuestaRolDTO.setMensaje("Campos con formatos invalidos");
+				}else{
+					respuestaRolDTO.setCodigo(3);
+					respuestaRolDTO.setMensaje("Hubo un error en el sistema");
+				}
+			} 
+		}else{
+			respuestaRolDTO.setCodigo(1);
+			respuestaRolDTO.setMensaje("Faltan Campos Obligatorios");
+		}
+
+		return respuestaRolDTO;
+	}
+	
+	@DELETE
+	@Path("eliminarRol")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaRolDTO eliminarRol(RolDTO rolDTO) {
+		RespuestaRolDTO respuestaRolDTO = new RespuestaRolDTO(0, "OK");
+		if (rolDTO.getId()!=null){
+			try {
+				//Validar si el rol existe en el sistema
+				Rol rolEliminar = rolBeanLocal.encontrarPorId(Rol.class, rolDTO.getId());
+				if (rolEliminar!=null){
+					rolEliminar.setEstado(Estado.ELIMINADO);
+					rolEliminar.setNombre(rolEliminar.getNombre()+"_"+Estado.ELIMINADO+"_"+Calendar.getInstance().getTime());	
+					rolBeanLocal.insertarOActualizar(rolEliminar);
+				}else{
+					respuestaRolDTO.setCodigo(4);
+					respuestaRolDTO.setMensaje("El rol no existe en el sistema");
+				}
 			} catch(Exception e){
 				if (e.getCause()!=null && e.getCause().getCause()!=null && e.getCause().getCause().getCause()!=null
 						&& e.getCause().getCause().getCause() instanceof ConstraintViolationException){
