@@ -1,11 +1,13 @@
 package com.sofactory.servicios;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -20,6 +22,7 @@ import com.sofactory.dtos.UsuarioDTO;
 import com.sofactory.entidades.Persona;
 import com.sofactory.entidades.Rol;
 import com.sofactory.entidades.Usuario;
+import com.sofactory.enums.Estado;
 import com.sofactory.enums.Genero;
 import com.sofactory.excepciones.RegistroYaExisteException;
 import com.sofactory.negocio.interfaces.RolBeanLocal;
@@ -321,11 +324,49 @@ public class GestionarUsuarioService {
 		return respuestaUsuarioDTO;
 	}
 	
+	@DELETE
+	@Path("eliminar")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaUsuarioDTO eliminar(UsuarioDTO usuarioDTO) {
+		RespuestaUsuarioDTO respuestaUsuarioDTO = new RespuestaUsuarioDTO(0, "OK");
+		if (usuarioDTO.getCodigo()!=null){
+			try {
+				//Validar si el usuario existe en el sistema
+				Usuario usuarioEliminar = usuarioBeanLocal.encontrarPorId(Usuario.class, usuarioDTO.getCodigo());
+				if (usuarioEliminar!=null){
+					usuarioEliminar.setEstado(Estado.ELIMINADO);
+					if (usuarioEliminar instanceof Persona){
+						((Persona)usuarioEliminar).setLogin(((Persona)usuarioEliminar).getLogin()+"_"+Estado.ELIMINADO+"_"+Calendar.getInstance().getTime());	
+					}		
+					usuarioBeanLocal.insertarOActualizar(usuarioEliminar);
+				}else{
+					respuestaUsuarioDTO.setCodigo(4);
+					respuestaUsuarioDTO.setMensaje("El usuario no existe en el sistema");
+				}
+			} catch(Exception e){
+				if (e.getCause()!=null && e.getCause().getCause()!=null && e.getCause().getCause().getCause()!=null
+						&& e.getCause().getCause().getCause() instanceof ConstraintViolationException){
+					respuestaUsuarioDTO.setCodigo(2);
+					respuestaUsuarioDTO.setMensaje("Campos con formatos invalidos");
+				}else{
+					respuestaUsuarioDTO.setCodigo(3);
+					respuestaUsuarioDTO.setMensaje("Hubo un error en el sistema");
+				}
+			} 
+		}else{
+			respuestaUsuarioDTO.setCodigo(1);
+			respuestaUsuarioDTO.setMensaje("Faltan Campos Obligatorios");
+		}
+
+		return respuestaUsuarioDTO;
+	}
+	
 	@POST
 	@Path("crearRol")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public RespuestaRolDTO crear(RolDTO rolDTO) {
+	public RespuestaRolDTO crearRol(RolDTO rolDTO) {
 
 		RespuestaRolDTO respuestaRolDTO = new RespuestaRolDTO(0, "OK");
 		if (rolDTO.getNombre()!=null && !rolDTO.getNombre().isEmpty()){
@@ -380,11 +421,11 @@ public class GestionarUsuarioService {
 																rol.getNombre());
 						respuestaRolDTO.getRoles().add(rolActDTO);
 					}else{
-						respuestaRolDTO.setCodigo(5);
+						respuestaRolDTO.setCodigo(4);
 						respuestaRolDTO.setMensaje("El rol ya existe en el sistema");
 					}
 				}else{
-					respuestaRolDTO.setCodigo(6);
+					respuestaRolDTO.setCodigo(5);
 					respuestaRolDTO.setMensaje("El rol no existe en el sistema");
 				}
 			} catch(ConstraintViolationException e){
@@ -399,7 +440,7 @@ public class GestionarUsuarioService {
 					respuestaRolDTO.setCodigo(2);
 					respuestaRolDTO.setMensaje("Campos con formatos invalidos");
 				}else{
-					respuestaRolDTO.setCodigo(4);
+					respuestaRolDTO.setCodigo(3);
 					respuestaRolDTO.setMensaje("Hubo un error en el sistema");
 				}
 			} 
