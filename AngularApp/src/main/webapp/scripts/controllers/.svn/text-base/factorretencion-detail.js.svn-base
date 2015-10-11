@@ -1,0 +1,35 @@
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name appWebApp.controller:FactorretencionDetailCtrl
+ * @description
+ * # FactorretencionDetailCtrl
+ * Controller of the appWebApp
+ */
+angular.module('webClientApp')
+  .controller('FactorretencionDetailCtrl', function ($scope, $rootScope, $http,  $dialogs, $routeParams) {
+    		   
+	  //Declaración del objeto FactorRetencion
+	 	function FactorRetencion() {}
+
+	  	//Se incluye el objeto en el scope
+		$scope.factorRetencion = new FactorRetencion();
+
+	 	console.log("Search factor por ID");
+        $http.get("http://"+window.location.host+"/negocio-apiRest/rest/FactoresRetencion/"+$routeParams.factorId)
+        
+        .success(function(data){    	
+    	$scope.factorRetencion = data; 
+    	
+    	$rootScope.$broadcast('dialogs.wait.complete');
+        }).error(function(data){
+            console.log("Doesn't work");
+            $rootScope.$broadcast('dialogs.wait.complete');
+        });
+        
+        
+      
+        
+        
+  });

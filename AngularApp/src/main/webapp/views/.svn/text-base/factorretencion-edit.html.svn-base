@@ -1,0 +1,108 @@
+<!-- Page Heading -->
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			Factores de retención<small></small>
+		</h1>
+		
+	</div>
+</div>
+<!-- /.row -->
+
+<div class="row" ng-controller="FactorretencionEditCtrl">
+	<form role="form">
+	<div class="col-lg-8">
+		<div class="panel panel-green">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Detalle factor retención</h3>
+			</div>
+			<div class="panel-body">
+
+				<div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">Descripción</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="text" class="form-control input-lg" placeholder="Descripción" autocomplete="off" required="required" ng-model="factorRetencion.descripcion">
+                                </div>
+                        </div>
+                </div>
+
+                <div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">Indicador de ingresos/egresos</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <select class="form-control input-lg" ng-model="factorRetencion.indicadorIngresoEgresoEnum">
+                                            <option value="INGRESO">INGRESO</option>
+                                            <option value="EGRESO">EGRESO</option>
+                                        </select>
+                                </div>
+                        </div>
+                </div>
+
+                <div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">Indicador operacional</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="checkbox" class="form-control input-group" ng-model="factorRetencion.indicadorOperacional">
+                                </div>
+                        </div>
+                </div>
+
+				<div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">% retención no declarante</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="number" class="form-control input-lg" placeholder="% retención no declarante" autocomplete="off" required="required" ng-model="factorRetencion.porcentajeRetencionNoDecl" min="0" max="100">
+                                </div>
+                        </div>
+                </div>
+
+                <div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">% retención declarante</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="number" class="form-control input-lg" placeholder="% retención declarante" autocomplete="off" required="required" ng-model="factorRetencion.porcentajeRetencionDeclarante" min="0" max="100">
+                                </div>
+                        </div>
+                </div>
+
+				<div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">Aplica dividendos</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="checkbox" class="form-control input-group" ng-model="factorRetencion.indicadorAplicaDividendos">
+                                </div>
+                        </div>
+                </div>
+			
+			</div>	
+		</div>
+	</div>
+
+	<div class="col-lg-12">
+		<div class="form-group">
+			<div class="col-lg-4">
+                <div class="col-sm-5 submitWrap">
+                     <button ng-click='update()' class="btn btn-default">Actualizar</button>
+                </div>
+     		</div>  
+
+     		<div class="col-lg-4">
+                <div class="col-sm-5 submitWrap">
+                        <button type="button" class="btn btn-primary btn-lg" >Cancelar</button>
+                </div>
+     		</div>  
+ 		</div> 
+	</div>
+	
+	</form>
+
+</div>
+
+

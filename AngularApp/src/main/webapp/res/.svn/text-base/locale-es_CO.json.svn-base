@@ -1,0 +1,12 @@
+{
+ "views.factorretencion.table.header.codigo":"Código"
+,"views.factorretencion.table.header.descripcion":"Descripción"
+,"views.factorretencion.table.header.indicador":"Indicador"
+,"views.factorretencion.table.header.indicador_operacional":"Indicador operacional"
+,"views.factorretencion.table.header.retencion_no_declarante":"% retención no declarante"
+,"views.factorretencion.table.header.retencion_declarante":"% retención declarante"
+,"views.factorretencion.table.header.dividendos":"Dividendos"
+
+,"views.factorretencion-add.form.header.indicador_ingreso_egreso":"Indicador de ingresos/egresos"
+,"views.factorretencion-add.form.header.aplica_dividendos":"Aplica dividendos"
+}

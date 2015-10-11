@@ -1,0 +1,70 @@
+10
+
+dir
+17755
+https://srv-repocore5.heinsohn.com.co/svn/core5/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/bower_components
+https://srv-repocore5.heinsohn.com.co/svn/core5
+
+
+
+2015-06-04T17:09:30.634969Z
+17755
+alrodriguez
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+18e25aca-c759-0410-aa7d-e1f7f65f620d
+
+jquery
+dir
+
+angular-cookies
+dir
+
+angular-mocks
+dir
+
+angular-translate
+dir
+
+angular-animate
+dir
+
+angular-route
+dir
+
+angular
+dir
+
+angular-touch
+dir
+
+ngstorage
+dir
+
+angular-sanitize
+dir
+
+bootstrap
+dir
+
+angular-translate-loader-static-files
+dir
+
+angular-messages
+dir
+
+angular-resource
+dir
+

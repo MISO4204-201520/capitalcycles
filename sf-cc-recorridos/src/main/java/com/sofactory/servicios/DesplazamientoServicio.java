@@ -23,7 +23,7 @@ public class DesplazamientoServicio {
 	@Path("iniciarDesplazamiento")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public RespuestaDTO iniciarDesplazamiento(@PathParam("idRuta")Long idRuta){
+	public RespuestaDTO iniciarDesplazamiento(Long idRuta){
 		RespuestaDTO response = new RespuestaDTO();
 		try {
 			desplazamientoBean.iniciarDesplazamiento(idRuta);

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/core5/!svn/ver/17710/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/scripts/controllers
+END
+main.js
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn/core5/!svn/ver/17758/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/scripts/controllers/main.js
+END
+factorretencion-detail.js
+K 25
+svn:wc:ra_dav:version-url
+V 174
+/svn/core5/!svn/ver/17845/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/scripts/controllers/factorretencion-detail.js
+END
+factorretencion-edit.js
+K 25
+svn:wc:ra_dav:version-url
+V 172
+/svn/core5/!svn/ver/17845/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/scripts/controllers/factorretencion-edit.js
+END
+login.js
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/svn/core5/!svn/ver/17787/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/scripts/controllers/login.js
+END
+factorretencion-add.js
+K 25
+svn:wc:ra_dav:version-url
+V 171
+/svn/core5/!svn/ver/17845/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/scripts/controllers/factorretencion-add.js
+END
+factoresretencion.js
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/svn/core5/!svn/ver/17845/areaArquitectura/pruebasConcepto/arqReferenciaJava/ImplementacionReferencia/AngularApp/src/main/webapp/scripts/controllers/factoresretencion.js
+END

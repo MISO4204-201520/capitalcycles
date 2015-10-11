@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+
+     <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
+    <link media="screen" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,300italic">
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+	
+    <title>HTML5 - PoC</title>
+
+</head>
+
+<body ng-app="webClientApp">
+<style>
+body {
+  background-color:#fff;
+  -webkit-font-smoothing: antialiased;
+  font: normal 14px Roboto,arial,sans-serif;
+}
+
+.container {
+    padding: 25px;
+    position: fixed;
+}
+
+.form-login {
+    background-color: #EDEDED;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    border-color:#d2d2d2;
+    border-width: 5px;
+    box-shadow:0 1px 0 #cfcfcf;
+}
+
+h4 { 
+ border:0 solid #fff; 
+ border-bottom-width:1px;
+ padding-bottom:10px;
+ text-align: center;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+</style>
+<div class="container" ng-controller="LoginCtrl">
+    <div class="row">
+    <div id="Error" class="alert alert-danger" style=" display:none;">
+    <strong>Error!</strong> <p id="Errormsg"> </p>
+    </div>
+        <div class="col-md-offset-5 col-md-3">
+			<form role="form" ng-submit="login()">
+				<div class="form-login">
+				<h4>Bienvenido</h4>
+				<input type="text" class="form-control input-sm chat-input" placeholder="usuario" required ng-model="usuario.login"/>
+				</br>
+				<input type="password" class="form-control input-sm chat-input" placeholder="contraseña" required ng-model="usuario.credencial"/>
+				</br>
+				<div class="wrapper">
+				<button id="LoginBTN" type="submit" class="btn btn-primary btn-md">
+					Login <span class="fa fa-sign-in"></span>
+				</button>	
+				</div>
+				</div>
+			</form>
+        </div>
+    </div>
+</div>
+ <script src="bower_components/jquery/dist/jquery.js"></script>
+ <script src="bower_components/angular/angular.js"></script>
+ <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+ <script src="bower_components/angular-route/angular-route.js"></script>
+ <script src="bower_components/angular-translate/angular-translate.js"></script>
+ <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+ <script src="bower_components/ngstorage/ngStorage.min.js"></script>
+  
+ <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.6.0.js" type="text/javascript"></script>
+ <script src="http://m-e-conroy.github.io/angular-dialog-service/javascripts/dialogs.min.js" type="text/javascript"></script>
+ 
+ <script src="scripts/app.js"></script>
+ <script src="scripts/controllers/login.js"></script> 
+</body>
+
+</html>

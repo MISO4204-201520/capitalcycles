@@ -1,0 +1,107 @@
+<!-- Page Heading -->
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			Factores de retención<small></small>
+		</h1>
+		
+	</div>
+</div>
+<!-- /.row -->
+
+<div class="row" ng-controller="FactorretencionAddCtrl">
+	<form role="form" ng-submit="addFactor()">
+	<div class="col-lg-8">
+		<div class="panel panel-green">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Agregar factor retención</h3>
+			</div>
+			<div class="panel-body">
+
+				<div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">{{'views.factorretencion.table.header.descripcion' | translate}}</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="text" class="form-control input-lg" placeholder="{{'views.factorretencion.table.header.descripcion' | translate}}" autocomplete="off" required="required" ng-model="factorRetencion.descripcion">
+                                </div>
+                        </div>
+                </div>
+
+                <div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">{{'views.factorretencion-add.form.header.indicador_ingreso_egreso' | translate}}</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <select class="form-control input-lg" ng-model="factorRetencion.indicadorIngresoEgresoEnum">
+                                            <option value="INGRESO">INGRESO</option>
+                                            <option value="EGRESO">EGRESO</option>
+                                        </select>
+                                </div>
+                        </div>
+                </div>
+
+                <div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">{{'views.factorretencion.table.header.indicador_operacional' | translate}}</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="checkbox" class="form-control input-group" ng-model="factorRetencion.indicadorOperacional">
+                                </div>
+                        </div>
+                </div>
+
+				<div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">{{'views.factorretencion.table.header.retencion_no_declarante' | translate}}</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="number" class="form-control input-lg" placeholder="{{'views.factorretencion.table.header.retencion_no_declarante' | translate}}" autocomplete="off" required="required" ng-model="factorRetencion.porcentajeRetencionNoDecl" min="0" max="100">
+                                </div>
+                        </div>
+                </div>
+
+                <div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">{{'views.factorretencion.table.header.retencion_declarante' | translate}}</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="number" class="form-control input-lg" placeholder="{{'views.factorretencion.table.header.retencion_declarante' | translate}}" autocomplete="off" required="required" ng-model="factorRetencion.porcentajeRetencionDeclarante" min="0" max="100">
+                                </div>
+                        </div>
+                </div>
+
+				<div class="form-group">
+                        <div class="col-xs-12">
+                                <span class="label label-default">{{'views.factorretencion-add.form.header.aplica_dividendos' | translate}}</span>
+                                <div class="input-group">
+                                        <span class="input-group-addon"></span>
+                                        <input type="checkbox" class="form-control input-group" ng-model="factorRetencion.indicadorAplicaDividendos">
+                                </div>
+                        </div>
+                </div>
+			
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-12">
+		<div class="form-group">
+			<div class="col-lg-4">
+                <div class="col-sm-5 submitWrap">
+                        <button type="submit" class="btn btn-primary btn-lg" >Guardar</button>
+                        <button ng-click='save()' class="btn btn-default">Guardar FACTOR RET</button>
+                </div>
+     		</div>  
+
+     		<div class="col-lg-4">
+                <div class="col-sm-5 submitWrap">
+                        <button type="button" class="btn btn-primary btn-lg" >Cancelar</button>
+                </div>
+     		</div>  
+ 		</div> 
+	</div>
+	</form>
+
+</div>
+<!-- /.row -->

@@ -1,6 +1,7 @@
 package com.sofactory.servicios;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -21,6 +22,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.TravelMode;
 import com.sofactory.entidades.Posicion;
+import com.sofactory.entidades.Ruta;
 import com.sofactory.negocio.interfaces.RutaBeanLocal;
 
 @Path("rutas")
@@ -171,9 +173,14 @@ public class RutaService {
             String destino = lat2 + "," + lng2;
             
             DirectionsRoute[] ruta = DirectionsApi.getDirections(context, origen, destino).await();
+            
+            Ruta rutaP = new Ruta();
+            rutaP.setDistancia(100l);
+            rutaP.setPlaneada(true);
+            rutaP.setTiempoTotal(100l);
+            rutaP.setPosiciones(new ArrayList<Posicion>());
            
-            for(int i=0; i < ruta[0].legs[0].steps.length; i++ )
-            {
+            for(int i=0; i < ruta[0].legs[0].steps.length; i++ ){
                 System.out.println("Punto Inicial P " + (i+1) + ":\t" + ruta[0].legs[0].steps[i].htmlInstructions.toString());  
                 System.out.println("Punto Inicial P " + (i+1) + ":\t" + ruta[0].legs[0].steps[i].startLocation.toString());               
                 System.out.println("Punto Final P " + (i+1) + ":\t" + ruta[0].legs[0].steps[i].endLocation.toString());
@@ -184,6 +191,7 @@ public class RutaService {
                 String[] splitPosicion = ruta[0].legs[0].steps[i].startLocation.toString().split(",");
                 posicion.setLatitud(new BigDecimal(splitPosicion[0]));
                 posicion.setLongitud(new BigDecimal(splitPosicion[1]));
+                rutaP.getPosiciones().add(posicion);
                 
             	// Create a new Gson object that could parse all passed in elements
         		GsonBuilder gsonBuilder = new GsonBuilder();
@@ -226,7 +234,7 @@ public class RutaService {
                 System.out.println("Punto Inicial P " + (i+1) + ":\t" + ruta[0].legs[0].steps[i].startLocation.toString());               
                 System.out.println("Punto Final P " + (i+1) + ":\t" + ruta[0].legs[0].steps[i].endLocation.toString()); 
                 System.out.println("");
-             }           
+             }
             
             System.out.println("FIN"); 
         }catch(Exception e )

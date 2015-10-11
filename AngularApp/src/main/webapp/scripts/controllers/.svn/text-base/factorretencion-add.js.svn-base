@@ -1,0 +1,31 @@
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name appWebApp.controller:FactorretencionAddCtrl
+ * @description
+ * # FactorretencionAddCtrl
+ * Controller of the appWebApp
+ */
+angular.module('webClientApp')
+  .controller('FactorretencionAddCtrl', function ($scope, $rootScope, $http,  $dialogs) {
+  	
+	//Declaración del objeto FactorRetencion
+	 	//function FactorRetencion() {}
+	 	//$scope.factorRetencion = new FactorRetencion();
+ 				
+		$scope.save=function(){
+            console.log("save factor");
+            console.log("factor:"+angular.toJson( $scope.factorRetencion));
+            $http.post("http://"+window.location.host+"/negocio-apiRest/rest/FactoresRetencion", angular.toJson( $scope.factorRetencion))
+            
+            .success(function(data){
+               // alert("Registro Factor Retencion Exitoso");
+                $dialogs.notify('Información!','Registro Factor Retencion Exitoso');
+                console.log(data);
+            }).error(function(data){
+                console.log("Doesn't work");
+            });
+        };
+
+  });
