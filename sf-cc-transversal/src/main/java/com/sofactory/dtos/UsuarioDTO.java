@@ -13,6 +13,8 @@ public class UsuarioDTO{
 	private String genero;
 	private String correo;
 	private List<RolDTO> roles;
+	private String credencialNueva;
+	private String confirmacionCredencialNueva;
 	
 	public UsuarioDTO(){}
 	
@@ -94,5 +96,21 @@ public class UsuarioDTO{
 	}
 	public void setCredencial(String credencial) {
 		this.credencial = credencial;
+	}
+
+	public String getCredencialNueva() {
+		return credencialNueva;
+	}
+
+	public void setCredencialNueva(String credencialNueva) {
+		this.credencialNueva = credencialNueva;
+	}
+
+	public String getConfirmacionCredencialNueva() {
+		return confirmacionCredencialNueva;
+	}
+
+	public void setConfirmacionCredencialNueva(String confirmacionCredencialNueva) {
+		this.confirmacionCredencialNueva = confirmacionCredencialNueva;
 	}
 }

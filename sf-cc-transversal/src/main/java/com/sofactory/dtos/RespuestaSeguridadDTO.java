@@ -1,15 +1,25 @@
 package com.sofactory.dtos;
 
 public class RespuestaSeguridadDTO extends RespuestaDTO{
+	private Long codigoUsuario;
 	private String login;
 	private String credencial;
 	private String nombres;
 	private String apellidos;
+	private String correo;
 	
 	public RespuestaSeguridadDTO(){}
 	
 	public RespuestaSeguridadDTO(int codigo, String mensaje) {
 		super(codigo, mensaje);
+	}
+	
+	public Long getCodigoUsuario() {
+		return codigoUsuario;
+	}
+
+	public void setCodigoUsuario(Long codigoUsuario) {
+		this.codigoUsuario = codigoUsuario;
 	}
 
 	public String getLogin() {
@@ -42,5 +52,13 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 }

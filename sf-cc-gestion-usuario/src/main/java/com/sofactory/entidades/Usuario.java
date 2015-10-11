@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +17,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import com.sofactory.enums.Estado;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -34,6 +38,10 @@ public abstract class Usuario implements Serializable {
 	@Column(name = "PASSWORD")
 	protected String password;
 
+	@Column(name = "ESTADO", nullable=true)
+	@Enumerated(EnumType.STRING)
+	protected Estado estado = Estado.ACTIVO;
+	
 	@ManyToMany
 	@JoinTable(
 			name="GU_USUARIO_ROL",
@@ -73,5 +81,13 @@ public abstract class Usuario implements Serializable {
 
 	public void setRoles(List<Rol> roles) {
 		this.roles = roles;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 }
