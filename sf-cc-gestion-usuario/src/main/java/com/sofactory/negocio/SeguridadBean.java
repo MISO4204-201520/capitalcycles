@@ -54,27 +54,28 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 					String credencialBD = textEncryptor.decrypt(usuario.getPassword());
 					String credencialUsuario = textEncryptor.decrypt(credencial);
 					if (credencialUsuario.equals(credencialBD)){
-						//Crear usuario en sesion
-						UsuarioDTO esValidoUsuarioDTO = new UsuarioDTO();
-						esValidoUsuarioDTO.setCodigo(usuario.getCodigo());
-						esValidoUsuarioDTO.setLogin(usuario.getLogin());
-						esValidoUsuarioDTO.setCredencial(usuario.getPassword());
-						if (usuario instanceof Persona){
-							esValidoUsuarioDTO.setNombres(((Persona)usuario).getNombres());
-							esValidoUsuarioDTO.setApellidos(((Persona)usuario).getApellidos());
-							esValidoUsuarioDTO.setCorreo(((Persona)usuario).getCorreo());
-						}
-						usuarioSingletonBean.getUsuariosDTO().put(esValidoUsuarioDTO.getCodigo(), esValidoUsuarioDTO);
 						usuarioEsValido = true;
 					}
 				}catch(Exception exc){
 				}
 				if (usuarioEsValido){
+					//Crear usuario en sesion
+					UsuarioDTO esValidoUsuarioDTO = new UsuarioDTO();
+					esValidoUsuarioDTO.setCodigo(usuario.getCodigo());
+					esValidoUsuarioDTO.setLogin(usuario.getLogin());
+					esValidoUsuarioDTO.setCredencial(usuario.getPassword());
+					if (usuario instanceof Persona){
+						esValidoUsuarioDTO.setNombres(((Persona)usuario).getNombres());
+						esValidoUsuarioDTO.setApellidos(((Persona)usuario).getApellidos());
+						esValidoUsuarioDTO.setCorreo(((Persona)usuario).getCorreo());
+					}
+					usuarioSingletonBean.getUsuariosDTO().put(esValidoUsuarioDTO.getCodigo(), esValidoUsuarioDTO);
+					respuestaDTO.setCodigoUsuario(usuario.getCodigo());
 					respuestaDTO.setLogin(usuario.getLogin());
-					respuestaDTO.setCredencial(usuario.getPassword());
 					if (usuario instanceof Persona){
 						respuestaDTO.setNombres(((Persona)usuario).getNombres());
 						respuestaDTO.setApellidos(((Persona)usuario).getApellidos());
+						respuestaDTO.setCorreo(((Persona)usuario).getCorreo());
 					}
 				}else{
 					respuestaDTO.setCodigo(2);
