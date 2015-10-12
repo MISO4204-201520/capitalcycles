@@ -102,4 +102,19 @@ public class SeguridadService {
 	public RespuestaSeguridadDTO cerrarSesion(UsuarioDTO usuarioDTO){
 		return seguridadBeanLocal.cerrarSesion(usuarioDTO.getCodigo());
 	}
+	
+	@POST
+	@Path("encriptar")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaSeguridadDTO encriptar(UsuarioDTO usuarioDTO){
+		RespuestaSeguridadDTO respuestaSeguridadDTO = new RespuestaSeguridadDTO(0, "OK");
+		if (usuarioDTO.getCredencial() != null && !usuarioDTO.getCredencial().isEmpty()){
+			respuestaSeguridadDTO.setCredencial(seguridadBeanLocal.encriptar(usuarioDTO.getCredencial()));
+		}else{
+			respuestaSeguridadDTO.setCodigo(1);
+			respuestaSeguridadDTO.setMensaje("Faltan Campos Obligatorios");
+		}
+		return respuestaSeguridadDTO;
+	}
 }

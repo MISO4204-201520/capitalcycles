@@ -8,4 +8,5 @@ public interface SeguridadBeanLocal extends MetodosGenerales<Usuario>{
 	RespuestaSeguridadDTO esValidoUsuario(String login, String credencial);
 	RespuestaSeguridadDTO obtenerUsuarioSesion(Long codigoUsuario);
 	RespuestaSeguridadDTO cerrarSesion(Long codigoUsuario);
+	String encriptar(String credencial);
 }

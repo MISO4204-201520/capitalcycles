@@ -122,13 +122,10 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 		
 		return respuestaDTO;
 	}
-	
-	
-//	public static void main(String[] args) throws UnsupportedEncodingException{
-//		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-//		textEncryptor.setPassword(LLAVE_PASSWORD);
-//		System.out.println(textEncryptor.encrypt("admin"));
-//		
-//		System.out.println(URLEncoder.encode("gMxyt0elu9HnM1C1UQ/WLQ==","UTF-8"));
-//	}
+
+	public String encriptar(String credencial) {
+		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+		textEncryptor.setPassword(LLAVE_PASSWORD);
+		return textEncryptor.encrypt(credencial);
+	}
 }
