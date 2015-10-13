@@ -11,7 +11,7 @@ session_start();
 
   <body>
 
-  	<form id="login" method="POST" action="cambiarcredencialservice.php">
+  	<form id="signup" method="POST" action="cambiarcredencialservice.php">
 		<h1>Cambia tu contrase&ntilde;a</h1>
 		<input type="text" placeholder="Nombre de Usuario" name="login" id="login" value="<?php echo $_SESSION['loginUsuario']; ?>" required="" disabled>
 		<input type="password" placeholder="Contrase&ntilde;a Actual" name="oldpassword" id="oldpassword" required="">				
