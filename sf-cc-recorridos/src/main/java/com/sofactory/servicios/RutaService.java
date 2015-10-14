@@ -61,7 +61,7 @@ public class RutaService {
 			PosicionDTO posicionDto;
 			for (Posicion posicion : ruta.getPosiciones()) {
 				posicionDto = new PosicionDTO(
-						posicion.getLatitud(), posicion.getLongitud());
+						posicion.getLatitud(), posicion.getLongitud(), null);
 				respuesta.getPosiciones().add(posicionDto);
 			}
 			

@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.sofactory.dtos.PosicionDTO;
 import com.sofactory.dtos.RegistrarPosicionDTO;
 import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RutaDTO;
@@ -48,6 +49,31 @@ public class DesplazamientoServicio {
 			pt.setLongitud(dto.getLongitud());
 			pt.setTiempo(dto.getTiempo());
 			desplazamientoBean.registrarPosicion(pt, dto.getIdRuta());
+			response.setMensaje("OK");
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.setMensaje("ERROR-"+e.getMessage());
+		}
+		
+		return response;
+	}
+	
+	@POST
+	@Path("registrarTodasPosiciones")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public RespuestaDTO registrarTodasPosiciones(RutaDTO dto){
+		RespuestaDTO response = new RespuestaDTO();
+		try {
+			PosicionTiempo pt = new PosicionTiempo();
+			for (PosicionDTO posDto : dto.getPosiciones()){
+				pt = new PosicionTiempo();
+				pt.setLatitud(posDto.getLatitud());
+				pt.setLongitud(posDto.getLongitud());
+				pt.setTiempo(posDto.getTiempo());
+				desplazamientoBean.registrarPosicion(pt, dto.getId());
+			}
+			
 			response.setMensaje("OK");
 		}catch (Exception e) {
 			e.printStackTrace();
