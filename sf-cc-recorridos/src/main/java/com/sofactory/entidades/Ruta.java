@@ -11,11 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 @Entity
-@Table(name="RE_RUTA")
+@Table(name="RE_RUTA", 
+	uniqueConstraints = {@UniqueConstraint(columnNames={"RECORRIDO_ID","CODIGO_USUARIO"})})
 public class Ruta {
 	
 	@Id
@@ -37,12 +38,11 @@ public class Ruta {
 	
 	@ManyToOne
 	@JoinColumn(name="RECORRIDO_ID")
-	@Null
 	private Recorrido recorrido;
 	
-//	@Column(name="USUARIO_ID")
-//	@NotNull
-//	private Usuario usuario;
+	@Column(name="CODIGO_USUARIO")
+	@NotNull
+	private String codigoUsuario;
 	
 	@OneToMany(mappedBy="ruta")
 	private List<Posicion> posiciones;
@@ -87,13 +87,13 @@ public class Ruta {
 		this.recorrido = recorrido;
 	}
 
-//	public Usuario getUsuario() {
-//		return usuario;
-//	}
-//
-//	public void setUsuario(Usuario usuario) {
-//		this.usuario = usuario;
-//	}
+	public String getCodigoUsuario() {
+		return codigoUsuario;
+	}
+
+	public void setCodigoUsuario(String codigousuario) {
+		this.codigoUsuario = codigousuario;
+	}
 
 	public List<Posicion> getPosiciones() {
 		return posiciones;

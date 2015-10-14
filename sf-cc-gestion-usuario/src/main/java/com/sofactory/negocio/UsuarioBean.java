@@ -17,7 +17,7 @@ import com.sofactory.negocio.interfaces.UsuarioBeanLocal;
 @Local({ UsuarioBeanLocal.class })
 public class UsuarioBean extends GenericoBean<Usuario> implements UsuarioBeanLocal {
 
-	@PersistenceContext(unitName="GestionUsuarioPU")
+	@PersistenceContext(unitName="RecorridosPU")
 	private EntityManager em;
 	
 	@PostConstruct

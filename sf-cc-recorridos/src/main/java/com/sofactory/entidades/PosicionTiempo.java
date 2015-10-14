@@ -12,7 +12,7 @@ public class PosicionTiempo extends Posicion {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="RUTA_ID", columnDefinition="DATETIME")
+	@Column(name="TIEMPO", columnDefinition="DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date tiempo;
 

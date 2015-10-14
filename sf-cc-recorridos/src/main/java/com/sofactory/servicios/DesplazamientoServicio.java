@@ -4,12 +4,12 @@ import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.sofactory.dtos.RegistrarPosicionDTO;
 import com.sofactory.dtos.RespuestaDTO;
+import com.sofactory.dtos.RutaDTO;
 import com.sofactory.entidades.PosicionTiempo;
 import com.sofactory.negocio.interfaces.DesplazamientoBeanLocal;
 
@@ -23,10 +23,10 @@ public class DesplazamientoServicio {
 	@Path("iniciarDesplazamiento")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public RespuestaDTO iniciarDesplazamiento(Long idRuta){
+	public RespuestaDTO iniciarDesplazamiento(RutaDTO dto){
 		RespuestaDTO response = new RespuestaDTO();
 		try {
-			desplazamientoBean.iniciarDesplazamiento(idRuta);
+			desplazamientoBean.iniciarDesplazamiento(dto.getId(), dto.getCodigoUsuario());
 			response.setMensaje("OK");
 		}catch (Exception e) {
 			e.printStackTrace();

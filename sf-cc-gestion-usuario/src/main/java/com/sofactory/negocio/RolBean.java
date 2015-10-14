@@ -19,7 +19,7 @@ import com.sofactory.negocio.interfaces.RolBeanLocal;
  */
 @Stateless
 @Local({RolBeanLocal.class})
-public class RolBean  extends GenericoBean<Rol> implements RolBeanLocal {
+public class RolBean extends GenericoBean<Rol> implements RolBeanLocal {
 	
 	@PersistenceContext(unitName="GestionUsuarioPU")
 	private EntityManager em;

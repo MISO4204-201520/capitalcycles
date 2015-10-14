@@ -1,7 +1,6 @@
 package com.sofactory.entidades;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Table(name="RE_POSICION")
 public class Posicion implements Serializable {
 	
@@ -33,11 +32,11 @@ public class Posicion implements Serializable {
 	
 	@Column(name="LATITUD")
 	@NotNull
-	private BigDecimal latitud;
+	private Double latitud;
 
 	@Column(name="LONGITUD")
 	@NotNull
-	private BigDecimal longitud;
+	private Double longitud;
 
 	@ManyToOne
 	@JoinColumn(name="RUTA_ID")
@@ -52,27 +51,32 @@ public class Posicion implements Serializable {
 		this.id = id;
 	}
 
-	public BigDecimal getLatitud() {
+	public Double getLatitud() {
 		return latitud;
 	}
 
-	public void setLatitud(BigDecimal latitud) {
+	public void setLatitud(Double latitud) {
 		this.latitud = latitud;
 	}
 
-	public BigDecimal getLongitud() {
+	public Double getLongitud() {
 		return longitud;
 	}
 
-	public void setLongitud(BigDecimal longitud) {
+	public void setLongitud(Double longitud) {
 		this.longitud = longitud;
 	}
 
-//	public Ruta getRuta() {
-//		return ruta;
-//	}
-//
-//	public void setRuta(Ruta ruta) {
-//		this.ruta = ruta;
-//	}
+	public Ruta getRuta() {
+		return ruta;
+	}
+
+	public void setRuta(Ruta ruta) {
+		this.ruta = ruta;
+	}
+
+	@Override
+	public String toString() {
+		return latitud + ", " + longitud;
+	}
 }

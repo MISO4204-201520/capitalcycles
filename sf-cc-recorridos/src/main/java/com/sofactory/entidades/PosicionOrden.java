@@ -1,9 +1,11 @@
 package com.sofactory.entidades;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 
+@Entity
 public class PosicionOrden extends Posicion {
-	
+
 	/**
 	 * 
 	 */

@@ -1,33 +1,16 @@
 package com.sofactory.dtos;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class RegistrarPosicionDTO {
 
-	private BigDecimal latitud;
+	protected Long idRuta;
 	
-	private BigDecimal longitud;
+	protected Date tiempo;
 	
-	private Date tiempo;
+	protected Double latitud;
 	
-	private Long idRuta;
-
-	public BigDecimal getLatitud() {
-		return latitud;
-	}
-
-	public void setLatitud(BigDecimal latitud) {
-		this.latitud = latitud;
-	}
-
-	public BigDecimal getLongitud() {
-		return longitud;
-	}
-
-	public void setLongitud(BigDecimal longitud) {
-		this.longitud = longitud;
-	}
+	protected Double longitud;
 
 	public Date getTiempo() {
 		return tiempo;
@@ -43,5 +26,21 @@ public class RegistrarPosicionDTO {
 
 	public void setIdRuta(Long idRuta) {
 		this.idRuta = idRuta;
+	}
+
+	public Double getLatitud() {
+		return latitud;
+	}
+
+	public void setLatitud(Double latitud) {
+		this.latitud = latitud;
+	}
+
+	public Double getLongitud() {
+		return longitud;
+	}
+
+	public void setLongitud(Double longitud) {
+		this.longitud = longitud;
 	}
 }
