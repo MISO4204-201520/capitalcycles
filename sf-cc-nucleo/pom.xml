@@ -32,6 +32,10 @@
 							<artifactId>sf-cc-recorridos</artifactId>
 							<excluded>${recorridos.excludes}</excluded>
 						</webModule>
+						<webModule>
+							<groupId>com.sofactory</groupId>
+							<artifactId>sf-cc-mensajes</artifactId>
+						</webModule>
 					</modules>
 				</configuration>
 			</plugin>
@@ -83,6 +87,12 @@
 		<dependency>
 			<groupId>com.sofactory</groupId>
 			<artifactId>sf-cc-recorridos</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sofactory</groupId>
+			<artifactId>sf-cc-mensajes</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
