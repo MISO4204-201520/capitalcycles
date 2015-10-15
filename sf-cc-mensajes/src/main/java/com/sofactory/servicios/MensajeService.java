@@ -1,9 +1,24 @@
 package com.sofactory.servicios;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ejb.EJB;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,10 +35,12 @@ import javax.ws.rs.core.Response;
 
 import com.sofactory.dtos.RespuestaMensajeDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sofactory.dtos.MensajeDTO;
 import com.sofactory.entidades.Mensaje;
 import com.sofactory.negocio.interfaces.MensajeBeanLocal;
 
+import play.libs.Json;
 
 @Path("mensajeService")
 public class MensajeService {
@@ -154,22 +171,28 @@ public class MensajeService {
 		
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
 		
+		
+		
 		if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
 
 			mDTO.setFecha(new Date());
 			mDTO.setStatus(false);
 			
 			try {
-//				Client client = ClientBuilder.newClient();
-//				WebTarget targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
-//				RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-			
-//				if (resu!=null && resu.getCodigo()==0){
 				
-//					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
-//					resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+				
+				
+				
+				Client client = ClientBuilder.newClient();
+				WebTarget targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
+				RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+			
+				if (resu!=null && resu.getCodigo()==0){
+				
+					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
+					resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
 					
-//					if (resu!=null && resu.getCodigo()==0){
+					if (resu!=null && resu.getCodigo()==0){
 					
 						Mensaje mensaje = new Mensaje();
 				
@@ -180,16 +203,62 @@ public class MensajeService {
 						mensaje.setFecha(mDTO.getFecha());
 				
 						mensajeBeanLocal.insertar(mensaje);
-				
-//					}else{			
-//						respuestaMensajeDTO.setCodigo(3);
-//						respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe ... ");
-//					}
+
+
+						//Envio mensaje txt al Celular segun token del usuario				
+						boolean msgtxt=false;
+						
+						if (msgtxt==true)
+						{
+							String apiKey = "LUIS";
+							String TOKEN="Token";
+						
+							try {
+								// Prepare JSON containing the GCM message content. What to send and where to send.
+								ObjectNode jGcmData = Json.newObject();
+								ObjectNode jData = Json.newObject();
+								jData.put("message", mensaje.getTexto());
+								// Where to send GCM message.
+								jGcmData.put("to", TOKEN);
+								// What to send in GCM message.
+								jGcmData.put("data", jData);
+
+								// Create connection to send GCM Message request.
+								URL url = new URL("https://android.googleapis.com/gcm/send");
+								HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+								conn.setRequestProperty("Authorization", "key=" + apiKey);
+								conn.setRequestProperty("Content-Type", "application/json");
+								conn.setRequestMethod("POST");
+								conn.setDoOutput(true);
+
+								// Send GCM message content.
+								OutputStream outputStream = conn.getOutputStream();
+								outputStream.write(jGcmData.toString().getBytes());
+
+								// Read GCM response.
+								InputStream inputStream = conn.getInputStream();
+								String resp = getStringFromInputStream(inputStream);
+								System.out.println(resp);
+								System.out.println("Check your device/emulator for notification or logcat for " +
+										"confirmation of the receipt of the GCM message.");
+							} catch (IOException e) {
+								System.out.println("Unable to send GCM message.");
+								System.out.println("Please ensure that API_KEY has been replaced by the server " +
+										"API key, and that the device's registration token is correct (if specified).");
+								e.printStackTrace();
+							}
+							
+						}
+						
+					}else{			
+						respuestaMensajeDTO.setCodigo(3);
+						respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe ... ");
+					}
 					
-//				}else{
-//					respuestaMensajeDTO.setCodigo(2);
-//					respuestaMensajeDTO.setMensaje("Usuario Remitente No Existe ... ");
-//				}
+				}else{
+					respuestaMensajeDTO.setCodigo(2);
+					respuestaMensajeDTO.setMensaje("Usuario Remitente No Existe ... ");
+				}
 				
 			} catch (Exception e) {
 				respuestaMensajeDTO.setCodigo(1);
@@ -197,8 +266,38 @@ public class MensajeService {
 			}
 		
 		}
+		
 		return respuestaMensajeDTO;
 	}
+
+	private static String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        return sb.toString();
+}
+	
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -268,5 +367,72 @@ public class MensajeService {
 		}
 		return respuestaMensajeDTO;
 	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("enviarCorreo")
+	public RespuestaMensajeDTO enviarCorreo(MensajeDTO mDTO) {
+		
+		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
+		
+		if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
 
+			mDTO.setFecha(new Date());
+			mDTO.setStatus(false);
+							
+			Mensaje mensaje = new Mensaje();
+			
+			mensaje.setUsrdesde(mDTO.getUsrdesde());
+			mensaje.setUsrpara(mDTO.getUsrpara());
+			mensaje.setTexto(mDTO.getTexto());
+			mensaje.setStatus(mDTO.getStatus());
+			mensaje.setFecha(mDTO.getFecha());
+
+			//Envio email segun dirección de correo usuario				
+
+			final String username = "capytalcycles@gmail.com";
+			final String password = "capytal2015";
+
+			Properties props = new Properties();
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+			Session session = Session.getInstance(props,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(username, password);
+						}
+					}
+			);
+						
+			try {
+	
+				System.out.println("... Sending Mail ...");					
+						
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
+				message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse("fergutierrez@yahoo.com"));
+				message.setSubject("Notificacion ");
+				message.setText("Pruebas"
+					            		+ "\n\n .... Pruebas .....");
+										
+				Transport.send(message);
+	
+			} catch (MessagingException e) {
+									throw new RuntimeException(e);
+			}
+			
+		}else{
+				respuestaMensajeDTO.setCodigo(1);
+				respuestaMensajeDTO.setMensaje("Faltan Campos Obligatorios");
+		}
+	
+		return respuestaMensajeDTO;
+	
+	}
 }
