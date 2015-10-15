@@ -42,6 +42,9 @@ public abstract class Usuario implements Serializable {
 	@Enumerated(EnumType.STRING)
 	protected Estado estado = Estado.ACTIVO;
 	
+	@Column(name = "TOKEN")
+	protected String token;
+		
 	@ManyToMany
 	@JoinTable(
 			name="GU_USUARIO_ROL",
@@ -89,5 +92,13 @@ public abstract class Usuario implements Serializable {
 
 	public void setEstado(Estado estado) {
 		this.estado = estado;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

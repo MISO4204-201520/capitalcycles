@@ -76,6 +76,8 @@ public abstract class GenericoBean<T> {
 			}
 			else if (e.getCause() != null && e.getCause().getCause() != null) {
 				throw new RegistroYaExisteException("El registro ya existe en la base de datos", e);
+			}else{
+				e.printStackTrace();
 			}
 		} finally {
 

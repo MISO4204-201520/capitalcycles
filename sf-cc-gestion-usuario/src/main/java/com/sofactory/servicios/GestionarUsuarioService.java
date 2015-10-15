@@ -55,6 +55,7 @@ public class GestionarUsuarioService {
 								p.getCelular(), 
 								p.getGenero()!=null?p.getGenero().name():null,
 										p.getCorreo());
+						usuarioDTO.setToken(p.getToken());
 						List<Rol> roles = rolBeanLocal.encontrarRolesPorUsuario(u.getCodigo());
 						if (roles!=null){
 							for (Rol rol:roles){
@@ -85,7 +86,8 @@ public class GestionarUsuarioService {
 				usuarioDTO.getCredencial()!=null && !usuarioDTO.getCredencial().isEmpty() &&
 				usuarioDTO.getNombres()!=null && !usuarioDTO.getNombres().isEmpty() &&
 				usuarioDTO.getApellidos()!=null && !usuarioDTO.getApellidos().isEmpty() &&
-				usuarioDTO.getRoles()!=null && !usuarioDTO.getRoles().isEmpty()){
+				usuarioDTO.getRoles()!=null && !usuarioDTO.getRoles().isEmpty() &&
+				usuarioDTO.getToken()!=null && !usuarioDTO.getToken().isEmpty()){
 			try {
 				//Validar Codigo Rol
 				boolean estanRoles=true;
@@ -106,6 +108,7 @@ public class GestionarUsuarioService {
 					persona.setNombres(usuarioDTO.getNombres());
 					persona.setApellidos(usuarioDTO.getApellidos());
 					persona.setRoles(roles);
+					persona.setToken(usuarioDTO.getToken());
 					if (usuarioDTO.getCelular()!=null && !usuarioDTO.getCelular().isEmpty()){
 						persona.setCelular(usuarioDTO.getCelular());	
 					}
@@ -184,6 +187,7 @@ public class GestionarUsuarioService {
 							p.getCelular(), 
 							p.getGenero()!=null?p.getGenero().name():null,
 									p.getCorreo());
+					usuarioDTO.setToken(p.getToken());
 					List<Rol> roles = rolBeanLocal.encontrarRolesPorUsuario(new Long(codigo));
 					if (roles!=null){
 						for (Rol rol:roles){
@@ -239,7 +243,8 @@ public class GestionarUsuarioService {
 				usuarioDTO.getLogin()!=null && !usuarioDTO.getLogin().isEmpty() &&
 				usuarioDTO.getNombres()!=null && !usuarioDTO.getNombres().isEmpty() &&
 				usuarioDTO.getApellidos()!=null && !usuarioDTO.getApellidos().isEmpty() &&
-				usuarioDTO.getRoles()!=null && !usuarioDTO.getRoles().isEmpty()){
+				usuarioDTO.getRoles()!=null && !usuarioDTO.getRoles().isEmpty() &&
+				usuarioDTO.getToken()!=null && !usuarioDTO.getToken().isEmpty()){
 			try {
 				//Validar si el usuario existe en el sistema
 				Usuario usuarioActualizar = usuarioBeanLocal.encontrarPorId(Usuario.class, usuarioDTO.getCodigo());
@@ -264,7 +269,8 @@ public class GestionarUsuarioService {
 								persona.setLogin(usuarioDTO.getLogin());
 								persona.setNombres(usuarioDTO.getNombres());
 								persona.setApellidos(usuarioDTO.getApellidos());
-								persona.setRoles(roles);	
+								persona.setRoles(roles);
+								persona.setToken(usuarioDTO.getToken());
 								if (usuarioDTO.getCelular()!=null && !usuarioDTO.getCelular().isEmpty()){
 									persona.setCelular(usuarioDTO.getCelular());	
 								}
@@ -282,6 +288,7 @@ public class GestionarUsuarioService {
 										persona.getCelular(), 
 										persona.getGenero()!=null?persona.getGenero().name():null,
 												persona.getCorreo());
+								usuarioActDTO.setToken(usuarioDTO.getToken());
 								List<RolDTO> rolesDTO = new ArrayList<RolDTO>();
 								for(Rol r:persona.getRoles()){
 									RolDTO rolDTO = new RolDTO(r.getId(), r.getNombre());

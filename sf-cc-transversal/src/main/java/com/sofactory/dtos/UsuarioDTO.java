@@ -12,6 +12,7 @@ public class UsuarioDTO{
 	private String celular;
 	private String genero;
 	private String correo;
+	private String token;
 	private List<RolDTO> roles;
 	private String credencialNueva;
 	private String confirmacionCredencialNueva;
@@ -112,5 +113,13 @@ public class UsuarioDTO{
 
 	public void setConfirmacionCredencialNueva(String confirmacionCredencialNueva) {
 		this.confirmacionCredencialNueva = confirmacionCredencialNueva;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
