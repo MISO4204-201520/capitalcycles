@@ -36,10 +36,10 @@ if($result->codigo = 0){
 	$_SESSION['encCredencial'] = $credencial;
 	$_SESSION['loginUsuario'] = $login;
 	$_SESSION['codigoUsuario'] = $result->codigoUsuario;
-	echo '<script>alert("Inicio de sesión exitoso");</script>';
+	echo '<script>alert("Inicio de sesión exitoso"); window.location="calcularRuta.php";</script>';
 }
 else
-	echo '<script>alert("' . $msj . '");</script>';
+	echo '<script>alert("' . $msj . '"); window.location="login.php";</script>';
 
 curl_close($curl);
 

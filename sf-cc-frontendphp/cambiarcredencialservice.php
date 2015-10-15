@@ -56,9 +56,9 @@ else
 	$result = curl_exec($curl);
 	$msj = $result->mensaje;
 	if($result->codigo = 0)
-		echo '<script>alert("Actualización de credencial exitosa");</script>';
+		echo '<script>alert("Actualización de credencial exitosa"); window.location="calcularRuta.php";</script>';
 	else
-		echo '<script>alert("' . $msj . '");</script>';
+		echo '<script>alert("' . $msj . '"); window.location="calcularRuta.php";</script>';
 
 	curl_close($curl);
 }
