@@ -1,4 +1,12 @@
+<?php 
+	session_start();
+  ?>
 <!doctype html>
+
+<?php 
+	if(isset($_SESSION['loginUsuario']))
+		session_destroy();
+  ?>
 <html>
   <head>
     <title>CapitalCycles</title>

@@ -1,4 +1,12 @@
+<?php 
+	session_start();
+  ?>
 <!doctype html>
+
+<?php 
+	if(isset($_SESSION['loginUsuario']))
+		session_destroy();
+  ?>
 <html>
   <head>
     <title>CapitalCycles</title>
@@ -8,7 +16,7 @@
 
   <body>
 
-  	<form id="login" method="POST" action="loginservice.php">
+  	<form id="signup" method="POST" action="loginservice.php">
 		<h1>Bienvenido a CapitalCycles!</h1>
 		<input type="text" placeholder="Nombre de Usuario" name="login" id="login" required="">
 		<input type="password" placeholder="Contrase&ntilde;a" name="password" id="password" required="">				

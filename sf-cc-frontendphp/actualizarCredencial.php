@@ -1,7 +1,13 @@
-<!doctype html>
 <?php 
 session_start();
+if(!isset($_SESSION['loginUsuario']))
+{
+	echo "<script>alert('No ha iniciado sesión.'); window.location='login.php';</script>"
+}
+else
+{
 ?>
+<!doctype html>
 <html>
   <head>
     <title>CapitalCycles</title>
@@ -10,6 +16,9 @@ session_start();
   </head>
 
   <body>
+  
+	<?php include('menu.php'); ?>
+	<br/>
 
   	<form id="signup" method="POST" action="cambiarcredencialservice.php">
 		<h1>Cambia tu contrase&ntilde;a</h1>
@@ -23,3 +32,6 @@ session_start();
   </body>
 
 </html>
+<?php 
+}
+?>
