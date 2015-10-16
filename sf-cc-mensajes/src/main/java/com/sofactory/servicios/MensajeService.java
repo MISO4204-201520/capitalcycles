@@ -171,17 +171,12 @@ public class MensajeService {
 		
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
 		
-		
-		
 		if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
 
 			mDTO.setFecha(new Date());
 			mDTO.setStatus(false);
 			
-			try {
-				
-				
-				
+			try {				
 				
 				Client client = ClientBuilder.newClient();
 				WebTarget targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
@@ -246,6 +241,8 @@ public class MensajeService {
 								System.out.println("Please ensure that API_KEY has been replaced by the server " +
 										"API key, and that the device's registration token is correct (if specified).");
 								e.printStackTrace();
+								respuestaMensajeDTO.setCodigo(4);
+								respuestaMensajeDTO.setMensaje("Error al Enviar Mensaje de Texto");
 							}
 							
 						}
@@ -378,60 +375,98 @@ public class MensajeService {
 		
 		if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
 
-			mDTO.setFecha(new Date());
-			mDTO.setStatus(false);
-							
-			Mensaje mensaje = new Mensaje();
-			
-			mensaje.setUsrdesde(mDTO.getUsrdesde());
-			mensaje.setUsrpara(mDTO.getUsrpara());
-			mensaje.setTexto(mDTO.getTexto());
-			mensaje.setStatus(mDTO.getStatus());
-			mensaje.setFecha(mDTO.getFecha());
-
-			//Envio email segun dirección de correo usuario				
-
-			final String username = "capytalcycles@gmail.com";
-			final String password = "capytal2015";
-
-			Properties props = new Properties();
-			props.put("mail.smtp.starttls.enable", "true");
-			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.host", "smtp.gmail.com");
-			props.put("mail.smtp.port", "587");
-			props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-			Session session = Session.getInstance(props,
-					new javax.mail.Authenticator() {
-						protected PasswordAuthentication getPasswordAuthentication() {
-							return new PasswordAuthentication(username, password);
-						}
-					}
-			);
-						
 			try {
-	
-				System.out.println("... Sending Mail ...");					
-						
-				Message message = new MimeMessage(session);
-				message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
-				message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse("fergutierrez@yahoo.com"));
-				message.setSubject("Notificacion ");
-				message.setText("Pruebas"
-					            		+ "\n\n .... Pruebas .....");
-										
-				Transport.send(message);
-	
-			} catch (MessagingException e) {
-									throw new RuntimeException(e);
-			}
 			
+				Client client = ClientBuilder.newClient();
+				WebTarget targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
+				RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+		
+				if (resu!=null && resu.getCodigo()==0){
+
+					try {
+					
+						targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
+						resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+												
+						if (resu!=null && resu.getCodigo()==0){
+						
+							mDTO.setFecha(new Date());
+							mDTO.setStatus(false);
+									
+							Mensaje mensaje = new Mensaje();
+						
+							mensaje.setUsrdesde(mDTO.getUsrdesde());
+							mensaje.setUsrpara(mDTO.getUsrpara());
+							mensaje.setTexto(mDTO.getTexto());
+							mensaje.setStatus(mDTO.getStatus());
+							mensaje.setFecha(mDTO.getFecha());
+	
+							//Envio email segun dirección de correo usuario				
+
+							final String username = "capytalcycles@gmail.com";
+							final String password = "capytal2015";
+			
+							Properties props = new Properties();
+							props.put("mail.smtp.starttls.enable", "true");
+							props.put("mail.smtp.auth", "true");
+							props.put("mail.smtp.host", "smtp.gmail.com");
+							props.put("mail.smtp.port", "587");
+							props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+			
+							Session session = Session.getInstance(props,
+									new javax.mail.Authenticator() {
+										protected PasswordAuthentication getPasswordAuthentication() {
+											return new PasswordAuthentication(username, password);
+										}
+									}
+							);
+						
+							try {
+				
+								System.out.println("... Sending Mail ...");					
+									
+								Message message = new MimeMessage(session);
+								message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
+								message.setRecipients(Message.RecipientType.TO,
+																			InternetAddress.parse(resu.getUsuarios().get(0).getCorreo()));
+								message.setSubject("Capytal Cycles ");
+								message.setText(mDTO.getTexto());
+								Transport.send(message);
+				
+							} catch (MessagingException e) {
+		//										throw new RuntimeException(e);
+								respuestaMensajeDTO.setCodigo(2);
+								respuestaMensajeDTO.setMensaje("Error en el Envio del Email");
+							}
+	
+						}else{
+							respuestaMensajeDTO.setCodigo(3);
+							respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe");
+						}	
+							
+					}catch (Exception e ) {
+		//							throw new RuntimeException(e);
+									respuestaMensajeDTO.setCodigo(4);
+									respuestaMensajeDTO.setMensaje("Error Interno del Sistema");
+					}
+					
+				}else{
+					respuestaMensajeDTO.setCodigo(5);
+					respuestaMensajeDTO.setMensaje("Usuario Remitente No Existe");
+				}
+
+			}catch (Exception e) {
+				//			throw new RuntimeException(e);
+							respuestaMensajeDTO.setCodigo(4);
+							respuestaMensajeDTO.setMensaje("Error Interno del Sistema");
+			}
+				
+				
 		}else{
 				respuestaMensajeDTO.setCodigo(1);
 				respuestaMensajeDTO.setMensaje("Faltan Campos Obligatorios");
 		}
-	
+		
 		return respuestaMensajeDTO;
 	
 	}
