@@ -4,13 +4,13 @@ import java.util.List;
 
 public class CatalogoDTO extends RespuestaDTO{
 	
-	private List<ProdutoDTO> productos;
+	private List<ProductoDTO> productos;
 
-	public List<ProdutoDTO> getProductos() {
+	public List<ProductoDTO> getProductos() {
 		return productos;
 	}
 
-	public void setProductos(List<ProdutoDTO> productos) {
+	public void setProductos(List<ProductoDTO> productos) {
 		this.productos = productos;
 	}
 }

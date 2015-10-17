@@ -1,6 +1,6 @@
 package com.sofactory.dtos;
 
-public class ProdutoDTO {
+public class ProductoDTO{
 	
 	private Long id;
 	

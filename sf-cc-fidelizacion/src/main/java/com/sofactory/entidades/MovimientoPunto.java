@@ -34,6 +34,10 @@ public class MovimientoPunto implements Serializable{
 	private Boolean registro;
 	
 	@ManyToOne
+	@JoinColumn(name="PUNTO_ID")
+	private Punto punto;
+	
+	@ManyToOne
 	@JoinColumn(name="SERVICIO_ID")
 	private Servicio servicio;
 	
@@ -55,6 +59,14 @@ public class MovimientoPunto implements Serializable{
 
 	public void setRegistro(Boolean registro) {
 		this.registro = registro;
+	}
+	
+	public Punto getPunto() {
+		return punto;
+	}
+
+	public void setPunto(Punto punto) {
+		this.punto = punto;
 	}
 
 	public Servicio getServicio() {
