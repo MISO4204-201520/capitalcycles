@@ -29,14 +29,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import com.sofactory.dtos.RespuestaMensajeDTO;
-import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sofactory.dtos.MensajeDTO;
+import com.sofactory.dtos.RespuestaMensajeDTO;
+import com.sofactory.dtos.RespuestaSeguridadDTO;
+import com.sofactory.dtos.RespuestaUsuarioDTO;
+import com.sofactory.dtos.UsuarioDTO;
 import com.sofactory.entidades.Mensaje;
 import com.sofactory.negocio.interfaces.MensajeBeanLocal;
 
@@ -46,6 +48,7 @@ import play.libs.Json;
 public class MensajeService {
 
 	private static String servicioGetEncontrarUsuario = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarUsuarioPorCodigo/";
+	private static String servicioObtenerUsuarioSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/obtenerUsuarioSesion";
 	
 	@EJB
 	private MensajeBeanLocal mensajeBeanLocal;
@@ -53,8 +56,22 @@ public class MensajeService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("obtenerStatus")
-	public Response getStatus() {
-		return Response.ok("{\"status \":\"sf-cc-mensajes is running...\"}").build();
+	public RespuestaMensajeDTO getStatus() {
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(new Long(1));
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resu = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resu.getCodigo());
+		System.out.println("RESU "+resu.getMensaje());
+		
+		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "{\"status \":\"sf-cc-mensajes is running...\"}");
+			
+		return respuestaMensajeDTO;
+	
 	}
 
 	@GET
@@ -83,27 +100,46 @@ public class MensajeService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("encontrarMensajePorId/{id}")
-	public RespuestaMensajeDTO encontrarMensajePorId(@PathParam("id") long idMensaje) {
-		
+	@Path("encontrarMensajePorId/{cod}/{id}")
+	public RespuestaMensajeDTO encontrarMensajePorId(@PathParam("cod") long codUsuario, @PathParam("id") long idMensaje) {
+	
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
-		try {
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(codUsuario);
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resu = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resu.getCodigo());
+		System.out.println("RESU "+resu.getMensaje());
+		
+		if (resu.getCodigo()==0){
+		
+				try {
+					
+					Mensaje m = mensajeBeanLocal.encontrarPorId(Mensaje.class, new Long(idMensaje));	
+		
+					if (m!=null) {
+						MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
+								   m.getTexto(),m.getStatus(), m.getFecha());
+						respuestaMensajeDTO.getMensajes().add(mensajeDTO);
+					}else{
+						respuestaMensajeDTO.setCodigo(2);
+						respuestaMensajeDTO.setMensaje("El Mensaje No existe en el sistema");
+					}
+					
+				}catch(Exception e){
+					respuestaMensajeDTO.setCodigo(1);
+					respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
+					e.printStackTrace();
+				}
+		}else{
 			
-			Mensaje m = mensajeBeanLocal.encontrarPorId(Mensaje.class, new Long(idMensaje));	
-
-			if (m!=null) {
-				MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
-						   m.getTexto(),m.getStatus(), m.getFecha());
-				respuestaMensajeDTO.getMensajes().add(mensajeDTO);
-			}else{
-				respuestaMensajeDTO.setCodigo(2);
-				respuestaMensajeDTO.setMensaje("El Mensaje No existe en el sistema");
-			}
+			respuestaMensajeDTO.setCodigo(10);
+			respuestaMensajeDTO.setMensaje(resu.getMensaje());
 			
-		}catch(Exception e){
-			respuestaMensajeDTO.setCodigo(1);
-			respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
-			e.printStackTrace();
 		}
 		
 		return respuestaMensajeDTO;
@@ -116,23 +152,41 @@ public class MensajeService {
 	public RespuestaMensajeDTO mensajesEnviadosPorUsuario(@PathParam("usuario") long usuario) {
 		
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
-		try {
-
-			List<Mensaje> mensajes = mensajeBeanLocal.mensajesEnviadosPorUsuario(usuario);
-			
-			for  (Mensaje m: mensajes){
-				MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
-													   m.getTexto(),m.getStatus(), m.getFecha());
-				respuestaMensajeDTO.getMensajes().add(mensajeDTO);
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(usuario);
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resu = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resu.getCodigo());
+		System.out.println("RESU "+resu.getMensaje());
+		
+		if (resu.getCodigo()==0){
+		
+			try {
+	
+				List<Mensaje> mensajes = mensajeBeanLocal.mensajesEnviadosPorUsuario(usuario);
+				
+				for  (Mensaje m: mensajes){
+					MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
+														   m.getTexto(),m.getStatus(), m.getFecha());
+					respuestaMensajeDTO.getMensajes().add(mensajeDTO);
+				}
+	
+			} catch (Exception e) {
+	
+				respuestaMensajeDTO.setCodigo(1);
+				respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
+				e.printStackTrace();
+				
 			}
-
-		} catch (Exception e) {
-
-			respuestaMensajeDTO.setCodigo(1);
-			respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
-			e.printStackTrace();
-			
+		}else{
+			respuestaMensajeDTO.setCodigo(10);
+			respuestaMensajeDTO.setMensaje(resu.getMensaje());	
 		}
+			
 		return respuestaMensajeDTO;
 	}
 
@@ -142,25 +196,43 @@ public class MensajeService {
 	public RespuestaMensajeDTO mensajesRecibidosPorUsuario(@PathParam("usuario") long usuario) {
 		
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
-		try {
-
-			List<Mensaje> mensajes = mensajeBeanLocal.mensajesRecibidosPorUsuario(usuario);
-			
-			for  (Mensaje m: mensajes){
-				MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
-													   m.getTexto(),m.getStatus(), m.getFecha());
-				respuestaMensajeDTO.getMensajes().add(mensajeDTO);
-			}			
-			
-		} catch (Exception e) {
-			
-			respuestaMensajeDTO.setCodigo(1);
-			respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
-			e.printStackTrace();
 		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(usuario);
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resu = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resu.getCodigo());
+		System.out.println("RESU "+resu.getMensaje());
+		
+		if (resu.getCodigo()==0){
+		
+			try {
+	
+				List<Mensaje> mensajes = mensajeBeanLocal.mensajesRecibidosPorUsuario(usuario);
+				
+				for  (Mensaje m: mensajes){
+					MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
+														   m.getTexto(),m.getStatus(), m.getFecha());
+					respuestaMensajeDTO.getMensajes().add(mensajeDTO);
+				}			
+				
+			} catch (Exception e) {
+				
+				respuestaMensajeDTO.setCodigo(1);
+				respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
+				e.printStackTrace();
+			
+			}
+		}else{
+			respuestaMensajeDTO.setCodigo(10);
+			respuestaMensajeDTO.setMensaje(resu.getMensaje());	
 		}
-		
+			
 		return respuestaMensajeDTO;
+
 	}
 
 	@POST
@@ -170,100 +242,117 @@ public class MensajeService {
 	public RespuestaMensajeDTO crearNuevoMensaje(MensajeDTO mDTO) {
 		
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
-		
-		if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
 
-			mDTO.setFecha(new Date());
-			mDTO.setStatus(false);
-			
-			try {				
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(mDTO.getUsrdesde());
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resuSeg.getCodigo());
+		System.out.println("RESU "+resuSeg.getMensaje());
+		
+		if (resuSeg.getCodigo()==0){
+		
+			if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
+	
+				mDTO.setFecha(new Date());
+				mDTO.setStatus(false);
 				
-				Client client = ClientBuilder.newClient();
-				WebTarget targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
-				RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-			
-				if (resu!=null && resu.getCodigo()==0){
-				
-					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
-					resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+				try {				
 					
+					client = ClientBuilder.newClient();
+					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
+					RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+				
 					if (resu!=null && resu.getCodigo()==0){
 					
-						Mensaje mensaje = new Mensaje();
-				
-						mensaje.setUsrdesde(mDTO.getUsrdesde());
-						mensaje.setUsrpara(mDTO.getUsrpara());
-						mensaje.setTexto(mDTO.getTexto());
-						mensaje.setStatus(mDTO.getStatus());
-						mensaje.setFecha(mDTO.getFecha());
-				
-						mensajeBeanLocal.insertar(mensaje);
-
-
-						//Envio mensaje txt al Celular segun token del usuario				
-						boolean msgtxt=false;
+						targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
+						resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
 						
-						if (msgtxt==true)
-						{
-							String apiKey = "LUIS";
-							String TOKEN="Token";
+						if (resu!=null && resu.getCodigo()==0){
 						
-							try {
-								// Prepare JSON containing the GCM message content. What to send and where to send.
-								ObjectNode jGcmData = Json.newObject();
-								ObjectNode jData = Json.newObject();
-								jData.put("message", mensaje.getTexto());
-								// Where to send GCM message.
-								jGcmData.put("to", TOKEN);
-								// What to send in GCM message.
-								jGcmData.put("data", jData);
-
-								// Create connection to send GCM Message request.
-								URL url = new URL("https://android.googleapis.com/gcm/send");
-								HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-								conn.setRequestProperty("Authorization", "key=" + apiKey);
-								conn.setRequestProperty("Content-Type", "application/json");
-								conn.setRequestMethod("POST");
-								conn.setDoOutput(true);
-
-								// Send GCM message content.
-								OutputStream outputStream = conn.getOutputStream();
-								outputStream.write(jGcmData.toString().getBytes());
-
-								// Read GCM response.
-								InputStream inputStream = conn.getInputStream();
-								String resp = getStringFromInputStream(inputStream);
-								System.out.println(resp);
-								System.out.println("Check your device/emulator for notification or logcat for " +
-										"confirmation of the receipt of the GCM message.");
-							} catch (IOException e) {
-								System.out.println("Unable to send GCM message.");
-								System.out.println("Please ensure that API_KEY has been replaced by the server " +
-										"API key, and that the device's registration token is correct (if specified).");
-								e.printStackTrace();
-								respuestaMensajeDTO.setCodigo(4);
-								respuestaMensajeDTO.setMensaje("Error al Enviar Mensaje de Texto");
+							Mensaje mensaje = new Mensaje();
+					
+							mensaje.setUsrdesde(mDTO.getUsrdesde());
+							mensaje.setUsrpara(mDTO.getUsrpara());
+							mensaje.setTexto(mDTO.getTexto());
+							mensaje.setStatus(mDTO.getStatus());
+							mensaje.setFecha(mDTO.getFecha());
+					
+							mensajeBeanLocal.insertar(mensaje);
+	
+	
+							//Envio mensaje txt al Celular segun token del usuario				
+							boolean msgtxt=false;
+							
+							if (msgtxt==true)
+							{
+								String apiKey = "AIzaSyAUMsAY_oY3IgmtEyDVqXyLrZQxYbnMM_k";
+								String TOKEN="Token???";
+							
+								try {
+									// Prepare JSON containing the GCM message content. What to send and where to send.
+									ObjectNode jGcmData = Json.newObject();
+									ObjectNode jData = Json.newObject();
+									jData.put("message", mensaje.getTexto());
+									// Where to send GCM message.
+									jGcmData.put("to", TOKEN);
+									// What to send in GCM message.
+									jGcmData.put("data", jData);
+	
+									// Create connection to send GCM Message request.
+									URL url = new URL("https://android.googleapis.com/gcm/send");
+									HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+									conn.setRequestProperty("Authorization", "key=" + apiKey);
+									conn.setRequestProperty("Content-Type", "application/json");
+									conn.setRequestMethod("POST");
+									conn.setDoOutput(true);
+	
+									// Send GCM message content.
+									OutputStream outputStream = conn.getOutputStream();
+									outputStream.write(jGcmData.toString().getBytes());
+	
+									// Read GCM response.
+									InputStream inputStream = conn.getInputStream();
+									String resp = getStringFromInputStream(inputStream);
+									System.out.println(resp);
+									System.out.println("Check your device/emulator for notification or logcat for " +
+											"confirmation of the receipt of the GCM message.");
+								} catch (IOException e) {
+									System.out.println("Unable to send GCM message.");
+									System.out.println("Please ensure that API_KEY has been replaced by the server " +
+											"API key, and that the device's registration token is correct (if specified).");
+									e.printStackTrace();
+									respuestaMensajeDTO.setCodigo(4);
+									respuestaMensajeDTO.setMensaje("Error al Enviar Mensaje de Texto");
+								}
+								
 							}
 							
+						}else{			
+							respuestaMensajeDTO.setCodigo(3);
+							respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe ... ");
 						}
 						
-					}else{			
-						respuestaMensajeDTO.setCodigo(3);
-						respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe ... ");
+					}else{
+						respuestaMensajeDTO.setCodigo(2);
+						respuestaMensajeDTO.setMensaje("Usuario Remitente No Existe ... ");
 					}
 					
-				}else{
-					respuestaMensajeDTO.setCodigo(2);
-					respuestaMensajeDTO.setMensaje("Usuario Remitente No Existe ... ");
+				} catch (Exception e) {
+					respuestaMensajeDTO.setCodigo(1);
+					respuestaMensajeDTO.setMensaje("Faltan Campos Obligatorios");
 				}
-				
-			} catch (Exception e) {
-				respuestaMensajeDTO.setCodigo(1);
-				respuestaMensajeDTO.setMensaje("Faltan Campos Obligatorios");
+			
 			}
 		
-		}
-		
+		}else{
+			respuestaMensajeDTO.setCodigo(10);
+			respuestaMensajeDTO.setMensaje(resuSeg.getMensaje());	
+		}		
+			
 		return respuestaMensajeDTO;
 	}
 
@@ -304,34 +393,57 @@ public class MensajeService {
 
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
 
-		try {
-
-			//Validar si el mensaje existe en el sistema
-			Mensaje mensajeActualizar = mensajeBeanLocal.encontrarPorId(Mensaje.class, mensajeDTO.getId());
-			
-			if (mensajeActualizar!=null){
-				if (mensajeActualizar.getStatus()==true){
-					respuestaMensajeDTO.setCodigo(1);
-					respuestaMensajeDTO.setMensaje("El Mensaje con Id : "+mensajeActualizar.getId()+ 
-											                                     		" ya tiene estatus Leido");
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(mensajeDTO.getUsrdesde());
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resuSeg.getCodigo());
+		System.out.println("RESU "+resuSeg.getMensaje());
+		
+		if (resuSeg.getCodigo()==0){
+		
+			try {
+	
+				//Validar si el mensaje existe en el sistema
+				Mensaje mensajeActualizar = mensajeBeanLocal.encontrarPorId(Mensaje.class, mensajeDTO.getId());
+				
+				if (mensajeActualizar!=null){
+					if (mensajeActualizar.getStatus()==true){
+						respuestaMensajeDTO.setCodigo(1);
+						respuestaMensajeDTO.setMensaje("El Mensaje con Id : "+mensajeActualizar.getId()+ 
+												                                     		" ya tiene estatus Leido");
+					}else{
+						
+						if (mensajeActualizar.getUsrdesde()==mensajeDTO.getUsrdesde()){
+							mensajeActualizar.setStatus(true);
+							mensajeBeanLocal.insertarOActualizar(mensajeActualizar);
+						}else{
+							respuestaMensajeDTO.setCodigo(4);
+							respuestaMensajeDTO.setMensaje("El Mensaje con Id : "+mensajeActualizar.getId()+ 
+												            " No pertence al Usuario " + mensajeDTO.getUsrdesde());
+						}
+					}
 				}else{
-					
-					mensajeActualizar.setStatus(true);
-					mensajeBeanLocal.insertarOActualizar(mensajeActualizar);
+					respuestaMensajeDTO.setCodigo(2);
+					respuestaMensajeDTO.setMensaje("El Mensaje no existe en el sistema");
 				}
-			}else{
-				respuestaMensajeDTO.setCodigo(2);
-				respuestaMensajeDTO.setMensaje("El Mensaje no existe en el sistema");
+				
+			} catch (Exception err) {
+				
+				respuestaMensajeDTO.setCodigo(3);
+				respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
+				
 			}
-			
-		} catch (Exception err) {
-			
-			respuestaMensajeDTO.setCodigo(3);
-			respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
-			
-		}
+		}else{
+			respuestaMensajeDTO.setCodigo(10);
+			respuestaMensajeDTO.setMensaje(resuSeg.getMensaje());	
+		}	
 		
 		return respuestaMensajeDTO;
+	
 	}
 
 	@DELETE
@@ -341,27 +453,50 @@ public class MensajeService {
 	public RespuestaMensajeDTO removerMensaje(MensajeDTO mensajeDTO) {
 
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
+	
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(mensajeDTO.getUsrdesde());
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
 		
-		try {
+		System.out.println("RESU "+resuSeg.getCodigo());
+		System.out.println("RESU "+resuSeg.getMensaje());
 		
-			//Validar si el mensaje existe en el sistema
-			Mensaje mensajeRemover = mensajeBeanLocal.encontrarPorId(Mensaje.class, mensajeDTO.getId());
+		if (resuSeg.getCodigo()==0){
+		
+			try {
 			
-			if (mensajeRemover!=null){
-			
-				mensajeBeanLocal.remover(mensajeRemover, mensajeRemover.getId());
+				//Validar si el mensaje existe en el sistema
+				Mensaje mensajeRemover = mensajeBeanLocal.encontrarPorId(Mensaje.class, mensajeDTO.getId());
 				
-			}else{
-				respuestaMensajeDTO.setCodigo(1);
-				respuestaMensajeDTO.setMensaje("El Mensaje no existe en el sistema");
+				if (mensajeRemover!=null){
+				
+					if (mensajeRemover.getUsrdesde()==mensajeDTO.getUsrdesde()){
+						mensajeBeanLocal.remover(mensajeRemover, mensajeRemover.getId());
+					}else{
+						respuestaMensajeDTO.setCodigo(4);
+						respuestaMensajeDTO.setMensaje("El Mensaje con Id : "+mensajeRemover.getId()+ 
+											            " No pertence al Usuario " + mensajeDTO.getUsrdesde());
+					}
+						
+				}else{
+					respuestaMensajeDTO.setCodigo(1);
+					respuestaMensajeDTO.setMensaje("El Mensaje no existe en el sistema");
+				}
+				
+			} catch (Exception e) {
+				
+				respuestaMensajeDTO.setCodigo(2);
+				respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");		
 			}
-			
-		} catch (Exception e) {
-			
-			respuestaMensajeDTO.setCodigo(2);
-			respuestaMensajeDTO.setMensaje("Hubo un error en el sistema");
-			
-		}
+		
+		}else{
+			respuestaMensajeDTO.setCodigo(10);
+			respuestaMensajeDTO.setMensaje(resuSeg.getMensaje());	
+		}	
+		
 		return respuestaMensajeDTO;
 	}
 	
@@ -372,101 +507,108 @@ public class MensajeService {
 	public RespuestaMensajeDTO enviarCorreo(MensajeDTO mDTO) {
 		
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
-		
-		if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
-
-			try {
-			
-				Client client = ClientBuilder.newClient();
-				WebTarget targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
-				RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-		
-				if (resu!=null && resu.getCodigo()==0){
-
-					try {
-					
-						targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
-						resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-												
-						if (resu!=null && resu.getCodigo()==0){
-						
-							mDTO.setFecha(new Date());
-							mDTO.setStatus(false);
-									
-							Mensaje mensaje = new Mensaje();
-						
-							mensaje.setUsrdesde(mDTO.getUsrdesde());
-							mensaje.setUsrpara(mDTO.getUsrpara());
-							mensaje.setTexto(mDTO.getTexto());
-							mensaje.setStatus(mDTO.getStatus());
-							mensaje.setFecha(mDTO.getFecha());
 	
-							//Envio email segun dirección de correo usuario				
-
-							final String username = "capytalcycles@gmail.com";
-							final String password = "capytal2015";
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(mDTO.getUsrdesde());
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resuSeg.getCodigo());
+		System.out.println("RESU "+resuSeg.getMensaje());
+		
+		if (resuSeg.getCodigo()==0){
+		
+			if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
+	
+				try {
+				
+					client = ClientBuilder.newClient();
+					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
+					RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
 			
-							Properties props = new Properties();
-							props.put("mail.smtp.starttls.enable", "true");
-							props.put("mail.smtp.auth", "true");
-							props.put("mail.smtp.host", "smtp.gmail.com");
-							props.put("mail.smtp.port", "587");
-							props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-			
-							Session session = Session.getInstance(props,
-									new javax.mail.Authenticator() {
-										protected PasswordAuthentication getPasswordAuthentication() {
-											return new PasswordAuthentication(username, password);
+					if (resu!=null && resu.getCodigo()==0){
+	
+						try {
+						
+							targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
+							resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+													
+							if (resu!=null && resu.getCodigo()==0){
+		
+								//Envio email segun dirección de correo usuario	destino			
+	
+								final String username = "capytalcycles@gmail.com";
+								final String password = "capytal2015";
+				
+								Properties props = new Properties();
+								props.put("mail.smtp.starttls.enable", "true");
+								props.put("mail.smtp.auth", "true");
+								props.put("mail.smtp.host", "smtp.gmail.com");
+								props.put("mail.smtp.port", "587");
+								props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+				
+								Session session = Session.getInstance(props,
+										new javax.mail.Authenticator() {
+											protected PasswordAuthentication getPasswordAuthentication() {
+												return new PasswordAuthentication(username, password);
+											}
 										}
-									}
-							);
-						
-							try {
-				
-								System.out.println("... Sending Mail ...");					
-									
-								Message message = new MimeMessage(session);
-								message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
-								message.setRecipients(Message.RecipientType.TO,
-																			InternetAddress.parse(resu.getUsuarios().get(0).getCorreo()));
-								message.setSubject("Capytal Cycles ");
-								message.setText(mDTO.getTexto());
-								Transport.send(message);
-				
-							} catch (MessagingException e) {
-		//										throw new RuntimeException(e);
-								respuestaMensajeDTO.setCodigo(2);
-								respuestaMensajeDTO.setMensaje("Error en el Envio del Email");
-							}
-	
-						}else{
-							respuestaMensajeDTO.setCodigo(3);
-							respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe");
-						}	
+								);
 							
-					}catch (Exception e ) {
-		//							throw new RuntimeException(e);
-									respuestaMensajeDTO.setCodigo(4);
-									respuestaMensajeDTO.setMensaje("Error Interno del Sistema");
-					}
+								try {
 					
-				}else{
-					respuestaMensajeDTO.setCodigo(5);
-					respuestaMensajeDTO.setMensaje("Usuario Remitente No Existe");
-				}
-
-			}catch (Exception e) {
-				//			throw new RuntimeException(e);
-							respuestaMensajeDTO.setCodigo(4);
-							respuestaMensajeDTO.setMensaje("Error Interno del Sistema");
-			}
-				
-				
-		}else{
-				respuestaMensajeDTO.setCodigo(1);
-				respuestaMensajeDTO.setMensaje("Faltan Campos Obligatorios");
-		}
+									System.out.println("... Sending Mail ...");					
+										
+									Message message = new MimeMessage(session);
+									message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
+									message.setRecipients(Message.RecipientType.TO,
+																				InternetAddress.parse(resu.getUsuarios().get(0).getCorreo()));
+									message.setSubject("Mensaje desde :");
+									message.setText(mDTO.getTexto());
+									Transport.send(message);
+					
+								} catch (MessagingException e) {
+			//										throw new RuntimeException(e);
+									respuestaMensajeDTO.setCodigo(2);
+									respuestaMensajeDTO.setMensaje("Error en el Envio del Email");
+								}
 		
+							}else{
+								respuestaMensajeDTO.setCodigo(3);
+								respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe");
+							}	
+								
+						}catch (Exception e ) {
+			//							throw new RuntimeException(e);
+										respuestaMensajeDTO.setCodigo(4);
+										respuestaMensajeDTO.setMensaje("Error Interno del Sistema");
+						}
+						
+					}else{
+						respuestaMensajeDTO.setCodigo(5);
+						respuestaMensajeDTO.setMensaje("Usuario Remitente No Existe");
+					}
+	
+				}catch (Exception e) {
+					//			throw new RuntimeException(e);
+								respuestaMensajeDTO.setCodigo(4);
+								respuestaMensajeDTO.setMensaje("Error Interno del Sistema");
+				}
+					
+					
+			}else{
+					respuestaMensajeDTO.setCodigo(1);
+					respuestaMensajeDTO.setMensaje("Faltan Campos Obligatorios");
+			}
+		
+		}else{
+			
+			respuestaMensajeDTO.setCodigo(10);
+			respuestaMensajeDTO.setMensaje(resuSeg.getMensaje());	
+		}	
+			
 		return respuestaMensajeDTO;
 	
 	}
