@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="plantillas/plantilla.xhtml">
+			<ui:define name="contenido">
+				<h:form id="formActualizarUsuario">
+					<p:panel id="panelCambiarUsuario" header="Cambiar Credencial" style="text-align:center;">
+						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
+						<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
+							<h:outputText value="Nueva Credencial"/>
+							<h:outputText value="*" styleClass="requerido"/>
+ 							<p:password id="credencial" value="#{autenticarUsuarioManagedBean.nuevaClave}" feedback="true" required="true" style="width:200px;"/>
+ 							<p:message  for="credencial" />
+ 							<h:outputText value="Confirmar Nueva Credencial"/>
+							<h:outputText value="*" styleClass="requerido"/>
+ 							<p:password id="confirmarCredencial" value="#{autenticarUsuarioManagedBean.confirmarClave}" feedback="true"  required="true" style="width:200px;"/>
+ 							<p:message  for="confirmarCredencial" />
+						</h:panelGrid>
+					</p:panel>
+
+					<p:panel>
+						<h:panelGroup layout="block" styleClass="estiloDiv">
+							<p:commandButton value="Cambiar Credencial" action="#{autenticarUsuarioManagedBean.actualizarCredencial}" update="@form"/>
+							<p:commandButton value="Cancelar" action="paginaBlanco?faces-redirect=true" immediate="true"/>
+						</h:panelGroup>
+					</p:panel>
+				</h:form>
+    		</ui:define>				
+		</ui:composition>	
+	</h:body>
+</html>

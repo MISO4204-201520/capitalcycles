@@ -27,12 +27,9 @@
 							<p:message  for="contrasena" />
 						</h:panelGrid>
 						<h:panelGroup layout="block" styleClass="estiloDiv">
-							<p:commandButton value="Ingresar" action="#{autenticarUsuarioManagedBean.iniciarSesion}" update="panelAutenticacion" ajax="true"/>
-						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="estiloDiv">
 							<h:panelGrid columns="2">
+								<p:commandButton value="Ingresar" action="#{autenticarUsuarioManagedBean.iniciarSesion}" update="panelAutenticacion" ajax="true"/>
 								<p:commandButton value="Registrese" action="registrarUsuario?faces-redirect=false" ajax="true" immediate="true"/>
-								<p:commandButton value="Cambiar Credencial" ajax="true" immediate="true"/>
 							</h:panelGrid>
 						</h:panelGroup>
 					</p:panel>

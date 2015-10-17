@@ -31,12 +31,6 @@ public class GestionarUsuarioManagedBean implements Serializable{
 	/** Constante serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
-	/** Constante COD_ADMIN. */
-	private static final Long COD_ADMIN = new Long(1);
-
-	/** Constante MAXIMO_INTENTOS. */
-	private static final Integer MAXIMO_INTENTOS = 3;
-
 	private static final String LLAVE_PASSWORD = "llavePassword?.";
 
 	/** Atributo usuario managed bean. */
@@ -46,8 +40,9 @@ public class GestionarUsuarioManagedBean implements Serializable{
 	private UsuarioDTO usuarioDTO;
 
 	private String postRegistrarUsuario = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/crear";
-	private String postActualizarUsuario = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/actualizar";
+	private String putActualizarUsuario = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/actualizar";
 	private String getUsuarioPorCodigo = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarUsuarioPorCodigo/";
+	
 
 	@PostConstruct
 	private void iniciar(){
@@ -165,8 +160,8 @@ public class GestionarUsuarioManagedBean implements Serializable{
 			try{
 				//POST
 				Client client = ClientBuilder.newClient();
-				WebTarget messages = client.target(postActualizarUsuario);
-				RespuestaUsuarioDTO respuesta = messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaUsuarioDTO.class);
+				WebTarget messages = client.target(putActualizarUsuario);
+				RespuestaUsuarioDTO respuesta = messages.request("application/json").put(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaUsuarioDTO.class);
 				if (respuesta!=null){
 					if (respuesta.getCodigo()==0){
 						FacesContext.getCurrentInstance().addMessage(null, 
@@ -174,7 +169,6 @@ public class GestionarUsuarioManagedBean implements Serializable{
 										FacesMessage.SEVERITY_INFO, 
 										null, 
 										"El usuario se actualizó correctamente"));
-						usuarioDTO = new UsuarioDTO();
 					}else if (respuesta.getCodigo()==1){
 						FacesContext.getCurrentInstance().addMessage(null, 
 								new FacesMessage(
@@ -243,7 +237,7 @@ public class GestionarUsuarioManagedBean implements Serializable{
 
 		return reglaNavegacion;
 	}
-
+	
 	public UsuarioDTO getUsuarioDTO() {
 		return usuarioDTO;
 	}

@@ -1,6 +1,8 @@
 package com.sofactory.app.seguridad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +18,8 @@ import javax.ws.rs.core.MediaType;
 import org.jasypt.util.text.BasicTextEncryptor;
 
 import com.sofactory.dtos.RespuestaSeguridadDTO;
+import com.sofactory.dtos.RespuestaUsuarioDTO;
+import com.sofactory.dtos.RolDTO;
 import com.sofactory.dtos.UsuarioDTO;
 
 @ManagedBean
@@ -54,7 +58,8 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 
 	private String post = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/esValidoUsuario";
 	private String postCerrarSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cerrarSesion";
-
+	private String postCambiarCredencial = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cambiarCredencial";
+	
 	/**
 	 * Método - acción que sirve para iniciar la sesión de un usuario.
 	 *
@@ -80,6 +85,7 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 					usuarioAutenticado.setNombres(respuesta.getNombres());
 					usuarioAutenticado.setApellidos(respuesta.getApellidos());
 					usuarioAutenticado.setCorreo(respuesta.getCorreo());
+					usuarioAutenticado.setCredencial(respuesta.getCredencial());
 					usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
 					reglaNavegacion = "CORRECTO";
 				}else{
@@ -134,6 +140,65 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	}
 
 
+	public String actualizarCredencial(){
+		String reglaNavegacion = null;
+		if (nuevaClave.equals(confirmarClave)){
+			//POST
+			try{
+				Client client = ClientBuilder.newClient();
+				WebTarget messages = client.target(postCambiarCredencial);
+				BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+				textEncryptor.setPassword(LLAVE_PASSWORD);
+				nuevaClave = textEncryptor.encrypt(nuevaClave);
+				confirmarClave = textEncryptor.encrypt(confirmarClave);
+				UsuarioDTO usuarioDTO = new UsuarioDTO();
+				usuarioDTO.setCodigo(usuarioManagedBean.getUsuarioDTO().getCodigo());
+				usuarioDTO.setCredencial(usuarioManagedBean.getUsuarioDTO().getCredencial());
+				usuarioDTO.setCredencialNueva(nuevaClave);
+				usuarioDTO.setConfirmacionCredencialNueva(confirmarClave);
+				RespuestaUsuarioDTO respuesta = messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaUsuarioDTO.class);
+				if (respuesta!=null){
+					if (respuesta.getCodigo()==0){
+						FacesContext.getCurrentInstance().addMessage(null, 
+								new FacesMessage(
+										FacesMessage.SEVERITY_INFO, 
+										null, 
+										"El usuario cambió correctamente la credencial, para verificar cierre sesion e ingrese nuevamente"));
+						usuarioDTO = new UsuarioDTO();
+					}else{
+						FacesContext.getCurrentInstance().addMessage(null, 
+								new FacesMessage(
+										FacesMessage.SEVERITY_ERROR, 
+										null, 
+										respuesta.getMensaje()));
+					}
+				}else{
+					FacesContext.getCurrentInstance().addMessage(null, 
+							new FacesMessage(
+									FacesMessage.SEVERITY_ERROR, 
+									null, 
+									"Hubo un error llamando el servicio"));
+				}
+			}catch(Exception exc){
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(
+								FacesMessage.SEVERITY_ERROR, 
+								null, 
+								"Hubo un error llamando el servicio"));
+				exc.printStackTrace();
+			}		
+		}else{
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, 
+							null, 
+							"Credenciales no coinciden"));
+		}
+	
+
+		return reglaNavegacion;
+	}
+	
 	/**
 	 * Obtiene el atributo usuario managed bean.
 	 *

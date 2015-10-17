@@ -45,32 +45,24 @@ public class SeguridadService {
 	public RespuestaUsuarioDTO cambiarCredencial(UsuarioDTO usuarioDTO) {
 		RespuestaUsuarioDTO respuestaUsuarioDTO = new RespuestaUsuarioDTO(0, "OK");
 		if (usuarioDTO.getCodigo()!=null && 
-				usuarioDTO.getCredencial()!=null && !usuarioDTO.getCredencial().isEmpty() &&
 				usuarioDTO.getCredencialNueva()!=null && !usuarioDTO.getCredencialNueva().isEmpty() &&
 				usuarioDTO.getConfirmacionCredencialNueva()!=null && !usuarioDTO.getConfirmacionCredencialNueva().isEmpty()){
 			try {
-				//Validar si el usuario existe en el sistema
-				Usuario usuario = usuarioBeanLocal.encontrarPorId(Usuario.class, usuarioDTO.getCodigo());
-				if (usuario!=null && (usuario.getEstado()==null || usuario.getEstado().equals(Estado.ACTIVO))){
-					usuarioDTO.setLogin(usuario.getLogin());
-					RespuestaSeguridadDTO usuarioValidoDTO = esValidoUsuario(usuarioDTO);
-					if (usuarioValidoDTO!=null){
-						if (usuarioValidoDTO.getCodigo()==0){
-							if (usuarioDTO.getCredencialNueva().equals(usuarioDTO.getConfirmacionCredencialNueva())){
-								usuario.setPassword(usuarioDTO.getCredencialNueva());
-								usuarioBeanLocal.insertarOActualizar(usuario);
-							}else{
-								respuestaUsuarioDTO.setCodigo(6);
-								respuestaUsuarioDTO.setMensaje("La credencial nueva es diferente a la credencial de confirmacion");
-							}
-						}else{
-							respuestaUsuarioDTO.setCodigo(2);
-							respuestaUsuarioDTO.setMensaje("La credencial del usuario es invalida");
-						}
+				//Validar usuario en sesion
+				if (seguridadBeanLocal.obtenerUsuarioSesion(usuarioDTO.getCodigo())!=null &&
+						seguridadBeanLocal.obtenerUsuarioSesion(usuarioDTO.getCodigo()).getCodigo()==0){
+					//Validar si el usuario existe en el sistema
+					Usuario usuario = usuarioBeanLocal.encontrarPorId(Usuario.class, usuarioDTO.getCodigo());
+					if (usuario!=null && (usuario.getEstado()==null || usuario.getEstado().equals(Estado.ACTIVO))){
+						usuarioDTO.setLogin(usuario.getLogin());
+						respuestaUsuarioDTO = seguridadBeanLocal.cambiarCredencial(usuario, usuarioDTO);
+					}else{
+						respuestaUsuarioDTO.setCodigo(4);
+						respuestaUsuarioDTO.setMensaje("El usuario no existe en el sistema");
 					}
 				}else{
-					respuestaUsuarioDTO.setCodigo(4);
-					respuestaUsuarioDTO.setMensaje("El usuario no existe en el sistema");
+					respuestaUsuarioDTO.setCodigo(7);
+					respuestaUsuarioDTO.setMensaje("El usuario no se encuentra en sesion");
 				}
 			} catch(IllegalArgumentException e){
 				respuestaUsuarioDTO.setCodigo(3);

@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import org.jasypt.util.text.BasicTextEncryptor;
 
 import com.sofactory.dtos.RespuestaSeguridadDTO;
+import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
 import com.sofactory.entidades.Persona;
 import com.sofactory.entidades.Usuario;
@@ -127,5 +128,22 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
 		textEncryptor.setPassword(LLAVE_PASSWORD);
 		return textEncryptor.encrypt(credencial);
+	}
+
+	public RespuestaUsuarioDTO cambiarCredencial(Usuario usuario, UsuarioDTO usuarioDTO) {
+		RespuestaUsuarioDTO respuestaDTO = new RespuestaUsuarioDTO(0, "OK");
+		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+		textEncryptor.setPassword(LLAVE_PASSWORD);
+		String nuevaClave = textEncryptor.decrypt(usuarioDTO.getCredencialNueva());
+		String confirmarNuevaClave = textEncryptor.decrypt(usuarioDTO.getConfirmacionCredencialNueva());
+		if (nuevaClave.equals(confirmarNuevaClave)){
+			usuario.setPassword(usuarioDTO.getCredencialNueva());
+			em.merge(usuario);
+		}else{
+			respuestaDTO.setCodigo(6);
+			respuestaDTO.setMensaje("La credencial nueva es diferente a la credencial de confirmacion");
+		}
+		
+		return respuestaDTO;
 	}
 }
