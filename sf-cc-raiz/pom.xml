@@ -58,6 +58,7 @@
 		<module>../sf-cc-gestion-usuario</module>
 		<module>../sf-cc-recorridos</module>
 		<module>../sf-cc-mensajes</module>
+		<module>../sf-cc-fidelizacion</module>
 	</modules>
 
 </project>

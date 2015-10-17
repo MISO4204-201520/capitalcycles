@@ -6,7 +6,7 @@ body {
 
 #signup {
 	width: 550px;
-	height: 550px;
+	height: auto;
 	margin: 50px auto 50px auto;
 	padding: 20px;
 	position: relative;

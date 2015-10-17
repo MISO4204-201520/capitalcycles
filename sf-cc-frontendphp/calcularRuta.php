@@ -48,6 +48,7 @@
 		</script>
 	</head>
 	<body onload="initialize()">
+		<?php include ('menu.php'); ?>
 		<div>
 			<p>
 				<label for="start">Direcci&oacute;n inicial: </label>

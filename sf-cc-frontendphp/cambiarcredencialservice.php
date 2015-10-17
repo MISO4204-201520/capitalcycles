@@ -13,11 +13,8 @@ else
 	$confirmpassword = $_POST['confirmpassword'];
 	$login = $_POST['login'];
 
-	//Encriptar contraseña
-	// $salt = "llavePassword";
-	// $credencial = crypt($password,$salt);
-
-	$urlencriptar = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/encriptar"
+	//Encripto las credenciales
+	$urlencriptar = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/encriptar";
 	$servicio_encriptar = curl_init();
 	curl_setopt($servicio_encriptar, CURLOPT_POST, 1);
 	curl_setopt($servicio_encriptar, CURLOPT_URL, $urlencriptar);
@@ -46,7 +43,7 @@ else
 		"credencialNueva" => $newcredencial,
 		"confirmacionCredencialNueva" => $confirmcredencial);
 
-	$url = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cambiarCredencial"
+	$url = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cambiarCredencial";
 	$curl = curl_init();
 	 
 	curl_setopt($curl, CURLOPT_POST, 1);
@@ -59,9 +56,9 @@ else
 	$result = curl_exec($curl);
 	$msj = $result->mensaje;
 	if($result->codigo = 0)
-		echo '<script>alert("Actualización de credencial exitosa");</script>';
+		echo '<script>alert("Actualización de credencial exitosa"); window.location="calcularRuta.php";</script>';
 	else
-		echo '<script>alert("' . $msj . '");</script>';
+		echo '<script>alert("' . $msj . '"); window.location="calcularRuta.php";</script>';
 
 	curl_close($curl);
 }
