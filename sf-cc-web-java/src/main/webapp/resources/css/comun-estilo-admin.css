@@ -108,3 +108,8 @@ body{
 .grillaHeaderGrid.ui-panelgrid .ui-panelgrid-cell {
     border: none;
 }
+
+.titulo{
+    text-align: center;
+    font-size: 20px;
+}

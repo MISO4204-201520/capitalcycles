@@ -24,7 +24,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
-					<outputDirectory>C:/wildfly-9.0.1.Final/standalone/deployments</outputDirectory>
+					<outputDirectory>C:\Users\Johan\workspace\fabricas\proyecto\wildfly-9.0.1.Final\standalone\deployments</outputDirectory>
 				</configuration>
 				
 			</plugin>

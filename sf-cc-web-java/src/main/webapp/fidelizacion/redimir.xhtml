@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
+			<ui:define name="contenido">
+				<h:outputText value="Usted posee: #{fidelizacionManagedBean.puntosUsuario} puntos" styleClass="titulo"/>
+				<h:form id="formProductos">
+					<p:panel id="panelProductos" header="Catalogo de productos:" style="text-align:center;">
+						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
+						<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
+						<p:dataTable var="producto" value="#{fidelizacionManagedBean.productos}">
+						 <p:column headerText="Producto">
+					        <h:outputText value="#{producto.nombre}" />
+					    </p:column>
+					    <p:column headerText="Puntos">
+					        <h:outputText value="#{producto.puntos}" />
+					    </p:column>
+					    <p:column headerText="Redimir">
+					    	<p:commandButton value="Redimir" action="#{fidelizacionManagedBean.redimir(producto.id)}" update="@form"/>
+					    </p:column>
+					    </p:dataTable>
+						</h:panelGrid>
+					</p:panel>
+
+					<p:panel>
+						<h:panelGroup layout="block" styleClass="estiloDiv">
+							<p:commandButton value="Cancelar" action="paginaInicio?faces-redirect=true" immediate="true"/>
+						</h:panelGroup>
+					</p:panel>
+				</h:form>
+    		</ui:define>				
+		</ui:composition>	
+	</h:body>
+</html>

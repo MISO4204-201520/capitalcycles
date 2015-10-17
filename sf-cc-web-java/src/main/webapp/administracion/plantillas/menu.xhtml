@@ -13,8 +13,12 @@
 		rendered="#{usuarioManagedBean.usuarioDTO != null}">
 		<p:menubar>
 			<p:submenu label="Usuario">
-				<p:menuitem value="Actualizar Informacion" url="actualizarUsuario.xhtml" />
-				<p:menuitem value="Cambiar Credencial" url="cambiarCredencial.xhtml" />
+				<p:menuitem value="Actualizar Informacion" url="../administracion/actualizarUsuario.xhtml" />
+				<p:menuitem value="Cambiar Credencial" url="../administracion/cambiarCredencial.xhtml" />
+			</p:submenu>
+			<p:submenu label="Fidelizacion">
+				<p:menuitem value="Redimir puntos" url="../fidelizacion/redimir.xhtml" />
+				<p:menuitem value="Historia transacciones" url="../fidelizacion/historial.xhtml" />
 			</p:submenu>
 		</p:menubar>
 	</h:form>
