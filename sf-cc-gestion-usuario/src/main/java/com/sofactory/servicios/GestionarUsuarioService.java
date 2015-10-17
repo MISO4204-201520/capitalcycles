@@ -119,6 +119,7 @@ public class GestionarUsuarioService {
 						persona.setCorreo(usuarioDTO.getCorreo());	
 					}
 					usuarioBeanLocal.insertar(persona);	
+					respuestaUsuarioDTO.setCodigoUsuario(persona.getCodigo().toString());
 				}else{
 					respuestaUsuarioDTO.setCodigo(4);
 					respuestaUsuarioDTO.setMensaje("El rol o roles ingresados no existen en el sistema");

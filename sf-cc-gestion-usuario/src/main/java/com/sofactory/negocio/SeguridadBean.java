@@ -70,7 +70,7 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 						esValidoUsuarioDTO.setCorreo(((Persona)usuario).getCorreo());
 					}
 					usuarioSingletonBean.getUsuariosDTO().put(esValidoUsuarioDTO.getCodigo(), esValidoUsuarioDTO);
-					respuestaDTO.setCodigoUsuario(usuario.getCodigo());
+					respuestaDTO.setCodigoUsuario(usuario.getCodigo().toString());
 					respuestaDTO.setLogin(usuario.getLogin());
 					if (usuario instanceof Persona){
 						respuestaDTO.setNombres(((Persona)usuario).getNombres());
@@ -97,7 +97,7 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 		RespuestaSeguridadDTO respuestaDTO = new RespuestaSeguridadDTO(0, "OK");
 		UsuarioDTO usuarioSesion = usuarioSingletonBean.getUsuariosDTO().get(codigoUsuario);
 		if (usuarioSesion!=null){
-			respuestaDTO.setCodigoUsuario(usuarioSesion.getCodigo());
+			respuestaDTO.setCodigoUsuario(usuarioSesion.getCodigo().toString());
 			respuestaDTO.setLogin(usuarioSesion.getLogin());
 			respuestaDTO.setNombres(usuarioSesion.getNombres());
 			respuestaDTO.setApellidos(usuarioSesion.getApellidos());

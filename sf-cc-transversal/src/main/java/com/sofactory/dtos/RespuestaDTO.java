@@ -1,6 +1,6 @@
 package com.sofactory.dtos;
 
-public class RespuestaDTO {
+public class RespuestaDTO extends RequestDTO{
 	protected int codigo;
 	protected String mensaje;
 	
