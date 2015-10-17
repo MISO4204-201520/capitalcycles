@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<meta http-equiv="refresh" content="#{session.maxInactiveInterval}; url=inicio.xhtml" />
+		<title>App Java</title>
+		<h:outputStylesheet library="css" name="comun-estilo-admin.css"  />
+	</h:head>
+	<h:body>
+		<h:panelGroup id="pagina" layout="block" styleClass="estiloPagina">
+			<ui:insert name="cabecera">
+				<ui:include src="cabecera.xhtml" />
+			</ui:insert>
+			<h:panelGroup id="panelContenido" layout="block" styleClass="estiloPanelContenido">
+				<ui:insert name="menu" >
+					<ui:include src="menu.xhtml" />
+				</ui:insert>
+				<ui:insert name="contenido" />
+			</h:panelGroup>
+	    	    		
+			<ui:insert name="pie" >
+				<ui:include src="pie.xhtml" />
+			</ui:insert>
+		</h:panelGroup>
+	</h:body>
+</html>

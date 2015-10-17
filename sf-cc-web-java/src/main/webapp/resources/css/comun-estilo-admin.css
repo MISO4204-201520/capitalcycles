@@ -1,0 +1,110 @@
+body{
+	background-color:#ebebdf;
+}
+
+.estiloPagina {
+	width: 1200px;
+	margin: 0 auto;
+	background-color: #F9F9F9;
+	height: auto;
+	font-family: "Arial",serif;
+	font-size: 12px; 
+	border-radius: 3px;
+}
+
+.estiloPanel {
+	width:420px;
+	margin: 0 auto;
+	padding-bottom: 15px !important;
+}
+
+.estiloPanelContenido{
+	height:auto;
+	background-color: #ebebdf;
+}
+
+.requerido{
+    color: #FF0000;
+    padding-left: 2px;
+}
+
+
+.estiloDiv {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.estiloCabecera{
+	width: 1200px;
+	background-color: #ebebdf;
+}
+
+.estiloTablaCabecera{
+	width:100%;
+}
+
+.estiloPie{
+	width: 1200px;	
+	background-color: #d7d7cd;	
+}
+
+.estiloInicioSesion{
+	margin-right: 20px;
+	text-align: right;
+	font-family: "Arial", serif;
+	font-size:1em;
+}
+
+.estiloDerechos{
+	margin-right: 20px;
+	text-align: right;
+	font-family: "Arial", serif;
+	font-size:0.9em;
+}
+
+.estiloDerechos1{
+	text-transform: uppercase;
+	text-align: right;
+	background-color: #ebebdf;
+    color: #999;
+    font-family: arial;
+    font-size: 12px;
+    padding: 8px;
+    height: 35px;
+}
+
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+    opacity: 0.8;
+}
+
+.estiloGrillaRegPrestador{
+	vertical-align: top;
+}
+
+.ui-messages-info, .ui-message-info {
+    background-color: #dff0d8 !important;
+    border-color: #5cb85c !important;
+    color: #3c763d !important;
+}
+
+.ui-widget,
+.ui-widget .ui-widget{
+    font-size: 13px !important;
+}
+
+.estiloCalendario input{
+	width: 200px;
+}
+
+.estilo-grilla-vertical{
+	vertical-align: top;
+}
+
+.estiloTablaSinBorde {
+    text-align: right;
+}
+
+.grillaHeaderGrid.ui-panelgrid>*>tr,
+.grillaHeaderGrid.ui-panelgrid .ui-panelgrid-cell {
+    border: none;
+}

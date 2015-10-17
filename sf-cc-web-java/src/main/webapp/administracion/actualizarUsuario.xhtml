@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="plantillas/plantilla.xhtml">
+			<ui:define name="contenido">
+				<h:form id="formActualizarUsuario">
+					<p:panel id="panelActualizarUsuario" header="Actualizar Usuario" style="text-align:center;">
+						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
+						<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
+							<h:outputText value="Login"/>
+							<h:outputText value="*" styleClass="requerido"/>
+							<p:inputText id="login" value="#{gestionarUsuarioManagedBean.usuarioDTO.login}" required="true" maxlength="100" style="width:200px;">
+ 							</p:inputText>
+ 							<p:message  for="login"/>
+ 							<h:outputText value="Nombres"/>
+							<h:outputText value="*" styleClass="requerido"/>
+							<p:inputText id="nombres" value="#{gestionarUsuarioManagedBean.usuarioDTO.nombres}" required="true" maxlength="100" style="width:200px;">
+ 							</p:inputText>
+ 							<p:message  for="nombres"/>
+ 							<h:outputText value="Apellidos"/>
+							<h:outputText value="*" styleClass="requerido"/>
+							<p:inputText id="apellidos" value="#{gestionarUsuarioManagedBean.usuarioDTO.apellidos}" required="true" maxlength="100" style="width:200px;">
+ 							</p:inputText>
+ 							<p:message  for="apellidos"/>
+ 							<h:outputText value="Celular"/>
+							<p:spacer/>
+							<p:inputText id="celular" value="#{gestionarUsuarioManagedBean.usuarioDTO.celular}" maxlength="100" style="width:200px;">
+ 							</p:inputText>
+ 							<p:message  for="celular"/>
+ 							<h:outputText value="Correo"/>
+ 							<p:spacer/>
+ 							<p:inputText id="correo" value="#{gestionarUsuarioManagedBean.usuarioDTO.correo}" maxlength="100" style="width:200px;">
+ 							</p:inputText>
+ 							<p:message  for="correo" />
+ 							<h:outputText value="Genero"/>
+ 							<p:spacer/>
+ 							<p:selectOneMenu id="genero" value="#{gestionarUsuarioManagedBean.usuarioDTO.genero}" required="true" style="width:210px;">
+ 								<f:selectItem itemLabel="Masculino" itemValue="M"/>
+ 								<f:selectItem itemLabel="Femenino" itemValue="F"/> 								
+ 							</p:selectOneMenu>
+ 							<p:message  for="genero"/>
+						</h:panelGrid>
+					</p:panel>
+
+					<p:panel>
+						<h:panelGroup layout="block" styleClass="estiloDiv">
+							<p:commandButton value="Actualizar Usuario" action="#{gestionarUsuarioManagedBean.actualizar}" update="@form"/>
+							<p:commandButton value="Cancelar" action="paginaInicio?faces-redirect=true" immediate="true"/>
+						</h:panelGroup>
+					</p:panel>
+				</h:form>
+    		</ui:define>				
+		</ui:composition>	
+	</h:body>
+</html>
