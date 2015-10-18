@@ -26,6 +26,7 @@ import com.sofactory.enums.Estado;
 import com.sofactory.enums.Genero;
 import com.sofactory.excepciones.RegistroYaExisteException;
 import com.sofactory.negocio.interfaces.RolBeanLocal;
+import com.sofactory.negocio.interfaces.SeguridadBeanLocal;
 import com.sofactory.negocio.interfaces.UsuarioBeanLocal;
 
 @Path("gestionarUsuarioService")
@@ -36,6 +37,9 @@ public class GestionarUsuarioService {
 
 	@EJB
 	private RolBeanLocal rolBeanLocal;
+	
+	@EJB
+	private SeguridadBeanLocal seguridadBeanLocal;
 
 	@GET
 	@Path("encontrarTodosUsuarios")
@@ -247,70 +251,78 @@ public class GestionarUsuarioService {
 				usuarioDTO.getRoles()!=null && !usuarioDTO.getRoles().isEmpty() &&
 				usuarioDTO.getToken()!=null && !usuarioDTO.getToken().isEmpty()){
 			try {
-				//Validar si el usuario existe en el sistema
-				Usuario usuarioActualizar = usuarioBeanLocal.encontrarPorId(Usuario.class, usuarioDTO.getCodigo());
-				if (usuarioActualizar!=null){
-					//Validar si el login nuevo es unico en el sistema
-					if (usuarioBeanLocal.encontrarPorLogin(usuarioDTO.getCodigo(),usuarioDTO.getLogin())==null){
-						//Validar Codigo Rol
-						boolean estanRoles=true;
-						List<Rol> roles = new ArrayList<>();
-						for(RolDTO r: usuarioDTO.getRoles()){
-							Rol rol = rolBeanLocal.encontrarPorId(Rol.class, r.getId());
-							roles.add(rol);
-							if (rol==null){
-								estanRoles = false;
-								break;
+				//Validar usuario en sesion
+				if (seguridadBeanLocal.obtenerUsuarioSesion(usuarioDTO.getCodigo())!=null &&
+						seguridadBeanLocal.obtenerUsuarioSesion(usuarioDTO.getCodigo()).getCodigo()==0){
+					//Validar si el usuario existe en el sistema
+					Usuario usuarioActualizar = usuarioBeanLocal.encontrarPorId(Usuario.class, usuarioDTO.getCodigo());
+					if (usuarioActualizar!=null){
+						//Validar si el login nuevo es unico en el sistema
+						if (usuarioBeanLocal.encontrarPorLogin(usuarioDTO.getCodigo(),usuarioDTO.getLogin())==null){
+							//Validar Codigo Rol
+							boolean estanRoles=true;
+							List<Rol> roles = new ArrayList<>();
+							for(RolDTO r: usuarioDTO.getRoles()){
+								Rol rol = rolBeanLocal.encontrarPorId(Rol.class, r.getId());
+								roles.add(rol);
+								if (rol==null){
+									estanRoles = false;
+									break;
+								}
 							}
-						}
 
-						if (estanRoles){
-							if (usuarioActualizar instanceof Persona){
-								Persona persona = (Persona)usuarioActualizar;
-								persona.setLogin(usuarioDTO.getLogin());
-								persona.setNombres(usuarioDTO.getNombres());
-								persona.setApellidos(usuarioDTO.getApellidos());
-								persona.setRoles(roles);
-								persona.setToken(usuarioDTO.getToken());
-								if (usuarioDTO.getCelular()!=null && !usuarioDTO.getCelular().isEmpty()){
-									persona.setCelular(usuarioDTO.getCelular());	
-								}
-								if (usuarioDTO.getGenero()!=null && !usuarioDTO.getGenero().isEmpty()){
-									persona.setGenero(Genero.valueOf(usuarioDTO.getGenero()));	
-								}
-								if (usuarioDTO.getCorreo()!=null && !usuarioDTO.getCorreo().isEmpty()){
-									persona.setCorreo(usuarioDTO.getCorreo());	
-								}
-								usuarioBeanLocal.insertarOActualizar(persona);
-								UsuarioDTO usuarioActDTO = new UsuarioDTO(persona.getCodigo(), 
-										persona.getLogin(), 
-										persona.getNombres(), 
-										persona.getApellidos(),
-										persona.getCelular(), 
-										persona.getGenero()!=null?persona.getGenero().name():null,
-												persona.getCorreo());
-								usuarioActDTO.setToken(usuarioDTO.getToken());
-								List<RolDTO> rolesDTO = new ArrayList<RolDTO>();
-								for(Rol r:persona.getRoles()){
-									RolDTO rolDTO = new RolDTO(r.getId(), r.getNombre());
-									rolesDTO.add(rolDTO);
-								}
-								usuarioActDTO.setRoles(rolesDTO);
-								respuestaUsuarioDTO.getUsuarios().add(usuarioActDTO);
+							if (estanRoles){
+								if (usuarioActualizar instanceof Persona){
+									Persona persona = (Persona)usuarioActualizar;
+									persona.setLogin(usuarioDTO.getLogin());
+									persona.setNombres(usuarioDTO.getNombres());
+									persona.setApellidos(usuarioDTO.getApellidos());
+									persona.setRoles(roles);
+									persona.setToken(usuarioDTO.getToken());
+									if (usuarioDTO.getCelular()!=null && !usuarioDTO.getCelular().isEmpty()){
+										persona.setCelular(usuarioDTO.getCelular());	
+									}
+									if (usuarioDTO.getGenero()!=null && !usuarioDTO.getGenero().isEmpty()){
+										persona.setGenero(Genero.valueOf(usuarioDTO.getGenero()));	
+									}
+									if (usuarioDTO.getCorreo()!=null && !usuarioDTO.getCorreo().isEmpty()){
+										persona.setCorreo(usuarioDTO.getCorreo());	
+									}
+									usuarioBeanLocal.insertarOActualizar(persona);
+									UsuarioDTO usuarioActDTO = new UsuarioDTO(persona.getCodigo(), 
+											persona.getLogin(), 
+											persona.getNombres(), 
+											persona.getApellidos(),
+											persona.getCelular(), 
+											persona.getGenero()!=null?persona.getGenero().name():null,
+													persona.getCorreo());
+									usuarioActDTO.setToken(usuarioDTO.getToken());
+									List<RolDTO> rolesDTO = new ArrayList<RolDTO>();
+									for(Rol r:persona.getRoles()){
+										RolDTO rolDTO = new RolDTO(r.getId(), r.getNombre());
+										rolesDTO.add(rolDTO);
+									}
+									usuarioActDTO.setRoles(rolesDTO);
+									respuestaUsuarioDTO.getUsuarios().add(usuarioActDTO);
 
+								}
+							}else{
+								respuestaUsuarioDTO.setCodigo(3);
+								respuestaUsuarioDTO.setMensaje("El rol o roles ingresados no existen en el sistema");
 							}
 						}else{
-							respuestaUsuarioDTO.setCodigo(3);
-							respuestaUsuarioDTO.setMensaje("El rol o roles ingresados no existen en el sistema");
+							respuestaUsuarioDTO.setCodigo(5);
+							respuestaUsuarioDTO.setMensaje("El login ya existe en el sistema");
 						}
 					}else{
-						respuestaUsuarioDTO.setCodigo(5);
-						respuestaUsuarioDTO.setMensaje("El login ya existe en el sistema");
+						respuestaUsuarioDTO.setCodigo(6);
+						respuestaUsuarioDTO.setMensaje("El usuario no existe en el sistema");
 					}
 				}else{
-					respuestaUsuarioDTO.setCodigo(6);
-					respuestaUsuarioDTO.setMensaje("El usuario no existe en el sistema");
+					respuestaUsuarioDTO.setCodigo(7);
+					respuestaUsuarioDTO.setMensaje("El usuario no se encuentra en sesion");
 				}
+				
 			} catch(ConstraintViolationException e){
 				respuestaUsuarioDTO.setCodigo(2);
 				respuestaUsuarioDTO.setMensaje("Campos con formatos invalidos");
