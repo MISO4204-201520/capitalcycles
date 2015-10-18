@@ -14,52 +14,6 @@
 				<h:form id="formVerMensajes">
 					<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
 					<p:tabView>
-						<p:tab title="Enviados" >
-							<h:panelGrid columns="2" style="margin: 0 auto;text-align:left;">
-								<p:dataTable id="tablaEnviados" value="#{verMensajesManagedBean.mensajesEnviados}" var="enviado" style="width:100%;"
-									 paginator="true" 
-									 paginatorAlwaysVisible="false"
-									 rows="10"
-									 currentPageReportTemplate="({startRecord}-{endRecord}) de {totalRecords} registros encontrados"
-									 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-									 paginatorPosition="bottom"
-									 emptyMessage="No hay registros para mostrar"
-									 widgetVar="widgetTablaEnviados"
-									 >
-									<f:facet name="header">
-								        Mensajes Enviados
-								    </f:facet>
-									<p:column>
-					    				<f:facet name="header">Usuario que envia</f:facet>
-					    				<h:outputText value="#{enviado.loginUsuario}"/>
-					    			</p:column>
-					    			<p:column>
-					    				<f:facet name="header">Nombre Usuario que envia</f:facet>
-					    				<h:outputText value="#{enviado.nombres} #{enviado.apellidos}"/>
-					    			</p:column>
-					    			<p:column>
-					    				<f:facet name="header">Usuario que recibe</f:facet>
-					    				<h:outputText value="#{enviado.loginUsuarioRecibe}"/>
-					    			</p:column>
-					    			<p:column>
-					    				<f:facet name="header">Nombre Usuario que recibe</f:facet>
-					    				<h:outputText value="#{enviado.nombresRecibe} #{enviado.apellidosRecibe}"/>
-					    			</p:column>
-					    			<p:column>
-					    				<f:facet name="header">Fecha</f:facet>
-					    				<h:outputText value="#{enviado.fecha}">
-					    				</h:outputText>
-					    			</p:column>
-					    			<p:column width="7%" style="text-align:center;">
-					    				<f:facet name="header">#{msgAdministracion['comun.actualizar']}</f:facet>
-					    				<p:commandButton title="Ver Mensaje" icon="ui-icon-pencil"
-					    						 action="#{verMensajesManagedBean.verMensajeEnviado(enviado.id)}"
-					    						 ajax="true"
-					    						 update=":formVer"/>
-					    			</p:column>
-					    		</p:dataTable>
-							</h:panelGrid>
-						</p:tab>
 						<p:tab title="Recibidos" >
 							<h:panelGrid columns="2" style="margin: 0 auto;text-align:left;">
 								<p:dataTable id="tablaRecibidos" value="#{verMensajesManagedBean.mensajesRecibidos}" var="recibido" style="width:100%;"
@@ -104,6 +58,52 @@
 					    				<f:facet name="header">#{msgAdministracion['comun.actualizar']}</f:facet>
 					    				<p:commandButton title="Ver Mensaje" icon="ui-icon-pencil"
 					    						 action="#{verMensajesManagedBean.verMensajeRecibido(recibido.id)}"
+					    						 ajax="true"
+					    						 update=":formVer"/>
+					    			</p:column>
+					    		</p:dataTable>
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="Enviados" >
+							<h:panelGrid columns="2" style="margin: 0 auto;text-align:left;">
+								<p:dataTable id="tablaEnviados" value="#{verMensajesManagedBean.mensajesEnviados}" var="enviado" style="width:100%;"
+									 paginator="true" 
+									 paginatorAlwaysVisible="false"
+									 rows="10"
+									 currentPageReportTemplate="({startRecord}-{endRecord}) de {totalRecords} registros encontrados"
+									 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									 paginatorPosition="bottom"
+									 emptyMessage="No hay registros para mostrar"
+									 widgetVar="widgetTablaEnviados"
+									 >
+									<f:facet name="header">
+								        Mensajes Enviados
+								    </f:facet>
+									<p:column>
+					    				<f:facet name="header">Usuario que envia</f:facet>
+					    				<h:outputText value="#{enviado.loginUsuario}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Nombre Usuario que envia</f:facet>
+					    				<h:outputText value="#{enviado.nombres} #{enviado.apellidos}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Usuario que recibe</f:facet>
+					    				<h:outputText value="#{enviado.loginUsuarioRecibe}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Nombre Usuario que recibe</f:facet>
+					    				<h:outputText value="#{enviado.nombresRecibe} #{enviado.apellidosRecibe}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Fecha</f:facet>
+					    				<h:outputText value="#{enviado.fecha}">
+					    				</h:outputText>
+					    			</p:column>
+					    			<p:column width="7%" style="text-align:center;">
+					    				<f:facet name="header">#{msgAdministracion['comun.actualizar']}</f:facet>
+					    				<p:commandButton title="Ver Mensaje" icon="ui-icon-pencil"
+					    						 action="#{verMensajesManagedBean.verMensajeEnviado(enviado.id)}"
 					    						 ajax="true"
 					    						 update=":formVer"/>
 					    			</p:column>

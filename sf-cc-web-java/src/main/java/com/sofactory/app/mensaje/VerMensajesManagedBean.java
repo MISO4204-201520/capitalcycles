@@ -40,6 +40,7 @@ public class VerMensajesManagedBean implements Serializable{
 	private String putActualizarMensaje = "http://localhost:8080/sf-cc-mensajes/rest/mensajeService/actualizarMensaje";
 	private String getEncontrarTodosUsuarios = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarTodosUsuarios";
 	private String postCrearNuevoMensaje = "http://localhost:8080/sf-cc-mensajes/rest/mensajeService/crearNuevoMensaje";
+	private String postEnviarCorreo = "http://localhost:8080/sf-cc-mensajes/rest/mensajeService/enviarCorreo";
 	private List<MensajeDTO> mensajesRecibidos;
 	private List<MensajeDTO> mensajesEnviados;
 	private boolean visibleVM = false;
@@ -201,6 +202,7 @@ public class VerMensajesManagedBean implements Serializable{
 		visibleEM = false;
 		this.mensajeAEnviar =null;
 		this.opcion = null;
+		this.codigoUsuarioEnviar = null;
 	}
 	
 	public void enviarMensaje(){
@@ -232,6 +234,31 @@ public class VerMensajesManagedBean implements Serializable{
 	}
 	
 	public void notificarMensaje(){
+		//POST
+		Client client = ClientBuilder.newClient();
+		WebTarget messages = client.target(postEnviarCorreo);
+		MensajeDTO mensajeDTO = new MensajeDTO();
+		mensajeDTO.setUsrdesde(usuarioManagedBean.getUsuarioDTO().getCodigo());
+		mensajeDTO.setUsrpara(codigoUsuarioEnviar);
+		mensajeDTO.setTexto(mensajeAEnviar);
+		RespuestaMensajeDTO respuestaMensaje = messages.request("application/json").post(Entity.entity(mensajeDTO, MediaType.APPLICATION_JSON),RespuestaMensajeDTO.class);
+		if (respuestaMensaje!=null){
+			if (respuestaMensaje.getCodigo()==0){
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(
+								FacesMessage.SEVERITY_INFO, 
+								null, 
+								"El mensaje se envió correctamente al correo del usuario destino"));
+				iniciar();
+				cerrarEM();
+			}else{
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(
+								FacesMessage.SEVERITY_ERROR, 
+								null, 
+								respuestaMensaje.getMensaje()));
+			}			
+		}
 		
 	}
 	
