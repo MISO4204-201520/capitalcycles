@@ -242,6 +242,7 @@ public class MensajeService {
 	public RespuestaMensajeDTO crearNuevoMensaje(MensajeDTO mDTO) {
 		
 		RespuestaMensajeDTO respuestaMensajeDTO = new RespuestaMensajeDTO(0, "OK");
+		respuestaMensajeDTO.setCodigoUsuario(mDTO.getUsrdesde().toString());
 
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
 		usuarioDTO.setCodigo(mDTO.getUsrdesde());
@@ -264,14 +265,14 @@ public class MensajeService {
 					
 					client = ClientBuilder.newClient();
 					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
-					RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+					RespuestaUsuarioDTO resuDesde = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
 				
-					if (resu!=null && resu.getCodigo()==0){
+					if (resuDesde!=null && resuDesde.getCodigo()==0){
 					
 						targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
-						resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+						RespuestaUsuarioDTO resuPara = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
 						
-						if (resu!=null && resu.getCodigo()==0){
+						if (resuPara!=null && resuPara.getCodigo()==0){
 						
 							Mensaje mensaje = new Mensaje();
 					
@@ -285,18 +286,22 @@ public class MensajeService {
 	
 	
 							//Envio mensaje txt al Celular segun token del usuario				
-							boolean msgtxt=false;
 							
-							if (msgtxt==true)
+							String TOKEN=resuPara.getUsuarios().get(0).getToken();
+							System.out.println("TOKEN USUARIO PARA "+TOKEN);
+							
+							if (TOKEN=="SI")
 							{
 								String apiKey = "AIzaSyAUMsAY_oY3IgmtEyDVqXyLrZQxYbnMM_k";
-								String TOKEN="Token???";
-							
+								//TOKEN="elUpDaFOJjQ:APA91bEnkQCsE_A7LD-6qFIAbi3ixEMYw79rRqRgvUJKfrdY_bzGbIhJnQEA2wRkoqJ7FrTSh_qmech0y2JvVxo4t-J62Kje2ilugwcFAZDzS3eJZsWjRTtyeqIy7sqb51EqUS3y_TSc";
+					
 								try {
 									// Prepare JSON containing the GCM message content. What to send and where to send.
 									ObjectNode jGcmData = Json.newObject();
 									ObjectNode jData = Json.newObject();
 									jData.put("message", mensaje.getTexto());
+									jData.put("senderId", mensaje.getUsrdesde());
+									jData.put("senderName", resuDesde.getUsuarios().get(0).getNombres());
 									// Where to send GCM message.
 									jGcmData.put("to", TOKEN);
 									// What to send in GCM message.
@@ -526,16 +531,16 @@ public class MensajeService {
 				
 					client = ClientBuilder.newClient();
 					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
-					RespuestaUsuarioDTO resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+					RespuestaUsuarioDTO resuDesde = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
 			
-					if (resu!=null && resu.getCodigo()==0){
+					if (resuDesde!=null && resuDesde.getCodigo()==0){
 	
 						try {
 						
 							targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
-							resu = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+							RespuestaUsuarioDTO resuPara = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
 													
-							if (resu!=null && resu.getCodigo()==0){
+							if (resuPara!=null && resuPara.getCodigo()==0){
 		
 								//Envio email segun dirección de correo usuario	destino			
 	
@@ -564,8 +569,8 @@ public class MensajeService {
 									Message message = new MimeMessage(session);
 									message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
 									message.setRecipients(Message.RecipientType.TO,
-																				InternetAddress.parse(resu.getUsuarios().get(0).getCorreo()));
-									message.setSubject("Mensaje desde :");
+																				InternetAddress.parse(resuPara.getUsuarios().get(0).getCorreo()));
+									message.setSubject("Mensaje desde :"+ resuDesde.getUsuarios().get(0).getCorreo());
 									message.setText(mDTO.getTexto());
 									Transport.send(message);
 					

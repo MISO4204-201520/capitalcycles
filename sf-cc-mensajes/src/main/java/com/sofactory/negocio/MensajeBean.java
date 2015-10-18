@@ -27,7 +27,7 @@ public class MensajeBean extends GenericoBean<Mensaje> implements MensajeBeanLoc
 	
 	public List<Mensaje> mensajesEnviadosPorUsuario(long codUser){
 		
-		Query query = em.createQuery("FROM com.sofactory.entidades.Mensaje WHERE USRDESDE=:codUser")
+		Query query = em.createQuery("FROM com.sofactory.entidades.Mensaje WHERE USRDESDE=:codUser ORDER BY FECHA")
 				.setParameter("codUser", codUser);
 		List<Mensaje> list = query.getResultList();
 		
@@ -37,12 +37,11 @@ public class MensajeBean extends GenericoBean<Mensaje> implements MensajeBeanLoc
 	
 	public List<Mensaje> mensajesRecibidosPorUsuario(long codUser){
 	
-		Query query = em.createQuery("FROM com.sofactory.entidades.Mensaje WHERE USRPARA=:codUser")
+		Query query = em.createQuery("FROM com.sofactory.entidades.Mensaje WHERE USRPARA=:codUser ORDER BY FECHA")
 				.setParameter("codUser", codUser);
 		List<Mensaje> list = query.getResultList();
 
 		return list;
 	}
-	
 	
 }
