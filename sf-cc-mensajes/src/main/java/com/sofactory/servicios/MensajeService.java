@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -49,6 +50,8 @@ public class MensajeService {
 
 	private static String servicioGetEncontrarUsuario = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarUsuarioPorCodigo/";
 	private static String servicioObtenerUsuarioSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/obtenerUsuarioSesion";
+	private static final SimpleDateFormat FORMATO_FECHA = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
 	
 	@EJB
 	private MensajeBeanLocal mensajeBeanLocal;
@@ -86,7 +89,7 @@ public class MensajeService {
 			
 			for  (Mensaje m: mensajes){
 				MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrdesde(),
-													   m.getTexto(),m.getStatus(), m.getFecha());
+													   m.getTexto(),m.getStatus(), FORMATO_FECHA.format(m.getFecha()));
 				respuestaMensajeDTO.getMensajes().add(mensajeDTO);
 			}
 			
@@ -123,7 +126,7 @@ public class MensajeService {
 		
 					if (m!=null) {
 						MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
-								   m.getTexto(),m.getStatus(), m.getFecha());
+								   m.getTexto(),m.getStatus(), FORMATO_FECHA.format(m.getFecha()));
 						respuestaMensajeDTO.getMensajes().add(mensajeDTO);
 					}else{
 						respuestaMensajeDTO.setCodigo(2);
@@ -171,7 +174,7 @@ public class MensajeService {
 				
 				for  (Mensaje m: mensajes){
 					MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
-														   m.getTexto(),m.getStatus(), m.getFecha());
+														   m.getTexto(),m.getStatus(),FORMATO_FECHA.format(m.getFecha()));
 					respuestaMensajeDTO.getMensajes().add(mensajeDTO);
 				}
 	
@@ -215,7 +218,7 @@ public class MensajeService {
 				
 				for  (Mensaje m: mensajes){
 					MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
-														   m.getTexto(),m.getStatus(), m.getFecha());
+														   m.getTexto(),m.getStatus(), FORMATO_FECHA.format(m.getFecha()));
 					respuestaMensajeDTO.getMensajes().add(mensajeDTO);
 				}			
 				
@@ -258,7 +261,7 @@ public class MensajeService {
 		
 			if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
 	
-				mDTO.setFecha(new Date());
+				mDTO.setFecha(FORMATO_FECHA.format(new Date()));
 				mDTO.setStatus(false);
 				
 				try {				
@@ -280,7 +283,7 @@ public class MensajeService {
 							mensaje.setUsrpara(mDTO.getUsrpara());
 							mensaje.setTexto(mDTO.getTexto());
 							mensaje.setStatus(mDTO.getStatus());
-							mensaje.setFecha(mDTO.getFecha());
+							mensaje.setFecha(FORMATO_FECHA.parse(mDTO.getFecha()));
 					
 							mensajeBeanLocal.insertar(mensaje);
 	
@@ -405,10 +408,25 @@ public class MensajeService {
 		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
 		RespuestaSeguridadDTO resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
 		
-		System.out.println("RESU "+resuSeg.getCodigo());
-		System.out.println("RESU "+resuSeg.getMensaje());
+		System.out.println("RESU desde "+resuSeg.getCodigo());
+		System.out.println("RESU desde "+resuSeg.getMensaje());
 		
+		boolean estaUsuarioSesion = false;
 		if (resuSeg.getCodigo()==0){
+			estaUsuarioSesion=true;
+		}else{
+			usuarioDTO.setCodigo(mensajeDTO.getUsrpara());
+			client = ClientBuilder.newClient();
+			targetMensaje = client.target(servicioObtenerUsuarioSesion);
+			resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+			if (resuSeg.getCodigo()==0){
+				estaUsuarioSesion=true;
+			}
+			System.out.println("RESU para"+resuSeg.getCodigo());
+			System.out.println("RESU para"+resuSeg.getMensaje());		
+		}
+		
+		if (estaUsuarioSesion){
 		
 			try {
 	

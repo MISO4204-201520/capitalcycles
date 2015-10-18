@@ -158,7 +158,7 @@ public class GestionarUsuarioManagedBean implements Serializable{
 				UtilidadCorreo.validarFormatoCorreo(usuarioDTO.getCorreo().trim()))){
 
 			try{
-				//POST
+				//PUT
 				Client client = ClientBuilder.newClient();
 				WebTarget messages = client.target(putActualizarUsuario);
 				RespuestaUsuarioDTO respuesta = messages.request("application/json").put(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaUsuarioDTO.class);

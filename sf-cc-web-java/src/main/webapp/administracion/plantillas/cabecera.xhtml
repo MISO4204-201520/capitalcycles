@@ -18,11 +18,13 @@
 	        	<h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="estiloTablaCabecera">
 	        		<h:graphicImage library="imagenes" name="logoCycle.png" height="85" onclick="location.href = 'paginaBlanco.xhtml';" style="cursor:pointer;"/>
 	    			<h:panelGroup id="grupoSesion" layout="block" style="float:right;">
-	     				<h:panelGrid columns="2" styleClass="estiloInicioSesion" rendered="#{usuarioManagedBean.usuarioDTO != null}">
-	    					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.nombres} #{usuarioManagedBean.usuarioDTO.apellidos}" style="font-size:1.2em;" />
+	     				<h:panelGrid columns="2" rendered="#{usuarioManagedBean.usuarioDTO != null}" style="font-size:1.2em;">
+	     					<h:outputLabel value="Login"></h:outputLabel>
+	     					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.login}" style="font-size:0.9em;" />
+	    					<h:outputLabel value="Nombre"></h:outputLabel>
+	    					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.nombres} #{usuarioManagedBean.usuarioDTO.apellidos}" style="font-size:0.9em;" />
 	    					<h:outputLabel value=" "></h:outputLabel>
 	    					<h:commandLink value="Cerrar Sesión" action="#{autenticarUsuarioManagedBean.cerrarSesion}" style="color:black;"/>
-	    					<h:outputLabel value=" "></h:outputLabel>
 	    				</h:panelGrid>					
 					</h:panelGroup>
 	    		</h:panelGrid>

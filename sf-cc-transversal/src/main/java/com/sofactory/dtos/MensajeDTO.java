@@ -9,11 +9,18 @@ public class MensajeDTO {
 	private Long usrpara;
 	private String texto;
 	private Boolean status;
-	private Date fecha;
+	private String fecha;
+	private String loginUsuario;
+	private String nombres;
+	private String apellidos;
+	private String loginUsuarioRecibe;
+	private String nombresRecibe;
+	private String apellidosRecibe;
+	
 	
 	public MensajeDTO(){}
 	
-	public MensajeDTO(Long id, Long usrdesde, Long usrpara, String texto, Boolean status, Date fecha) {
+	public MensajeDTO(Long id, Long usrdesde, Long usrpara, String texto, Boolean status, String fecha) {
 		super();
 		this.id = id;
 		this.usrdesde = usrdesde;
@@ -43,7 +50,7 @@ public class MensajeDTO {
 		return status;
 	}
 	
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
 	
@@ -67,8 +74,55 @@ public class MensajeDTO {
 		this.status = status;
 	}
 	
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-		
+
+	public String getLoginUsuario() {
+		return loginUsuario;
+	}
+
+	public void setLoginUsuario(String loginUsuario) {
+		this.loginUsuario = loginUsuario;
+	}
+
+	public String getNombres() {
+		return nombres;
+	}
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+
+	public String getLoginUsuarioRecibe() {
+		return loginUsuarioRecibe;
+	}
+
+	public void setLoginUsuarioRecibe(String loginUsuarioRecibe) {
+		this.loginUsuarioRecibe = loginUsuarioRecibe;
+	}
+
+	public String getNombresRecibe() {
+		return nombresRecibe;
+	}
+
+	public void setNombresRecibe(String nombresRecibe) {
+		this.nombresRecibe = nombresRecibe;
+	}
+
+	public String getApellidosRecibe() {
+		return apellidosRecibe;
+	}
+
+	public void setApellidosRecibe(String apellidosRecibe) {
+		this.apellidosRecibe = apellidosRecibe;
+	}
 }

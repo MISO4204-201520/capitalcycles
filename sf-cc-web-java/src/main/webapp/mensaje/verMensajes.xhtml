@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
+			<ui:define name="contenido">
+				<h:form id="formVerMensajes">
+					<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
+					<p:tabView>
+						<p:tab title="Enviados" >
+							<h:panelGrid columns="2" style="margin: 0 auto;text-align:left;">
+								<p:dataTable id="tablaEnviados" value="#{verMensajesManagedBean.mensajesEnviados}" var="enviado" style="width:100%;"
+									 paginator="true" 
+									 paginatorAlwaysVisible="false"
+									 rows="10"
+									 currentPageReportTemplate="({startRecord}-{endRecord}) de {totalRecords} registros encontrados"
+									 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									 paginatorPosition="bottom"
+									 emptyMessage="No hay registros para mostrar"
+									 widgetVar="widgetTablaEnviados"
+									 >
+									<f:facet name="header">
+								        Mensajes Enviados
+								    </f:facet>
+									<p:column>
+					    				<f:facet name="header">Usuario que envia</f:facet>
+					    				<h:outputText value="#{enviado.loginUsuario}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Nombre Usuario que envia</f:facet>
+					    				<h:outputText value="#{enviado.nombres} #{enviado.apellidos}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Usuario que recibe</f:facet>
+					    				<h:outputText value="#{enviado.loginUsuarioRecibe}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Nombre Usuario que recibe</f:facet>
+					    				<h:outputText value="#{enviado.nombresRecibe} #{enviado.apellidosRecibe}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Fecha</f:facet>
+					    				<h:outputText value="#{enviado.fecha}">
+					    				</h:outputText>
+					    			</p:column>
+					    			<p:column width="7%" style="text-align:center;">
+					    				<f:facet name="header">#{msgAdministracion['comun.actualizar']}</f:facet>
+					    				<p:commandButton title="Ver Mensaje" icon="ui-icon-pencil"
+					    						 action="#{verMensajesManagedBean.verMensajeEnviado(enviado.id)}"
+					    						 ajax="true"
+					    						 update=":formVer"/>
+					    			</p:column>
+					    		</p:dataTable>
+							</h:panelGrid>
+						</p:tab>
+						<p:tab title="Recibidos" >
+							<h:panelGrid columns="2" style="margin: 0 auto;text-align:left;">
+								<p:dataTable id="tablaRecibidos" value="#{verMensajesManagedBean.mensajesRecibidos}" var="recibido" style="width:100%;"
+									 paginator="true" 
+									 paginatorAlwaysVisible="false"
+									 rows="10"
+									 currentPageReportTemplate="({startRecord}-{endRecord}) de {totalRecords} registros encontrados"
+									 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									 paginatorPosition="bottom"
+									 emptyMessage="No hay registros para mostrar"
+									 widgetVar="widgetTablaRecibidos"
+									 >
+									<f:facet name="header">
+								        Mensajes Recibidos
+								    </f:facet>
+									<p:column>
+					    				<f:facet name="header">Usuario que envia</f:facet>
+					    				<h:outputText value="#{recibido.loginUsuario}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Nombre Usuario que envia</f:facet>
+					    				<h:outputText value="#{recibido.nombres} #{recibido.apellidos}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Usuario que recibe</f:facet>
+					    				<h:outputText value="#{recibido.loginUsuarioRecibe}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Nombre Usuario que recibe</f:facet>
+					    				<h:outputText value="#{recibido.nombresRecibe} #{recibido.apellidosRecibe}"/>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Fecha</f:facet>
+					    				<h:outputText value="#{recibido.fecha}">
+					    				</h:outputText>
+					    			</p:column>
+					    			<p:column>
+					    				<f:facet name="header">Leido</f:facet>
+					    				<h:outputText value="#{recibido.status?'SI' : 'NO'}"/>
+					    			</p:column>
+					    			<p:column width="7%" style="text-align:center;">
+					    				<f:facet name="header">#{msgAdministracion['comun.actualizar']}</f:facet>
+					    				<p:commandButton title="Ver Mensaje" icon="ui-icon-pencil"
+					    						 action="#{verMensajesManagedBean.verMensajeRecibido(recibido.id)}"
+					    						 ajax="true"
+					    						 update=":formVer"/>
+					    			</p:column>
+					    		</p:dataTable>
+							</h:panelGrid>
+						</p:tab>
+					</p:tabView>
+					<p:panel>
+						<h:panelGroup layout="block" styleClass="estiloDiv">
+							<p:commandButton value="Enviar Mensaje" action="#{verMensajesManagedBean.abrirVentanaEnviar(1)}" update=":formEnviarMensaje"/>
+							<p:commandButton value="Notificar" action="#{verMensajesManagedBean.abrirVentanaEnviar(2)}" update=":formEnviarMensaje"/>
+						</h:panelGroup>
+					</p:panel>
+				</h:form>
+				
+				<h:form id="formVer">
+					<p:dialog header="Mensaje Visto" widgetVar="widgetVM" modal="true" height="200" width="450" visible="#{verMensajesManagedBean.visibleVM}" resizable="false" closable="false">
+						<p:inputTextarea style="width:375px;height:100px;overflow-y: auto;" value="#{verMensajesManagedBean.mensaje}" readonly="true">
+						</p:inputTextarea>
+						<center>
+		                        <p:commandButton value="Cancelar" actionListener="#{verMensajesManagedBean.cerrarVM}" ajax="true" update="@form :formVerMensajes" immediate="true">
+	                            </p:commandButton>
+                        </center>
+					</p:dialog>
+				</h:form>
+				
+				<h:form id="formEnviarMensaje">
+					<p:dialog header="#{verMensajesManagedBean.opcion == 1 ? 'Enviar Mensaje' : 'Notificar'}" widgetVar="widgetVM" modal="true" height="250" width="650" visible="#{verMensajesManagedBean.visibleEM}" resizable="false" closable="false">
+						<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
+							<h:outputText value="Seleccione un usuario"/>
+							<h:outputText value="*" styleClass="requerido"/>
+							<p:selectOneMenu id="usuario" value="#{verMensajesManagedBean.codigoUsuarioEnviar}" required="true" style="width:300px;">
+ 								<f:selectItem itemLabel="--Seleccione un usuario--" itemValue=""/>
+ 								<f:selectItems value="#{verMensajesManagedBean.usuarios}"/>							
+ 							</p:selectOneMenu>
+ 							<p:message  for="usuario"/>
+ 							
+ 							<h:outputText value="Mensaje"/>
+							<h:outputText value="*" styleClass="requerido"/>
+ 							<p:inputTextarea id="mensaje" style="width:300px;height:100px;overflow-y: auto;" value="#{verMensajesManagedBean.mensajeAEnviar}" required="true">
+							</p:inputTextarea>
+							<p:message  for="mensaje"/>
+ 						</h:panelGrid>
+ 						
+						
+						<center>
+								<p:commandButton value="Enviar" actionListener="#{verMensajesManagedBean.enviarMensaje}" ajax="true" update="@form :formVerMensajes" rendered="#{verMensajesManagedBean.opcion == 1}">
+	                            </p:commandButton>
+	                            <p:commandButton value="Notificar" actionListener="#{verMensajesManagedBean.notificarMensaje}" ajax="true" update="@form :formVerMensajes" rendered="#{verMensajesManagedBean.opcion == 2}">
+	                            </p:commandButton>
+		                        <p:commandButton value="Cancelar" actionListener="#{verMensajesManagedBean.cerrarEM}" ajax="true" update="@form :formVerMensajes" immediate="true">
+	                            </p:commandButton>
+                        </center>
+					</p:dialog>
+				</h:form>
+				
+    		</ui:define>				
+		</ui:composition>	
+	</h:body>
+</html>
