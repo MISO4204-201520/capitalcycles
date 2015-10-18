@@ -31,9 +31,9 @@ public class FidelizacionManagedBean implements Serializable{
 	/** Constante serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
-	private final static String R_CATALOGO = "http://localhost:8080//sf-cc-fidelizacion/rest/fidelizacion/catalogoProdutos";
+	private final static String R_CATALOGO = "http://localhost:8080/sf-cc-fidelizacion/rest/fidelizacion/catalogoProductos";
 
-	private final static String R_PUNTOS_USUARIO = "http://localhost:8080//sf-cc-fidelizacion/rest/fidelizacion/obtenerPuntoUsuario";
+	private final static String R_PUNTOS_USUARIO = "http://localhost:8080/sf-cc-fidelizacion/rest/fidelizacion/obtenerPuntoUsuario";
 
 	private final static String R_REDIMIR = "http://localhost:8080/sf-cc-fidelizacion/rest/fidelizacion/redimirProducto";
 
@@ -48,7 +48,7 @@ public class FidelizacionManagedBean implements Serializable{
 	@PostConstruct
 	public void inicializar(){
 		Client client = ClientBuilder.newClient();
-		WebTarget messages = client.target(R_CATALOGO);
+		WebTarget messages = client.target(R_CATALOGO+"/"+usuarioManagedBean.getUsuarioDTO().getCodigo());
 		CatalogoDTO catalogo = messages.request("application/json")
 				.get(CatalogoDTO.class);
 		
