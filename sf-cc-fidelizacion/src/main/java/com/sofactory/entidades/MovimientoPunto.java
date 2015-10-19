@@ -1,6 +1,7 @@
 package com.sofactory.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,10 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-
-import com.sofactory.entidades.Producto;
-import com.sofactory.entidades.Servicio;
 
 @Entity
 @Table(name = "FI_MOVIMIENTO_PUNTOS")
@@ -44,6 +44,10 @@ public class MovimientoPunto implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="PRODUCTO_ID")
 	private Producto producto;
+	
+	@Column(name="FECHA", columnDefinition="DATETIME")
+	@Temporal(TemporalType.DATE)
+	private Date fecha;
 
 	public Long getId() {
 		return id;
@@ -83,5 +87,13 @@ public class MovimientoPunto implements Serializable{
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 }

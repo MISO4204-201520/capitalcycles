@@ -1,5 +1,6 @@
 package com.sofactory.negocio;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -62,6 +63,7 @@ public class FidelizacionBean implements FidelizacionBeanLocal{
 		movimiento.setPunto(punto);
 		movimiento.setRegistro(true);
 		movimiento.setServicio(servicio);
+		movimiento.setFecha(new Date());
 		
 		movimientoJpa.insertar(movimiento);
 	}
@@ -94,6 +96,7 @@ public class FidelizacionBean implements FidelizacionBeanLocal{
 		movimiento.setPunto(punto);
 		movimiento.setRegistro(false);
 		movimiento.setProducto(producto);
+		movimiento.setFecha(new Date());
 		
 		movimientoJpa.insertar(movimiento);
 	}
@@ -113,5 +116,10 @@ public class FidelizacionBean implements FidelizacionBeanLocal{
 		}
 		
 		return puntos.get(0).getPuntos();
+	}
+
+	@Override
+	public List<MovimientoPunto> obtenerHistorial(String codigoUsuario) {
+		return movimientoJpa.obtenerTodosUsuario(codigoUsuario);
 	}
 }

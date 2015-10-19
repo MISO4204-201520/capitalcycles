@@ -17,6 +17,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import com.sofactory.dtos.CatalogoDTO;
+import com.sofactory.dtos.HistorialPuntosDTO;
+import com.sofactory.dtos.MovimientoPuntoDTO;
 import com.sofactory.dtos.ProductoDTO;
 import com.sofactory.dtos.PuntosUsuarioDTO;
 import com.sofactory.dtos.RedimirProductoDTO;
@@ -24,6 +26,7 @@ import com.sofactory.dtos.RegistrarPuntosDTO;
 import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.UsuarioDTO;
+import com.sofactory.entidades.MovimientoPunto;
 import com.sofactory.entidades.Producto;
 import com.sofactory.negocio.interfaz.FidelizacionBeanLocal;
 
@@ -190,4 +193,60 @@ public class FidelizacionServices {
 		return response;
 	}
 	
+	@GET
+	@Path("obtenerHistorial/{codigoUsuario}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public HistorialPuntosDTO obtenerHistorial
+		(@PathParam("codigoUsuario")String codigoUsuario) {
+	
+		HistorialPuntosDTO response = new HistorialPuntosDTO();
+		response.setCodigoUsuario(codigoUsuario);
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(new Long(codigoUsuario));
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resu = targetMensaje.request("application/json").
+				post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		if (resu.getCodigo()==0){
+		
+			try {
+				List<MovimientoPunto> movimientos =
+						fidelizacionBean.obtenerHistorial(codigoUsuario);
+				response.setMovimientos(new ArrayList<MovimientoPuntoDTO>());
+				MovimientoPuntoDTO mvDto;
+				
+				for (MovimientoPunto mp : movimientos) {
+					mvDto = new MovimientoPuntoDTO();
+					mvDto.setEsRegistro(mp.getRegistro());
+					mvDto.setFecha(mp.getFecha());
+					if (mp.getRegistro()){
+						mvDto.setMovimiento(mp.getServicio().getNombre());
+						mvDto.setPuntos(mp.getServicio().getPuntos());
+					}else{
+						mvDto.setMovimiento(mp.getProducto().getNombre());
+						mvDto.setPuntos(mp.getProducto().getPuntos());
+					}
+					
+					response.getMovimientos().add(mvDto);
+				}
+				
+				response.setCodigoUsuario(codigoUsuario);
+				response.setMensaje("OK");
+			}catch (Exception e) {
+				e.printStackTrace();
+				response.setMensaje("ERROR-"+e.getMessage());
+			}
+		}else{
+			
+			response.setCodigo(10);
+			response.setMensaje(resu.getMensaje());
+			
+		}
+		
+		return response;
+	}
 }

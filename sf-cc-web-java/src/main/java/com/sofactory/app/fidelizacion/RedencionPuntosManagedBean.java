@@ -26,12 +26,12 @@ import com.sofactory.dtos.RespuestaDTO;
 
 @ManagedBean
 @ViewScoped
-public class FidelizacionManagedBean implements Serializable{
+public class RedencionPuntosManagedBean implements Serializable{
 
 	/** Constante serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
-	private final static String R_CATALOGO = "http://localhost:8080//sf-cc-fidelizacion/rest/fidelizacion/catalogoProdutos";
+	private final static String R_CATALOGO = "http://localhost:8080//sf-cc-fidelizacion/rest/fidelizacion/catalogoProductos";
 
 	private final static String R_PUNTOS_USUARIO = "http://localhost:8080//sf-cc-fidelizacion/rest/fidelizacion/obtenerPuntoUsuario";
 
@@ -47,12 +47,13 @@ public class FidelizacionManagedBean implements Serializable{
 	
 	@PostConstruct
 	public void inicializar(){
+		Long idUsuario = usuarioManagedBean.getUsuarioDTO().getCodigo();
 		Client client = ClientBuilder.newClient();
-		WebTarget messages = client.target(R_CATALOGO);
+		WebTarget messages = client.target(R_CATALOGO+"/"+idUsuario);
 		CatalogoDTO catalogo = messages.request("application/json")
 				.get(CatalogoDTO.class);
 		
-		messages = client.target(R_PUNTOS_USUARIO+"/"+usuarioManagedBean.getUsuarioDTO().getCodigo());
+		messages = client.target(R_PUNTOS_USUARIO+"/"+idUsuario);
 		PuntosUsuarioDTO puntosUsuario = messages.request("application/json")
 				.get(PuntosUsuarioDTO.class);
 		

@@ -11,12 +11,12 @@
 	<h:body>
 		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
 			<ui:define name="contenido">
-				<h:outputText value="Usted posee: #{fidelizacionManagedBean.puntosUsuario} puntos" styleClass="titulo"/>
+				<h:outputText value="Usted posee: #{redencionPuntosManagedBean.puntosUsuario} puntos" styleClass="titulo"/>
 				<h:form id="formProductos">
 					<p:panel id="panelProductos" header="Catalogo de productos:" style="text-align:center;">
 						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
 						<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
-						<p:dataTable var="producto" value="#{fidelizacionManagedBean.productos}">
+						<p:dataTable var="producto" value="#{redencionPuntosManagedBean.productos}">
 						 <p:column headerText="Producto">
 					        <h:outputText value="#{producto.nombre}" />
 					    </p:column>
@@ -24,7 +24,7 @@
 					        <h:outputText value="#{producto.puntos}" />
 					    </p:column>
 					    <p:column headerText="Redimir">
-					    	<p:commandButton value="Redimir" action="#{fidelizacionManagedBean.redimir(producto.id)}" update="@form"/>
+					    	<p:commandButton value="Redimir" action="#{redencionPuntosManagedBean.redimir(producto.id)}" update="@form"/>
 					    </p:column>
 					    </p:dataTable>
 						</h:panelGrid>
