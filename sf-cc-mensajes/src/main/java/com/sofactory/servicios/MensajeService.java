@@ -291,12 +291,12 @@ public class MensajeService {
 							//Envio mensaje txt al Celular segun token del usuario				
 							
 							String TOKEN=resuPara.getUsuarios().get(0).getToken();
-							System.out.println("TOKEN USUARIO PARA "+TOKEN);
+							//System.out.println("TOKEN USUARIO PARA "+TOKEN);
 							
-							if (TOKEN=="SI")
+							if (TOKEN!="SI")
 							{
 								String apiKey = "AIzaSyAUMsAY_oY3IgmtEyDVqXyLrZQxYbnMM_k";
-								//TOKEN="elUpDaFOJjQ:APA91bEnkQCsE_A7LD-6qFIAbi3ixEMYw79rRqRgvUJKfrdY_bzGbIhJnQEA2wRkoqJ7FrTSh_qmech0y2JvVxo4t-J62Kje2ilugwcFAZDzS3eJZsWjRTtyeqIy7sqb51EqUS3y_TSc";
+							//	TOKEN="elUpDaFOJjQ:APA91bEnkQCsE_A7LD-6qFIAbi3ixEMYw79rRqRgvUJKfrdY_bzGbIhJnQEA2wRkoqJ7FrTSh_qmech0y2JvVxo4t-J62Kje2ilugwcFAZDzS3eJZsWjRTtyeqIy7sqb51EqUS3y_TSc";
 					
 								try {
 									// Prepare JSON containing the GCM message content. What to send and where to send.
@@ -328,7 +328,7 @@ public class MensajeService {
 									System.out.println(resp);
 									System.out.println("Check your device/emulator for notification or logcat for " +
 											"confirmation of the receipt of the GCM message.");
-								} catch (IOException e) {
+								} catch (Exception e) {
 									System.out.println("Unable to send GCM message.");
 									System.out.println("Please ensure that API_KEY has been replaced by the server " +
 											"API key, and that the device's registration token is correct (if specified).");
