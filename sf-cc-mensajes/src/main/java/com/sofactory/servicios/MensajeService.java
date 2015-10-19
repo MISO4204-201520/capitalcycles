@@ -36,6 +36,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sofactory.dtos.MensajeDTO;
+import com.sofactory.dtos.RegistrarPuntosDTO;
+import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RespuestaMensajeDTO;
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
@@ -50,6 +52,7 @@ public class MensajeService {
 
 	private static String servicioGetEncontrarUsuario = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarUsuarioPorCodigo/";
 	private static String servicioObtenerUsuarioSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/obtenerUsuarioSesion";
+	private static String servicioRegistrarServicio = "http://localhost:8080/sf-cc-fidelizacion/rest/fidelizacion/registrarServicio";
 	private static final SimpleDateFormat FORMATO_FECHA = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	
@@ -128,6 +131,19 @@ public class MensajeService {
 						MensajeDTO mensajeDTO = new MensajeDTO(m.getId(), m.getUsrdesde(), m.getUsrpara(),
 								   m.getTexto(),m.getStatus(), FORMATO_FECHA.format(m.getFecha()));
 						respuestaMensajeDTO.getMensajes().add(mensajeDTO);
+						
+						// Inicio Otorga Puntos por Fidelizacion
+						
+						RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+						registrarPuntosDTO.setCodigoUsuario(Long.toString(codUsuario));
+						registrarPuntosDTO.setServicio("encontrarMensajePorId");
+					
+						client = ClientBuilder.newClient();
+						targetMensaje = client.target(servicioRegistrarServicio);
+						RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+						
+						// Fin Otorga Puntos por Fidelizacion
+						
 					}else{
 						respuestaMensajeDTO.setCodigo(2);
 						respuestaMensajeDTO.setMensaje("El Mensaje No existe en el sistema");
@@ -177,7 +193,22 @@ public class MensajeService {
 														   m.getTexto(),m.getStatus(),FORMATO_FECHA.format(m.getFecha()));
 					respuestaMensajeDTO.getMensajes().add(mensajeDTO);
 				}
+				
+				if (mensajes.size()>0){
 	
+					// Inicio Otorga Puntos por Fidelizacion		
+					
+					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+					registrarPuntosDTO.setCodigoUsuario(Long.toString(usuario));
+					registrarPuntosDTO.setServicio("mensajesEnviadosPorUsuario");
+				
+					client = ClientBuilder.newClient();
+					targetMensaje = client.target(servicioRegistrarServicio);
+					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);			
+				
+					// Fin Otorga Puntos por Fidelizacion				
+
+				}
 			} catch (Exception e) {
 	
 				respuestaMensajeDTO.setCodigo(1);
@@ -222,6 +253,21 @@ public class MensajeService {
 					respuestaMensajeDTO.getMensajes().add(mensajeDTO);
 				}			
 				
+				if (mensajes.size()>0){
+				
+					// Inicio Otorga Puntos por Fidelizacion		
+					
+					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+					registrarPuntosDTO.setCodigoUsuario(Long.toString(usuario));
+					registrarPuntosDTO.setServicio("mensajesRecibidosPorUsuario");
+				
+					client = ClientBuilder.newClient();
+					targetMensaje = client.target(servicioRegistrarServicio);
+					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);			
+				
+					// Fin Otorga Puntos por Fidelizacion				
+				}
+				
 			} catch (Exception e) {
 				
 				respuestaMensajeDTO.setCodigo(1);
@@ -258,7 +304,7 @@ public class MensajeService {
 		System.out.println("RESU "+resuSeg.getMensaje());
 		
 		if (resuSeg.getCodigo()==0){
-		
+			
 			if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
 	
 				mDTO.setFecha(FORMATO_FECHA.format(new Date()));
@@ -286,8 +332,19 @@ public class MensajeService {
 							mensaje.setFecha(FORMATO_FECHA.parse(mDTO.getFecha()));
 					
 							mensajeBeanLocal.insertar(mensaje);
-	
-	
+
+							// Inicio Otorga Puntos por Fidelizacion
+							
+							RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+							registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+							registrarPuntosDTO.setServicio("crearNuevoMensaje");
+						
+							client = ClientBuilder.newClient();
+							targetMensaje = client.target(servicioRegistrarServicio);
+							RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+							
+							// Fin Otorga Puntos por Fidelizacion
+							
 							//Envio mensaje txt al Celular segun token del usuario				
 							
 							String TOKEN=resuPara.getUsuarios().get(0).getToken();
@@ -443,6 +500,19 @@ public class MensajeService {
 						if (mensajeActualizar.getUsrdesde()==mensajeDTO.getUsrdesde()){
 							mensajeActualizar.setStatus(true);
 							mensajeBeanLocal.insertarOActualizar(mensajeActualizar);
+							
+							// Inicio Otorga Puntos por Fidelizacion
+							
+							RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+							registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+							registrarPuntosDTO.setServicio("actualizarMensaje");
+						
+							client = ClientBuilder.newClient();
+							targetMensaje = client.target(servicioRegistrarServicio);
+							RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+							
+							// Fin Otorga Puntos por Fidelizacion
+							
 						}else{
 							respuestaMensajeDTO.setCodigo(4);
 							respuestaMensajeDTO.setMensaje("El Mensaje con Id : "+mensajeActualizar.getId()+ 
@@ -588,9 +658,22 @@ public class MensajeService {
 									message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
 									message.setRecipients(Message.RecipientType.TO,
 																				InternetAddress.parse(resuPara.getUsuarios().get(0).getCorreo()));
-									message.setSubject("Mensaje desde :"+ resuDesde.getUsuarios().get(0).getCorreo());
+									message.setSubject("Mensaje desde : "+ resuDesde.getUsuarios().get(0).getCorreo());
 									message.setText(mDTO.getTexto());
 									Transport.send(message);
+									
+									// Inicio Otorga Puntos por Fidelizacion
+									
+									RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+									registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+									registrarPuntosDTO.setServicio("enviarCorreo");
+								
+									client = ClientBuilder.newClient();
+									targetMensaje = client.target(servicioRegistrarServicio);
+									RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+									
+									// Fin Otorga Puntos por Fidelizacion
+									
 					
 								} catch (MessagingException e) {
 			//										throw new RuntimeException(e);
