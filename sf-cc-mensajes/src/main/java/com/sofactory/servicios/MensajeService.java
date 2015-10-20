@@ -390,8 +390,6 @@ public class MensajeService {
 									System.out.println("Please ensure that API_KEY has been replaced by the server " +
 											"API key, and that the device's registration token is correct (if specified).");
 									e.printStackTrace();
-									respuestaMensajeDTO.setCodigo(4);
-									respuestaMensajeDTO.setMensaje("Error al Enviar Mensaje de Texto");
 								}
 								
 							}

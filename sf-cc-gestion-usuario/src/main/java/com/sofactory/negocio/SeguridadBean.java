@@ -8,9 +8,16 @@ import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 
+import com.sofactory.dtos.RegistrarPuntosDTO;
+import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
@@ -29,6 +36,8 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 
 	private static final String LLAVE_PASSWORD = "llavePassword?.";
 
+	private static String servicioRegistrarServicio = "http://localhost:8080/sf-cc-fidelizacion/rest/fidelizacion/registrarServicio";
+	
 	@PersistenceContext(unitName="GestionUsuarioPU")
 	private EntityManager em;
 	
@@ -78,6 +87,19 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 						respuestaDTO.setApellidos(((Persona)usuario).getApellidos());
 						respuestaDTO.setCorreo(((Persona)usuario).getCorreo());
 					}
+					// Inicio Otorga Puntos por Fidelizacion
+					
+					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+					UsuarioDTO usuarioDTO = new UsuarioDTO();
+					usuarioDTO.setCodigo(esValidoUsuarioDTO.getCodigo());
+					registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+					registrarPuntosDTO.setServicio("autenticacionUsuario");
+				
+					Client client = ClientBuilder.newClient();
+					WebTarget targetMensaje = client.target(servicioRegistrarServicio);
+					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+					
+					// Fin Otorga Puntos por Fidelizacion
 				}else{
 					respuestaDTO.setCodigo(2);
 					respuestaDTO.setMensaje("La credencial del usuario es incorrecta");
