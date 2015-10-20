@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
+			<ui:define name="contenido">
+				<h:form id="formRecorridos" onload="initialize()">
+					<p:panel id="panelRecorridos" header="Planear mejor ruta" style="text-align:center;">
+						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
+						<h:panelGrid columns="5" style="margin: 0 auto;text-align:left;">
+							<h:outputText value="Inicio"/>
+							<p:inputText id="Inicio" 
+								value="#{recorridoManagedBean.inicio}" 
+								required="true" 
+								maxlength="100" 
+								style="width:200px;"/>
+							<h:outputText value="Fin"/>
+							<p:inputText id="Fin" 
+								value="#{recorridoManagedBean.fin}" 
+								required="true" 
+								maxlength="100" 
+								style="width:200px;"/>
+	 						<p:commandButton value="Calcular ruta" 
+	 							action="#{recorridoManagedBean.calcularRuta}" update="@form"
+	 							/>
+						</h:panelGrid>
+					</p:panel>
+					<p:gmap  center="4.598889, -74.0808" zoom="15" type="MAPA" 
+						style="width:100%;height:600px"
+						model="#{recorridoManagedBean.mapModel}"/>
+					<p:panel>
+						<h:panelGroup layout="block" styleClass="estiloDiv">
+							<p:commandButton value="Cancelar" action="paginaInicio?faces-redirect=true" immediate="true"/>
+						</h:panelGroup>
+					</p:panel>
+				</h:form>
+    		</ui:define>				
+		</ui:composition>	
+	</h:body>
+</html>
