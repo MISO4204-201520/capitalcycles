@@ -11,19 +11,10 @@
     
     <ui:composition>
     	<h:panelGroup layout="block" styleClass="estiloPie">
-    		<h:panelGrid columns="2" style="width:100%;height:100px;">
-    			<p:spacer />
-    			<h:panelGroup layout="block" style="float:right;text-align: right;" styleClass="estiloDerechos">
-    				<h:outputText value="#{msgAdministracion['pie.derechos1']}"/>
-    				<br/>
-    				<h:outputText value="#{msgAdministracion['pie.derechos2']}"/>
-    				<br/>
-    				<h:outputText value="#{msgAdministracion['pie.derechos3']}"/>
-				</h:panelGroup>
-    		</h:panelGrid>        	
-        </h:panelGroup>
-        <h:panelGroup layout="block" styleClass="estiloDerechos1">
-        	<h:outputText value="#{msgAdministracion['pie.derechos4']}"/>
-        </h:panelGroup>
+    		<h:panelGrid columns="2" style="width:100%;">
+				<h:graphicImage library="imagenes" name="sofactory.png" height="50"/>
+				<h:graphicImage library="imagenes" name="uniandes.png" height="60" style="float:right;"/>
+			</h:panelGrid>
+      	</h:panelGroup>
     </ui:composition>
 </html>

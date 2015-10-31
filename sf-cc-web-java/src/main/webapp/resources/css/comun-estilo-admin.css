@@ -36,7 +36,7 @@ body{
 
 .estiloCabecera{
 	width: 1200px;
-	background-color: #ebebdf;
+	background-color: #d7d7cd;
 }
 
 .estiloTablaCabecera{
@@ -112,4 +112,8 @@ body{
 .titulo{
     text-align: center;
     font-size: 20px;
+}
+
+.topAligned {
+    vertical-align: top;
 }

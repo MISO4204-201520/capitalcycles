@@ -9,33 +9,93 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pm="http://primefaces.org/mobile">
-	<h:body>
-		<ui:composition template="plantillas/plantilla.xhtml">
-			<ui:define name="contenido">
-				<h:form id="formAutenticacion">
-					<br/><br/><br/>
-					<p:panel id="panelAutenticacion" header="Administración" styleClass="estiloPanel">
-						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" escape="false"/>
-						<h:panelGrid columns="4">
-							<h:outputText value="Usuario"/>
-							<h:outputText value="*" styleClass="requerido"/>
-							<p:inputText id="usuario" value="#{autenticarUsuarioManagedBean.usuario}" required="true"/>
-							<p:message  for="usuario" />
-							<h:outputText value="Contraseña"/>
-							<h:outputText value="*" styleClass="requerido"/>
-							<p:password id="contrasena" value="#{autenticarUsuarioManagedBean.contrasena}" required="true"/>
-							<p:message  for="contrasena" />
-						</h:panelGrid>
-						<h:panelGroup layout="block" styleClass="estiloDiv">
-							<h:panelGrid columns="2">
-								<p:commandButton value="Ingresar" action="#{autenticarUsuarioManagedBean.iniciarSesion}" update="panelAutenticacion" ajax="true"/>
-								<p:commandButton value="Registrese" action="registrarUsuario?faces-redirect=false" ajax="true" immediate="true"/>
+<h:body>
+	<ui:composition template="plantillas/plantilla.xhtml">
+		<ui:define name="contenido">
+			<h:outputScript library="js" name="inicio.js" />
+			<h:panelGrid columns="2" columnClasses="topAligned, topAligned">
+				<h:panelGroup id="imagenes" layout="block" style="height:470px;width:670px;">
+					<h:graphicImage id="imgPre1" library="imagenes" name="imgPre1.png" height="470" style="position:absolute; border-radius: 5px; border:2px solid gray;"/>
+					<h:graphicImage id="imgPre2" library="imagenes" name="imgPre2.png" height="470" style="position:absolute; display:none; border-radius: 5px; border:2px solid gray;"/>
+					<h:graphicImage id="imgPre3" library="imagenes" name="imgPre3.png" height="470" style="position:absolute; display:none; border-radius: 5px; border:2px solid gray;"/>
+				</h:panelGroup>
+				<h:panelGroup layout="block" style="float:right;">
+					<h:form id="formRegistrarUsuario">
+						<p:panel id="panelRegistrarUsuario" header="Registrate"
+							style="text-align:center;">
+							<p:messages id="mensaje" showDetail="true" autoUpdate="true"
+								globalOnly="true" style="text-align:left;" />
+							<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
+								<h:outputText value="Login" />
+								<h:outputText value="*" styleClass="requerido" />
+								<p:inputText id="login"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.login}"
+									required="true" maxlength="100" style="width:200px;">
+								</p:inputText>
+								<p:message for="login" />
+								<h:outputText value="Nombres" />
+								<h:outputText value="*" styleClass="requerido" />
+								<p:inputText id="nombres"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.nombres}"
+									required="true" maxlength="100" style="width:200px;">
+								</p:inputText>
+								<p:message for="nombres" />
+								<h:outputText value="Apellidos" />
+								<h:outputText value="*" styleClass="requerido" />
+								<p:inputText id="apellidos"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.apellidos}"
+									required="true" maxlength="100" style="width:200px;">
+								</p:inputText>
+								<p:message for="apellidos" />
+								<h:outputText value="Celular" />
+								<p:spacer />
+								<p:inputText id="celular"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.celular}"
+									maxlength="100" style="width:200px;">
+								</p:inputText>
+								<p:message for="celular" />
+								<h:outputText value="Correo" />
+								<p:spacer />
+								<p:inputText id="correo"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.correo}"
+									maxlength="100" style="width:200px;">
+								</p:inputText>
+								<p:message for="correo" />
+								<h:outputText value="Genero" />
+								<p:spacer />
+								<p:selectOneMenu id="genero"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.genero}"
+									required="true" style="width:210px;">
+									<f:selectItem itemLabel="Masculino" itemValue="M" />
+									<f:selectItem itemLabel="Femenino" itemValue="F" />
+								</p:selectOneMenu>
+								<p:message for="genero" />
+								<h:outputText value="Credencial" />
+								<h:outputText value="*" styleClass="requerido" />
+								<p:password id="credencial"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.credencialNueva}"
+									feedback="true" required="true" style="width:200px;" />
+								<p:message for="credencial" />
+								<h:outputText value="Confirmar Credencial" />
+								<h:outputText value="*" styleClass="requerido" />
+								<p:password id="confirmarCredencial"
+									value="#{gestionarUsuarioManagedBean.usuarioDTO.confirmacionCredencialNueva}"
+									feedback="true" required="true" style="width:200px;" />
+								<p:message for="confirmarCredencial" />
 							</h:panelGrid>
-						</h:panelGroup>
-					</p:panel>
-					<br/><br/><br/>
-				</h:form>
-    		</ui:define>				
-		</ui:composition>	
-	</h:body>
+						</p:panel>
+
+						<p:panel>
+							<h:panelGroup layout="block" styleClass="estiloDiv">
+								<p:commandButton value="Empieza"
+									action="#{gestionarUsuarioManagedBean.crear}" update="@form" />
+							</h:panelGroup>
+						</p:panel>
+					</h:form>
+
+				</h:panelGroup>
+			</h:panelGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
 </html>

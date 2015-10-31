@@ -16,7 +16,24 @@
     	<h:form>
 	    	<h:panelGroup layout="block" styleClass="estiloCabecera">
 	        	<h:panelGrid columns="2" cellpadding="0" cellspacing="0" styleClass="estiloTablaCabecera">
-	        		<h:graphicImage library="imagenes" name="logoCycle.png" height="85" onclick="location.href = 'paginaBlanco.xhtml';" style="cursor:pointer;"/>
+	        		<h:panelGrid columns="2">
+	        			<h:graphicImage library="imagenes" name="logoCycle.png" height="85" style="cursor:pointer;"/>
+	        			<h:graphicImage library="imagenes" name="tituloCapital.png" height="40" style="cursor:pointer;"/>
+	        		</h:panelGrid>
+					<h:panelGroup id="autenticacion" layout="block" style="float:right;" rendered="#{usuarioManagedBean.usuarioDTO == null}">
+						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" escape="false"/>
+						<h:panelGrid columns="3">
+							<h:outputText value="Usuario"/>
+							<h:outputText value="Contraseña"/>
+							<p:spacer/>
+							<p:inputText id="usuario" value="#{autenticarUsuarioManagedBean.usuario}" required="true"/>
+							<p:password id="contrasena" value="#{autenticarUsuarioManagedBean.contrasena}" required="true"/>
+							<p:commandButton value="Entrar" action="#{autenticarUsuarioManagedBean.iniciarSesion}" ajax="true" update="@form"/>
+							<p:message  for="usuario" />
+							<p:message  for="contrasena" />
+						</h:panelGrid>
+					</h:panelGroup>
+				
 	    			<h:panelGroup id="grupoSesion" layout="block" style="float:right;">
 	     				<h:panelGrid columns="2" rendered="#{usuarioManagedBean.usuarioDTO != null}" style="font-size:1.2em;">
 	     					<h:outputLabel value="Login"></h:outputLabel>

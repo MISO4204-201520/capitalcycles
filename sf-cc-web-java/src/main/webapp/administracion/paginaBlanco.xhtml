@@ -11,20 +11,21 @@
 	<h:body>
 		<ui:composition template="plantillas/plantilla.xhtml">
 			<ui:define name="contenido">
-				<h:form>
-					<p:panel>
-						<br/>
-						<br/>
-						<br/>
-						<br/>
-						<h:outputText value="Ingreso Correctamente"/>
-						<br/>
-						<br/>
-						<br/>
-						<br/>
-						<br/>
-					</p:panel>
-				</h:form>
+				<h:outputScript library="js" name="inicio.js" />
+				
+				<p:panel>
+					<br/>
+					<h:outputText value="Ingreso Correctamente"/>
+					<br/>
+					<br/>
+					<h:panelGroup layout="block" style="height:350px;width:100%; margin-left:27%;">
+						<h:graphicImage id="imgPre1" library="imagenes" name="imgPre1.png" height="350" style="position:absolute; border-radius: 5px; border:2px solid gray;"/>
+						<h:graphicImage id="imgPre2" library="imagenes" name="imgPre2.png" height="350" style="position:absolute; display:none; border-radius: 5px; border:2px solid gray;"/>
+						<h:graphicImage id="imgPre3" library="imagenes" name="imgPre3.png" height="350" style="position:absolute; display:none; border-radius: 5px; border:2px solid gray;"/>
+					</h:panelGroup>
+					
+				</p:panel>
+				
     		</ui:define>				
 		</ui:composition>	
 	</h:body>
