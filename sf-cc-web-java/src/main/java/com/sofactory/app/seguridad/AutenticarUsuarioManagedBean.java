@@ -1,8 +1,6 @@
 package com.sofactory.app.seguridad;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -19,7 +17,6 @@ import org.jasypt.util.text.BasicTextEncryptor;
 
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
-import com.sofactory.dtos.RolDTO;
 import com.sofactory.dtos.UsuarioDTO;
 
 @ManagedBean
@@ -60,12 +57,17 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	private String postCerrarSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cerrarSesion";
 	private String postCambiarCredencial = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cambiarCredencial";
 	
+	private boolean verError;
+	private String errorMensaje;
+	
 	/**
 	 * Método - acción que sirve para iniciar la sesión de un usuario.
 	 *
 	 * @return Regla de navegación: CORRECTO, si el usuario se válido, null en caso contrario
 	 */
 	public String iniciarSesion(){
+		verError = false;
+		errorMensaje = "";
 		String reglaNavegacion = null;
 		//POST
 		try{
@@ -89,25 +91,16 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 					usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
 					reglaNavegacion = "CORRECTO";
 				}else{
-					FacesContext.getCurrentInstance().addMessage(null, 
-							new FacesMessage(
-									FacesMessage.SEVERITY_ERROR, 
-									null, 
-									"El usuario no existe en el sistema"));
+					verError = true;
+					errorMensaje = respuesta.getMensaje();
 				}
 			}else{
-				FacesContext.getCurrentInstance().addMessage(null, 
-						new FacesMessage(
-								FacesMessage.SEVERITY_ERROR, 
-								null, 
-								"Hubo un error llamando el servicio"));
+				verError = true;
+				errorMensaje = "Hubo un error llamando el servicio";
 			}
 		}catch(Exception exc){
-			FacesContext.getCurrentInstance().addMessage(null, 
-					new FacesMessage(
-							FacesMessage.SEVERITY_ERROR, 
-							null, 
-							"Hubo un error llamando el servicio"));
+			verError = true;
+			errorMensaje = "Hubo un error llamando el servicio";
 			exc.printStackTrace();
 		}		
 		return reglaNavegacion;
@@ -305,5 +298,21 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	 */
 	public void setConfirmarClave(String confirmarClave) {
 		this.confirmarClave = confirmarClave;
+	}
+
+	public boolean isVerError() {
+		return verError;
+	}
+
+	public void setVerError(boolean verError) {
+		this.verError = verError;
+	}
+
+	public String getErrorMensaje() {
+		return errorMensaje;
+	}
+
+	public void setErrorMensaje(String errorMensaje) {
+		this.errorMensaje = errorMensaje;
 	}
 }

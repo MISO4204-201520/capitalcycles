@@ -12,8 +12,8 @@
 		<ui:composition template="plantillas/plantilla.xhtml">
 			<ui:define name="contenido">
 				<h:outputScript library="js" name="inicio.js" />
-				
 				<p:panel>
+					<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
 					<br/>
 					<h:outputText value="Ingreso Correctamente"/>
 					<br/>

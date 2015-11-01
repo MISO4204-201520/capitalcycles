@@ -22,9 +22,7 @@
 				<h:panelGroup layout="block" style="float:right;">
 					<h:form id="formRegistrarUsuario">
 						<p:panel id="panelRegistrarUsuario" header="Registrate"
-							style="text-align:center;">
-							<p:messages id="mensaje" showDetail="true" autoUpdate="true"
-								globalOnly="true" style="text-align:left;" />
+							style="text-align:center;">							
 							<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
 								<h:outputText value="Login" />
 								<h:outputText value="*" styleClass="requerido" />
@@ -87,8 +85,10 @@
 
 						<p:panel>
 							<h:panelGroup layout="block" styleClass="estiloDiv">
+								<h:outputText value="#{gestionarUsuarioManagedBean.errorMensaje}" styleClass="requerido" rendered="#{gestionarUsuarioManagedBean.verError}"/>
+								<br />
 								<p:commandButton value="Empieza"
-									action="#{gestionarUsuarioManagedBean.crear}" update="@form" />
+									action="#{gestionarUsuarioManagedBean.crear}" update="formRegistrarUsuario" />
 							</h:panelGroup>
 						</p:panel>
 					</h:form>
