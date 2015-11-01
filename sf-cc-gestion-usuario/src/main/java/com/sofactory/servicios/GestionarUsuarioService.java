@@ -122,6 +122,12 @@ public class GestionarUsuarioService {
 						persona.setCorreo(usuarioDTO.getCorreo());	
 					}
 					persona.setFoto(usuarioDTO.getFoto());
+					if (usuarioDTO.getFechaNacimiento()!=null){
+						Calendar fecha = Calendar.getInstance();
+						fecha.setTime(usuarioDTO.getFechaNacimiento());
+						persona.setFechaNacimiento(fecha);	
+					}
+					
 					usuarioBeanLocal.insertar(persona);	
 					respuestaUsuarioDTO.setCodigoUsuario(persona.getCodigo().toString());
 				}else{
@@ -194,6 +200,9 @@ public class GestionarUsuarioService {
 									p.getCorreo());
 					usuarioDTO.setToken(p.getToken());
 					usuarioDTO.setFoto(p.getFoto());
+					if (p.getFechaNacimiento()!=null){
+						usuarioDTO.setFechaNacimiento(p.getFechaNacimiento().getTime());	
+					}
 					List<Rol> roles = rolBeanLocal.encontrarRolesPorUsuario(new Long(codigo));
 					if (roles!=null){
 						for (Rol rol:roles){
@@ -290,6 +299,11 @@ public class GestionarUsuarioService {
 										persona.setCorreo(usuarioDTO.getCorreo());	
 									}
 									persona.setFoto(usuarioDTO.getFoto());
+									if (usuarioDTO.getFechaNacimiento()!=null){
+										Calendar fecha = Calendar.getInstance();
+										fecha.setTime(usuarioDTO.getFechaNacimiento());
+										persona.setFechaNacimiento(fecha);	
+									}
 									usuarioBeanLocal.insertarOActualizar(persona);
 									UsuarioDTO usuarioActDTO = new UsuarioDTO(persona.getCodigo(), 
 											persona.getLogin(), 

@@ -1,12 +1,15 @@
 package com.sofactory.entidades;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Pattern;
 
 import com.sofactory.enums.Genero;
@@ -37,6 +40,10 @@ public class Persona extends Usuario implements Serializable {
 	             message="Correo inválido")
 	private String correo;
 
+	@Column(name="FECHA_NACIMIENTO")
+	@Temporal(TemporalType.DATE)
+	private Calendar fechaNacimiento;
+	
 	public String getNombres() {
 		return nombres;
 	}
@@ -75,5 +82,13 @@ public class Persona extends Usuario implements Serializable {
 
 	public void setCorreo(String correo) {
 		this.correo = correo;
+	}
+
+	public Calendar getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(Calendar fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 }

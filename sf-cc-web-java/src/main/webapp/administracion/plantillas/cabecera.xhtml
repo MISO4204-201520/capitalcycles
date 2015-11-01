@@ -46,9 +46,9 @@
           					</p:panel>
           					
 	    					<h:panelGrid columns="2" rendered="#{usuarioManagedBean.usuarioDTO != null}" style="font-size:1.2em;">
-		     					<h:outputLabel value="Login"></h:outputLabel>
+		     					<p:spacer/>
 		     					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.login}" style="font-size:0.9em;" />
-		    					<h:outputLabel value="Nombre"></h:outputLabel>
+		    					<h:outputLabel value="Hola!! "></h:outputLabel>
 		    					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.nombres} #{usuarioManagedBean.usuarioDTO.apellidos}" style="font-size:0.9em;" />
 		    					<h:outputLabel value=" "></h:outputLabel>
 		    					<h:commandLink value="Cerrar Sesión" action="#{autenticarUsuarioManagedBean.cerrarSesion}" style="color:black;"/>

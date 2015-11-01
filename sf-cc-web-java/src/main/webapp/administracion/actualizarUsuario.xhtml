@@ -47,6 +47,17 @@
  								<f:selectItem itemLabel="Femenino" itemValue="F"/> 								
  							</p:selectOneMenu>
  							<p:message  for="genero"/>
+ 							<h:outputText value="Fecha de Nacimiento" />
+							<p:spacer />
+							<p:calendar id="fechaNacimiento" 
+	                       				pattern="yyyy-MM-dd" 
+	                       				mask="true" 
+	                       				locale="es" 
+	                       				navigator="true"
+	                       				yearRange="c-100:c"
+	                       				value="#{gestionarUsuarioManagedBean.usuarioDTO.fechaNacimiento}"
+	                       				styleClass="estiloCalendario"/>
+							<p:message  for="fechaNacimiento" />
  							<h:outputText value="Foto"/>
  							<p:spacer/>
  							<h:panelGrid columns="1">

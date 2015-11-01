@@ -1,6 +1,7 @@
 package com.sofactory.dtos;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class UsuarioDTO{
@@ -17,7 +18,7 @@ public class UsuarioDTO{
 	private String credencialNueva;
 	private String confirmacionCredencialNueva;
 	private byte[] foto;
-	
+	private Date fechaNacimiento;
 	
 	public UsuarioDTO(){}
 	
@@ -131,5 +132,13 @@ public class UsuarioDTO{
 
 	public void setFoto(byte[] foto) {
 		this.foto = foto;
+	}
+
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 }
