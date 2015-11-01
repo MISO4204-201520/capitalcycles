@@ -35,15 +35,19 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sofactory.dtos.AmigoDTO;
 import com.sofactory.dtos.MensajeDTO;
 import com.sofactory.dtos.RegistrarPuntosDTO;
+import com.sofactory.dtos.RespuestaAmigoDTO;
 import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RespuestaMensajeDTO;
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
+import com.sofactory.entidades.Amigo;
 import com.sofactory.entidades.Mensaje;
 import com.sofactory.negocio.interfaces.MensajeBeanLocal;
+import com.sofactory.negocio.interfaces.AmigoBeanLocal;
 
 import play.libs.Json;
 
@@ -58,6 +62,9 @@ public class MensajeService {
 	
 	@EJB
 	private MensajeBeanLocal mensajeBeanLocal;
+	
+	@EJB
+	private AmigoBeanLocal amigoBeanLocal;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -716,4 +723,203 @@ public class MensajeService {
 		return respuestaMensajeDTO;
 	
 	}
+	
+	//********* Amigos
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("crearAmigo")
+	public RespuestaAmigoDTO crearAmigo(AmigoDTO aDTO) {
+		
+		RespuestaAmigoDTO respuestaAmigoDTO = new RespuestaAmigoDTO(0, "OK");
+		respuestaAmigoDTO.setCodigoUsuario(aDTO.getCodUsuario().toString());
+
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(aDTO.getCodUsuario());
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resuSeg.getCodigo());
+		System.out.println("RESU "+resuSeg.getMensaje());
+		
+		if (resuSeg.getCodigo()==0){
+			
+			if ((aDTO.getCodUsuario()!=null && aDTO.getCodAmigo()!=null) && (aDTO.getCodUsuario()!=aDTO.getCodAmigo())){
+					
+				try {				
+					
+					client = ClientBuilder.newClient();
+					targetMensaje = client.target(servicioGetEncontrarUsuario+aDTO.getCodUsuario());
+					RespuestaUsuarioDTO resuCodUsuario = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+				
+					if (resuCodUsuario!=null && resuCodUsuario.getCodigo()==0){
+					
+						targetMensaje = client.target(servicioGetEncontrarUsuario+aDTO.getCodAmigo());
+						RespuestaUsuarioDTO resuCodAmigo = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+						
+						if (resuCodAmigo!=null && resuCodAmigo.getCodigo()==0){
+
+							boolean yaAmigo = amigoBeanLocal.amigoDeUsuario(aDTO.getCodUsuario(), aDTO.getCodAmigo());
+							
+							if (!yaAmigo){
+							
+								Amigo amigo = new Amigo();
+						
+								amigo.setCodUsuario(aDTO.getCodUsuario());
+								amigo.setCodAmigo(aDTO.getCodAmigo());
+						
+								amigoBeanLocal.insertar(amigo);
+	
+								// Inicio Otorga Puntos por Fidelizacion
+								
+								RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+								registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+								registrarPuntosDTO.setServicio("crearAmigo");
+							
+								client = ClientBuilder.newClient();
+								targetMensaje = client.target(servicioRegistrarServicio);
+								RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+								
+								// Fin Otorga Puntos por Fidelizacion
+							
+							}else{			
+								respuestaAmigoDTO.setCodigo(5);
+								respuestaAmigoDTO.setMensaje("Codigo de Amigo Ya Existe ... ");
+							}	
+							
+						}else{			
+							respuestaAmigoDTO.setCodigo(3);
+							respuestaAmigoDTO.setMensaje("Codigo de Amigo No Existe ... ");
+						}
+						
+					}else{
+						respuestaAmigoDTO.setCodigo(2);
+						respuestaAmigoDTO.setMensaje("Codigo de Usuario No Existe ... ");
+					}
+					
+				} catch (Exception e) {
+					respuestaAmigoDTO.setCodigo(4);
+					respuestaAmigoDTO.setMensaje("Error Interno del Sistema ...");
+				}
+			
+			}else{
+				respuestaAmigoDTO.setCodigo(1);
+				respuestaAmigoDTO.setMensaje("Faltan Campos Obligatorios o Codigo de Usuario igual a Codigo de amigo");
+			}
+		
+		}else{
+			respuestaAmigoDTO.setCodigo(10);
+			respuestaAmigoDTO.setMensaje(resuSeg.getMensaje());	
+		}		
+			
+		return respuestaAmigoDTO;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("amigosDeUsuario/{usuario}")
+	public RespuestaAmigoDTO amigosDeUsuario(@PathParam("usuario") long usuario) {
+		
+		RespuestaAmigoDTO respuestaAmigoDTO = new RespuestaAmigoDTO(0, "OK");
+		respuestaAmigoDTO.setCodigoUsuario(Long.toString(usuario));
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(usuario);
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resu = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resu.getCodigo());
+		System.out.println("RESU "+resu.getMensaje());
+		
+		if (resu.getCodigo()==0){
+		
+			try {
+	
+				List<Amigo> Amigos = amigoBeanLocal.amigosDeUsuario(usuario);
+				
+				for  (Amigo a: Amigos){
+					AmigoDTO amigoDTO = new AmigoDTO(a.getId(), a.getCodUsuario(), a.getCodAmigo());
+					respuestaAmigoDTO.getAmigos().add(amigoDTO);
+				}
+				
+			} catch (Exception e) {
+	
+				respuestaAmigoDTO.setCodigo(1);
+				respuestaAmigoDTO.setMensaje("Hubo un error en el sistema");
+				e.printStackTrace();
+				
+			}
+		}else{
+			respuestaAmigoDTO.setCodigo(10);
+			respuestaAmigoDTO.setMensaje(resu.getMensaje());	
+		}
+			
+		return respuestaAmigoDTO;
+	}
+	
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("removerAmigo")
+	public RespuestaAmigoDTO removerAmigo(AmigoDTO amigoDTO) {
+
+		RespuestaAmigoDTO respuestaAmigoDTO = new RespuestaAmigoDTO(0, "OK");
+		respuestaAmigoDTO.setCodigoUsuario(Long.toString(amigoDTO.getCodUsuario()));
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(amigoDTO.getCodUsuario());
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resuSeg = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		System.out.println("RESU "+resuSeg.getCodigo());
+		System.out.println("RESU "+resuSeg.getMensaje());
+		
+		if (resuSeg.getCodigo()==0){
+		
+			try {
+			
+				//Validar si el amigo existe en el sistema
+				Amigo amigoRemover = amigoBeanLocal.encontrarPorId(Amigo.class, amigoDTO.getId());
+						
+				if (amigoRemover!=null){
+				
+					if (amigoRemover.getCodUsuario()==amigoDTO.getCodUsuario() && 
+						amigoRemover.getCodAmigo()==amigoDTO.getCodAmigo()) {
+				
+						amigoBeanLocal.remover(amigoRemover, amigoRemover.getId());
+					
+					}else{
+					
+						respuestaAmigoDTO.setCodigo(4);
+						respuestaAmigoDTO.setMensaje("El Amigo : "+amigoDTO.getCodAmigo()+ 
+											            " No pertence al Usuario " + amigoDTO.getCodUsuario());
+					}
+						
+				}else{
+					System.out.println(amigoRemover);
+					respuestaAmigoDTO.setCodigo(1);
+					respuestaAmigoDTO.setMensaje("El Amigo con Id:  "+amigoDTO.getId() +" no existe en el sistema");
+				}
+				
+			} catch (Exception e) {
+				
+				respuestaAmigoDTO.setCodigo(2);
+				respuestaAmigoDTO.setMensaje("Hubo un error en el sistema");		
+			}
+		
+		}else{
+			respuestaAmigoDTO.setCodigo(10);
+			respuestaAmigoDTO.setMensaje(resuSeg.getMensaje());	
+		}	
+		
+		return respuestaAmigoDTO;
+	}
+	
 }

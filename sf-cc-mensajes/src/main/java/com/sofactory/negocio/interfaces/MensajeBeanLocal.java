@@ -10,5 +10,4 @@ public interface MensajeBeanLocal extends MetodosGenerales<Mensaje>{
 	List<Mensaje> mensajesEnviadosPorUsuario(long codUser);
 	
 	List<Mensaje> mensajesRecibidosPorUsuario(long codUser);
-	
 }
