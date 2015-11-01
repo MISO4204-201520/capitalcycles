@@ -36,13 +36,23 @@
 					</h:panelGroup>
 				
 	    			<h:panelGroup id="grupoSesion" layout="block" style="float:right;">
-	     				<h:panelGrid columns="2" rendered="#{usuarioManagedBean.usuarioDTO != null}" style="font-size:1.2em;">
-	     					<h:outputLabel value="Login"></h:outputLabel>
-	     					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.login}" style="font-size:0.9em;" />
-	    					<h:outputLabel value="Nombre"></h:outputLabel>
-	    					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.nombres} #{usuarioManagedBean.usuarioDTO.apellidos}" style="font-size:0.9em;" />
-	    					<h:outputLabel value=" "></h:outputLabel>
-	    					<h:commandLink value="Cerrar Sesión" action="#{autenticarUsuarioManagedBean.cerrarSesion}" style="color:black;"/>
+	    				<h:panelGrid columns="2">
+	    					<p:panel rendered="#{imagenPerfilManagedBean.imagenActualizar != null}">
+								<h:panelGroup layout="block" style="width: 45px; height: 45px;">
+									<h:outputLink value="actualizarUsuario.xhtml">
+	          							<p:graphicImage id="imagen" value="#{imagenPerfilManagedBean.imagenActualizar}" cache="false" height="60" style="margin:-7px;"/>
+	          						</h:outputLink>
+	          					</h:panelGroup>
+          					</p:panel>
+          					
+	    					<h:panelGrid columns="2" rendered="#{usuarioManagedBean.usuarioDTO != null}" style="font-size:1.2em;">
+		     					<h:outputLabel value="Login"></h:outputLabel>
+		     					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.login}" style="font-size:0.9em;" />
+		    					<h:outputLabel value="Nombre"></h:outputLabel>
+		    					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.nombres} #{usuarioManagedBean.usuarioDTO.apellidos}" style="font-size:0.9em;" />
+		    					<h:outputLabel value=" "></h:outputLabel>
+		    					<h:commandLink value="Cerrar Sesión" action="#{autenticarUsuarioManagedBean.cerrarSesion}" style="color:black;"/>
+		    				</h:panelGrid>
 	    				</h:panelGrid>					
 					</h:panelGroup>
 	    		</h:panelGrid>

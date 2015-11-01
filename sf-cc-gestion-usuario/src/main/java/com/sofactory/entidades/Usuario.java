@@ -14,6 +14,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -45,6 +46,11 @@ public abstract class Usuario implements Serializable {
 	@Column(name = "TOKEN")
 	protected String token;
 		
+	@Column(name = "FOTO")
+	@Lob
+	protected byte[] foto;
+	
+	
 	@ManyToMany
 	@JoinTable(
 			name="GU_USUARIO_ROL",
@@ -100,5 +106,13 @@ public abstract class Usuario implements Serializable {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public byte[] getFoto() {
+		return foto;
+	}
+
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
 	}
 }

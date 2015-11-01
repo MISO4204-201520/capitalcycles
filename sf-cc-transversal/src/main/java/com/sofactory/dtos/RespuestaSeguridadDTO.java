@@ -6,6 +6,7 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 	private String nombres;
 	private String apellidos;
 	private String correo;
+	private byte[] foto;
 	
 	public RespuestaSeguridadDTO(){}
 	
@@ -51,5 +52,13 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 
 	public void setCorreo(String correo) {
 		this.correo = correo;
+	}
+
+	public byte[] getFoto() {
+		return foto;
+	}
+
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
 	}
 }

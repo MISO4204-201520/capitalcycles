@@ -84,7 +84,6 @@ public class GestionarUsuarioService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public RespuestaUsuarioDTO crear(UsuarioDTO usuarioDTO) {
-
 		RespuestaUsuarioDTO respuestaUsuarioDTO = new RespuestaUsuarioDTO(0, "OK");
 		if (usuarioDTO.getLogin()!=null && !usuarioDTO.getLogin().isEmpty() && 
 				usuarioDTO.getCredencial()!=null && !usuarioDTO.getCredencial().isEmpty() &&
@@ -122,6 +121,7 @@ public class GestionarUsuarioService {
 					if (usuarioDTO.getCorreo()!=null && !usuarioDTO.getCorreo().isEmpty()){
 						persona.setCorreo(usuarioDTO.getCorreo());	
 					}
+					persona.setFoto(usuarioDTO.getFoto());
 					usuarioBeanLocal.insertar(persona);	
 					respuestaUsuarioDTO.setCodigoUsuario(persona.getCodigo().toString());
 				}else{
@@ -193,6 +193,7 @@ public class GestionarUsuarioService {
 							p.getGenero()!=null?p.getGenero().name():null,
 									p.getCorreo());
 					usuarioDTO.setToken(p.getToken());
+					usuarioDTO.setFoto(p.getFoto());
 					List<Rol> roles = rolBeanLocal.encontrarRolesPorUsuario(new Long(codigo));
 					if (roles!=null){
 						for (Rol rol:roles){
@@ -288,6 +289,7 @@ public class GestionarUsuarioService {
 									if (usuarioDTO.getCorreo()!=null && !usuarioDTO.getCorreo().isEmpty()){
 										persona.setCorreo(usuarioDTO.getCorreo());	
 									}
+									persona.setFoto(usuarioDTO.getFoto());
 									usuarioBeanLocal.insertarOActualizar(persona);
 									UsuarioDTO usuarioActDTO = new UsuarioDTO(persona.getCodigo(), 
 											persona.getLogin(), 

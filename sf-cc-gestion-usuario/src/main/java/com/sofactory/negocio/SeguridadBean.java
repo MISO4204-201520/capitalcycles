@@ -82,6 +82,7 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 					usuarioSingletonBean.getUsuariosDTO().put(esValidoUsuarioDTO.getCodigo(), esValidoUsuarioDTO);
 					respuestaDTO.setCodigoUsuario(usuario.getCodigo().toString());
 					respuestaDTO.setLogin(usuario.getLogin());
+					respuestaDTO.setFoto(usuario.getFoto());
 					if (usuario instanceof Persona){
 						respuestaDTO.setNombres(((Persona)usuario).getNombres());
 						respuestaDTO.setApellidos(((Persona)usuario).getApellidos());

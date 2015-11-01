@@ -16,6 +16,8 @@ public class UsuarioDTO{
 	private List<RolDTO> roles;
 	private String credencialNueva;
 	private String confirmacionCredencialNueva;
+	private byte[] foto;
+	
 	
 	public UsuarioDTO(){}
 	
@@ -121,5 +123,13 @@ public class UsuarioDTO{
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public byte[] getFoto() {
+		return foto;
+	}
+
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
 	}
 }

@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 
+import com.sofactory.app.gestionusuario.ImagenPerfilManagedBean;
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
@@ -60,6 +61,9 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	private boolean verError;
 	private String errorMensaje;
 	
+	@ManagedProperty("#{imagenPerfilManagedBean}")
+	private ImagenPerfilManagedBean imagenPerfilManagedBean;
+	
 	/**
 	 * Método - acción que sirve para iniciar la sesión de un usuario.
 	 *
@@ -88,6 +92,8 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 					usuarioAutenticado.setApellidos(respuesta.getApellidos());
 					usuarioAutenticado.setCorreo(respuesta.getCorreo());
 					usuarioAutenticado.setCredencial(respuesta.getCredencial());
+					usuarioAutenticado.setFoto(respuesta.getFoto());
+					imagenPerfilManagedBean.setImgActualizar(usuarioAutenticado.getFoto());
 					usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
 					reglaNavegacion = "CORRECTO";
 				}else{
@@ -314,5 +320,13 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 
 	public void setErrorMensaje(String errorMensaje) {
 		this.errorMensaje = errorMensaje;
+	}
+
+	public ImagenPerfilManagedBean getImagenPerfilManagedBean() {
+		return imagenPerfilManagedBean;
+	}
+
+	public void setImagenPerfilManagedBean(ImagenPerfilManagedBean imagenPerfilManagedBean) {
+		this.imagenPerfilManagedBean = imagenPerfilManagedBean;
 	}
 }

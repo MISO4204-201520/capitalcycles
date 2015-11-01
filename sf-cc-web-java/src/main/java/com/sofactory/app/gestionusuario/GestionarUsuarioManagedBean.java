@@ -1,5 +1,8 @@
 package com.sofactory.app.gestionusuario;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -17,6 +22,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.jasypt.util.text.BasicTextEncryptor;
+import org.primefaces.event.FileUploadEvent;
 
 import com.sofactory.app.gestionusuario.utilidades.UtilidadCorreo;
 import com.sofactory.app.seguridad.UsuarioManagedBean;
@@ -24,6 +30,7 @@ import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.RolDTO;
 import com.sofactory.dtos.UsuarioDTO;
+import com.sofactory.utilidades.UtilidadGeneral;
 
 @ManagedBean
 @ViewScoped
@@ -33,6 +40,8 @@ public class GestionarUsuarioManagedBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private static final String LLAVE_PASSWORD = "llavePassword?.";
+	private static final String IMG_M = "anonimo_m.png";
+	private static final String IMG_W = "anonimo_w.png";
 
 	/** Atributo usuario managed bean. */
 	@ManagedProperty("#{usuarioManagedBean}")
@@ -48,6 +57,9 @@ public class GestionarUsuarioManagedBean implements Serializable{
 	private boolean verError;
 	private String errorMensaje;
 	
+	@ManagedProperty("#{imagenPerfilManagedBean}")
+	private ImagenPerfilManagedBean imagenPerfilManagedBean;
+	
 	
 	@PostConstruct
 	private void iniciar(){
@@ -61,11 +73,52 @@ public class GestionarUsuarioManagedBean implements Serializable{
 			if (respuesta!=null){
 				if (respuesta.getCodigo()==0){
 					this.usuarioDTO = respuesta.getUsuarios().get(0);
+					imagenPerfilManagedBean.setImagenActualizar(null);
+					imagenPerfilManagedBean.setUploadFileActualizar(null);
+					imagenPerfilManagedBean.setImgActualizar(this.usuarioDTO.getFoto());
 				}
 			}
 		}
 	}
 
+	public void cargarArchivo(FileUploadEvent evento) {
+		boolean imagenCorrecta=false;
+		imagenPerfilManagedBean.setUploadFileActualizar(null);
+		if (evento.getFile()!=null){
+			InputStream archivo = null;
+			try {
+				archivo = evento.getFile().getInputstream();
+				BufferedImage imagen = ImageIO.read(archivo);
+				if (imagen.getHeight() <= 150 && imagen.getWidth() <= 150){
+					imagenPerfilManagedBean.setImagenActualizar(null);
+					imagenPerfilManagedBean.setUploadFileActualizar(null);
+					imagenPerfilManagedBean.setImgActualizar(UtilidadGeneral.convertirArchivoByte(evento.getFile().getInputstream()));
+					imagenCorrecta = true;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally{
+				if (archivo!=null){
+					try {
+						archivo.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}	
+				}
+			}
+		}else{
+			imagenCorrecta=true;
+		}
+		
+		if (!imagenCorrecta){
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, 
+							null, 
+							"El tamaño de la imagen es incorrecta"));
+		}
+    }
+	
 	public String crear(){
 		errorMensaje = "";
 		verError = false;
@@ -86,6 +139,18 @@ public class GestionarUsuarioManagedBean implements Serializable{
 					roles.add(rolDTO);
 					usuarioDTO.setRoles(roles);
 					usuarioDTO.setToken("T");
+					ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance()
+							.getExternalContext().getContext();
+					String realPath = ctx.getRealPath("/resources/imagenes");
+					if (realPath!=null){
+						if (usuarioDTO.getGenero()!=null && usuarioDTO.getGenero().equals("M")){
+							usuarioDTO.setFoto(UtilidadGeneral.convertirArchivoByte(realPath+"/"+IMG_M));	
+						}else{
+							usuarioDTO.setFoto(UtilidadGeneral.convertirArchivoByte(realPath+"/"+IMG_W));
+						}
+						
+					}
+					
 					RespuestaUsuarioDTO respuesta = messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaUsuarioDTO.class);
 					if (respuesta!=null){
 						if (respuesta.getCodigo()==0){
@@ -109,6 +174,8 @@ public class GestionarUsuarioManagedBean implements Serializable{
 									usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
 									FacesContext context = FacesContext.getCurrentInstance();
 									context.getExternalContext().getFlash().setKeepMessages(true);
+									usuarioAutenticado.setFoto(respuestaAut.getFoto());
+									imagenPerfilManagedBean.setImgActualizar(usuarioAutenticado.getFoto());
 									reglaNavegacion = "CORRECTO";
 								}else{
 									errorMensaje = respuestaAut.getMensaje();
@@ -156,6 +223,9 @@ public class GestionarUsuarioManagedBean implements Serializable{
 				UtilidadCorreo.validarFormatoCorreo(usuarioDTO.getCorreo().trim()))){
 
 			try{
+				if (imagenPerfilManagedBean.getImagenActualizar()!=null){
+					usuarioDTO.setFoto(UtilidadGeneral.convertirArchivoByte(imagenPerfilManagedBean.getImagenActualizar().getStream()));
+				}
 				//PUT
 				Client client = ClientBuilder.newClient();
 				WebTarget messages = client.target(putActualizarUsuario);
@@ -266,5 +336,13 @@ public class GestionarUsuarioManagedBean implements Serializable{
 
 	public void setErrorMensaje(String errorMensaje) {
 		this.errorMensaje = errorMensaje;
+	}
+
+	public ImagenPerfilManagedBean getImagenPerfilManagedBean() {
+		return imagenPerfilManagedBean;
+	}
+
+	public void setImagenPerfilManagedBean(ImagenPerfilManagedBean imagenPerfilManagedBean) {
+		this.imagenPerfilManagedBean = imagenPerfilManagedBean;
 	}
 }
