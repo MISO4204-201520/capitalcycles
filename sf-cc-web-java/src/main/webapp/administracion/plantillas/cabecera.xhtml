@@ -38,10 +38,10 @@
 	    			<h:panelGroup id="grupoSesion" layout="block" style="float:right;">
 	    				<h:panelGrid columns="2">
 	    					<p:panel rendered="#{imagenPerfilManagedBean.imagenActualizar != null}">
-								<h:panelGroup layout="block" style="width: 45px; height: 45px;">
-									<h:outputLink value="actualizarUsuario.xhtml">
+	    						<h:panelGroup layout="block" style="width: 45px; height: 45px;">
+									<h:commandLink action="ACTUALIZAR_USUARIO">
 	          							<p:graphicImage id="imagen" value="#{imagenPerfilManagedBean.imagenActualizar}" cache="false" height="60" style="margin:-7px;"/>
-	          						</h:outputLink>
+	          						</h:commandLink>
 	          					</h:panelGroup>
           					</p:panel>
           					

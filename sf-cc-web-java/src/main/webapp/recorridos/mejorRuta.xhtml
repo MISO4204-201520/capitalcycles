@@ -11,30 +11,43 @@
 	<h:body>
 		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
 			<ui:define name="contenido">
-				<h:form id="formRecorridos" onload="initialize()">
-					<p:panel id="panelRecorridos" header="Planear mejor ruta" style="text-align:center;">
-						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
-						<h:panelGrid columns="5" style="margin: 0 auto;text-align:left;">
-							<h:outputText value="Inicio"/>
-							<p:inputText id="Inicio" 
-								value="#{recorridoManagedBean.inicio}" 
-								required="true" 
-								maxlength="100" 
-								style="width:200px;"/>
-							<h:outputText value="Fin"/>
-							<p:inputText id="Fin" 
-								value="#{recorridoManagedBean.fin}" 
-								required="true" 
-								maxlength="100" 
-								style="width:200px;"/>
-	 						<p:commandButton value="Calcular ruta" 
-	 							action="#{recorridoManagedBean.calcularRuta}" update="@form"
-	 							/>
-						</h:panelGrid>
-					</p:panel>
-					<p:gmap  center="4.598889, -74.0808" zoom="15" type="MAPA" 
-						style="width:100%;height:600px"
-						model="#{recorridoManagedBean.mapModel}"/>
+				<script src="http://maps.google.com/maps/api/js?libraries=drawing"></script>
+				<h:outputScript library="js" name="rutas.js" />
+				<h:form id="formRecorridos">
+					<h:panelGrid columns="2" columnClasses="estiloColumnaA, estiloColumnaB" style="width:100%">
+						<p:panel id="panelRecorridos" header="Planear mejor ruta" style="text-align:center;height:500px;">
+							<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
+							<h:panelGrid id="grillaDatos" columns="1">
+								<h:outputText value="Punto Inicial"></h:outputText>
+								<h:panelGrid id="puntoInicial" columns="5" style="margin: 0 auto;text-align:left;">
+									<h:outputText value="Latitud"/>
+									<p:inputText id="latInicio" style="width:70px;" value="#{recorridoManagedBean.latInicio}" readonly="#{facesContext.renderResponse}"
+												 required="true"/>
+									<h:outputText value="Longitud"/>
+									<p:inputText id="lngInicio" style="width:70px;" value="#{recorridoManagedBean.lngInicio}" readonly="#{facesContext.renderResponse}"/>
+									<p:message for="latInicio" />
+									<p:spacer />
+								</h:panelGrid>
+								<h:outputText value="Punto Final"></h:outputText>
+								<h:panelGrid id="puntoFinal" columns="5" style="margin: 0 auto;text-align:left;">
+									<h:outputText value="Latitud"/>
+									<p:inputText id="latFin" style="width:70px;" value="#{recorridoManagedBean.latFin}" readonly="#{facesContext.renderResponse}"
+												 required="true"/>
+									<h:outputText value="Longitud"/>
+									<p:inputText id="lngFin" style="width:70px;" value="#{recorridoManagedBean.lngFin}" readonly="#{facesContext.renderResponse}"/>
+									<p:message for="latFin" />
+									<p:spacer />
+								</h:panelGrid>
+								<h:panelGrid columns="2">
+									<p:commandButton value="Calcular ruta" action="#{recorridoManagedBean.calcularRuta}" update="grillaDatos mapaMejorRuta" oncomplete="repintar();"/>
+									<p:commandButton value="Limpiar"  action="#{recorridoManagedBean.limpiarMapa}" oncomplete="limpiarMapa();" update="mapaMejorRuta"/>
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:panel>
+						<p:gmap id="mapaMejorRuta" widgetVar="w_gmap" center="4.598889, -74.0808" zoom="15" type="MAPA" 
+							style="width:100%;height:500px"
+							model="#{recorridoManagedBean.mapModel}"/>
+					</h:panelGrid>
 					<p:panel>
 						<h:panelGroup layout="block" styleClass="estiloDiv">
 							<p:commandButton value="Cancelar" action="paginaInicio?faces-redirect=true" immediate="true"/>

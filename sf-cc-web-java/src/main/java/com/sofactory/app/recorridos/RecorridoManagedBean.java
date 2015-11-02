@@ -35,9 +35,13 @@ public class RecorridoManagedBean implements Serializable{
 	@ManagedProperty("#{usuarioManagedBean}")
 	private UsuarioManagedBean usuarioManagedBean;
 	
-	private String inicio;
+	private String latInicio;
 	
-	private String fin;
+	private String lngInicio;
+	
+	private String latFin;
+	
+	private String lngFin;
 	
 	private MapModel mapModel;
 
@@ -49,7 +53,7 @@ public class RecorridoManagedBean implements Serializable{
 	public void calcularRuta(){
 		Long idUsuario = usuarioManagedBean.getUsuarioDTO().getCodigo();
 		Client client = ClientBuilder.newClient();
-		WebTarget messages = client.target(R_MEJOR_RUTA+"/"+inicio+"/"+fin+"/"+idUsuario);
+		WebTarget messages = client.target(R_MEJOR_RUTA+"/"+latInicio+"/"+lngInicio+"/"+latFin+"/"+lngFin+"/"+idUsuario);
 		RutaDTO ruta = messages.request("application/json")
 				.get(RutaDTO.class);
 		
@@ -57,7 +61,8 @@ public class RecorridoManagedBean implements Serializable{
 		PosicionDTO dto;
 		
 		Polyline polyLine = new Polyline();
-		
+		polyLine.setStrokeColor("#DF7401");
+		polyLine.setStrokeWeight(4);
 		for (int i = 0; i < ruta.getPosiciones().size(); i++) {
 			dto = ruta.getPosiciones().get(i);
 			polyLine.getPaths().add(new LatLng(dto.getLatitud(),dto.getLongitud()));
@@ -73,6 +78,9 @@ public class RecorridoManagedBean implements Serializable{
 		mapModel.addOverlay(polyLine);
 	}
 
+	public void limpiarMapa(){
+		mapModel = new DefaultMapModel();
+	}
 	public UsuarioManagedBean getUsuarioManagedBean() {
 		return usuarioManagedBean;
 	}
@@ -81,20 +89,36 @@ public class RecorridoManagedBean implements Serializable{
 		this.usuarioManagedBean = usuarioManagedBean;
 	}
 
-	public String getInicio() {
-		return inicio;
+	public String getLatInicio() {
+		return latInicio;
 	}
 
-	public void setInicio(String inicio) {
-		this.inicio = inicio;
+	public void setLatInicio(String latInicio) {
+		this.latInicio = latInicio;
 	}
 
-	public String getFin() {
-		return fin;
+	public String getLngInicio() {
+		return lngInicio;
 	}
 
-	public void setFin(String fin) {
-		this.fin = fin;
+	public void setLngInicio(String lngInicio) {
+		this.lngInicio = lngInicio;
+	}
+
+	public String getLatFin() {
+		return latFin;
+	}
+
+	public void setLatFin(String latFin) {
+		this.latFin = latFin;
+	}
+
+	public String getLngFin() {
+		return lngFin;
+	}
+
+	public void setLngFin(String lngFin) {
+		this.lngFin = lngFin;
 	}
 
 	public MapModel getMapModel() {

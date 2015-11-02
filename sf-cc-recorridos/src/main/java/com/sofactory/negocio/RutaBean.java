@@ -48,6 +48,7 @@ public class RutaBean extends GenericoBean<Posicion> implements RutaBeanLocal  {
 			String[] splitPosicion = ruta[0].legs[0].steps[i].startLocation.toString().split(",");
 			posicionRuta.setLatitud(new Double(splitPosicion[0]));
 			posicionRuta.setLongitud(new Double(splitPosicion[1]));
+			posicionRuta.setRuta(rutaP);
 			posicionJPA.insertar(posicionRuta);
 			rutaP.getPosiciones().add(posicionRuta);
 		}

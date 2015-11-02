@@ -14,9 +14,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import com.sofactory.dtos.PosicionDTO;
 import com.sofactory.dtos.RegistrarPuntosDTO;
 import com.sofactory.dtos.RespuestaDTO;
@@ -35,32 +33,28 @@ public class RutaService {
 	private RutaBeanLocal rutaBeanLocal;
 
 	@GET
-	@Path("encontrarMejor/{inicio}/{fin}/{codigoUsuario}")
+	@Path("encontrarMejor/{latInicio}/{lngInicio}/{latFin}/{lngFin}/{codigoUsuario}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public RutaDTO encontrarMejor(
-			@PathParam("inicio")String inicio, 
-			@PathParam("fin")String fin, 
+			@PathParam("latInicio")String latInicio, 
+			@PathParam("lngInicio")String lngInicio,
+			@PathParam("latFin")String latFin, 
+			@PathParam("lngFin")String lngFin,
 			@PathParam("codigoUsuario")String codigoUsuario) {
 		RutaDTO respuesta = new RutaDTO();
 		Ruta ruta;
 		try {
-			GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyBEelLTtoKYBwxxjM9nlkipXI4bO4BOK3g");
-			GeocodingResult[] results;
-
-			results = GeocodingApi.geocode(context,
-					inicio).await();
-
+			LatLng latLngInicio = new LatLng(Double.parseDouble(latInicio), Double.parseDouble(lngInicio));
+			LatLng latLngFin = new LatLng(Double.parseDouble(latFin), Double.parseDouble(lngFin));
+			
 			Posicion origen = new Posicion();
-			origen.setLatitud(results[0].geometry.location.lat);
-			origen.setLongitud(results[0].geometry.location.lng);
-
-			results =  GeocodingApi.geocode(context,
-					fin).await();
+			origen.setLatitud(latLngInicio.lat);
+			origen.setLongitud(latLngInicio.lng);
 
 			Posicion destino = new Posicion();
-			destino.setLatitud(results[0].geometry.location.lat);
-			destino.setLongitud(results[0].geometry.location.lng);    
+			destino.setLatitud(latLngFin.lat);
+			destino.setLongitud(latLngFin.lng);    
 
 			ruta = rutaBeanLocal.encontrarMejor(origen, destino, codigoUsuario);
 			

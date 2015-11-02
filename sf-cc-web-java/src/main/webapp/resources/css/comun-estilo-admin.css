@@ -117,3 +117,13 @@ body{
 .topAligned {
     vertical-align: top;
 }
+
+.estiloColumnaA{
+	vertical-align: top;
+	width: 37%;
+} 
+
+.estiloColumnaB{
+	vertical-align: top;
+	width: 63%;
+}

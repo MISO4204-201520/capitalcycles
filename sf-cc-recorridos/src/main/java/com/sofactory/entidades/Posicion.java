@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
@@ -40,7 +39,6 @@ public class Posicion implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name="RUTA_ID")
-	@Null
 	private Ruta ruta;
 	
 	public Long getId() {
