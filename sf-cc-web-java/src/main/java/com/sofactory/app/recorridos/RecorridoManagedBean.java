@@ -45,6 +45,14 @@ public class RecorridoManagedBean implements Serializable{
 	
 	private MapModel mapModel;
 
+	private String direccionInicio;
+
+	private String direccionFin;
+
+	private String distanciaVisualizacion;
+
+	private String tiempoTotalVisualizacion;
+
 	@PostConstruct
 	private void iniciar(){
 		
@@ -59,6 +67,11 @@ public class RecorridoManagedBean implements Serializable{
 		
 		mapModel = new DefaultMapModel();
 		PosicionDTO dto;
+		
+		this.direccionInicio = ruta.getDireccionInicio();
+		this.direccionFin = ruta.getDireccionFin();
+		this.distanciaVisualizacion = ruta.getDistanciaVisualizacion();
+		this.tiempoTotalVisualizacion = ruta.getTiempoTotalVisualizacion();
 		
 		Polyline polyLine = new Polyline();
 		polyLine.setStrokeColor("#DF7401");
@@ -127,5 +140,37 @@ public class RecorridoManagedBean implements Serializable{
 
 	public void setMapModel(MapModel mapModel) {
 		this.mapModel = mapModel;
+	}
+
+	public String getDireccionInicio() {
+		return direccionInicio;
+	}
+
+	public void setDireccionInicio(String direccionInicio) {
+		this.direccionInicio = direccionInicio;
+	}
+
+	public String getDireccionFin() {
+		return direccionFin;
+	}
+
+	public void setDireccionFin(String direccionFin) {
+		this.direccionFin = direccionFin;
+	}
+
+	public String getDistanciaVisualizacion() {
+		return distanciaVisualizacion;
+	}
+
+	public void setDistanciaVisualizacion(String distanciaVisualizacion) {
+		this.distanciaVisualizacion = distanciaVisualizacion;
+	}
+
+	public String getTiempoTotalVisualizacion() {
+		return tiempoTotalVisualizacion;
+	}
+
+	public void setTiempoTotalVisualizacion(String tiempoTotalVisualizacion) {
+		this.tiempoTotalVisualizacion = tiempoTotalVisualizacion;
 	}
 }

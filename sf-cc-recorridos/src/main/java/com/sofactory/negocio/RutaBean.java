@@ -35,9 +35,13 @@ public class RutaBean extends GenericoBean<Posicion> implements RutaBeanLocal  {
 		DirectionsRoute[] ruta = DirectionsApi.getDirections(context, origen.toString(), destino.toString()).await();
 
 		Ruta rutaP = new Ruta();
-		rutaP.setDistancia(100l);
+		rutaP.setDistancia(ruta[0].legs[0].distance.inMeters);
+		rutaP.setDistanciaVisualizacion(ruta[0].legs[0].distance.humanReadable);
 		rutaP.setPlaneada(true);
-		rutaP.setTiempoTotal(100l);
+		rutaP.setTiempoTotal(ruta[0].legs[0].duration.inSeconds);
+		rutaP.setTiempoTotalVisualizacion(ruta[0].legs[0].duration.humanReadable);
+		rutaP.setDireccionInicio(ruta[0].legs[0].startAddress);
+		rutaP.setDireccionFin(ruta[0].legs[0].endAddress);
 		rutaP.setCodigoUsuario(codigoUsuario);
 		rutaJPA.insertar(rutaP);
 		

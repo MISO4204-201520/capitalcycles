@@ -36,6 +36,18 @@ public class Ruta {
 	@NotNull
 	private Boolean planeada;
 	
+	@Column(name="DISTANCIA_VISUALIZACION")
+	private String distanciaVisualizacion;
+	
+	@Column(name="TIEMPO_TOTAL_VISUALIZACION")
+	private String tiempoTotalVisualizacion;
+	
+	@Column(name="DIRECCION_INICIO")
+	private String direccionInicio;
+	
+	@Column(name="DIRECCION_FIN")
+	private String direccionFin;
+	
 	@ManyToOne
 	@JoinColumn(name="RECORRIDO_ID")
 	private Recorrido recorrido;
@@ -101,5 +113,37 @@ public class Ruta {
 
 	public void setPosiciones(List<Posicion> posiciones) {
 		this.posiciones = posiciones;
+	}
+
+	public String getDistanciaVisualizacion() {
+		return distanciaVisualizacion;
+	}
+
+	public void setDistanciaVisualizacion(String distanciaVisualizacion) {
+		this.distanciaVisualizacion = distanciaVisualizacion;
+	}
+
+	public String getTiempoTotalVisualizacion() {
+		return tiempoTotalVisualizacion;
+	}
+
+	public void setTiempoTotalVisualizacion(String tiempoTotalVisualizacion) {
+		this.tiempoTotalVisualizacion = tiempoTotalVisualizacion;
+	}
+
+	public String getDireccionInicio() {
+		return direccionInicio;
+	}
+
+	public void setDireccionInicio(String direccionInicio) {
+		this.direccionInicio = direccionInicio;
+	}
+
+	public String getDireccionFin() {
+		return direccionFin;
+	}
+
+	public void setDireccionFin(String direccionFin) {
+		this.direccionFin = direccionFin;
 	}
 }

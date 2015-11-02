@@ -60,6 +60,10 @@ public class RutaService {
 			
 			respuesta.setId(ruta.getId());
 			respuesta.setPosiciones(new ArrayList<>());
+			respuesta.setDireccionInicio(ruta.getDireccionInicio());
+			respuesta.setDireccionFin(ruta.getDireccionFin());
+			respuesta.setDistanciaVisualizacion(ruta.getDistanciaVisualizacion());
+			respuesta.setTiempoTotalVisualizacion(ruta.getTiempoTotalVisualizacion());
 			
 			PosicionDTO posicionDto;
 			for (Posicion posicion : ruta.getPosiciones()) {
