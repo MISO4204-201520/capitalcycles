@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
+			<ui:define name="contenido">
+				<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+				<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+				<script src="http://maps.google.com/maps/api/js?libraries=drawing"></script>
+				<h:outputScript library="js" name="sitios.js" />
+				<h:form id="formSitios">
+					<h:panelGroup id="groupJson">
+						<h:inputHidden id="json_sitios" value="#{sitiosManagedBean.sitiosJson}" />
+					</h:panelGroup>
+					<h:panelGrid columns="2" columnClasses="estiloColumnaA, estiloColumnaB" style="width:100%">
+						<p:panel id="panelSitios" header="Buscar Sitios" style="text-align:center;height:500px;">
+							<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
+							<h:panelGrid id="grillaDatos" columns="1">
+								<h:outputText value="Dibuje coordenada a buscar sitios"></h:outputText>
+								<h:panelGrid id="coordenada" columns="3" style="margin: 0 auto;text-align:left;">
+									<h:outputText value="Latitud"/>
+									<p:inputText id="lat" style="width:70px;" value="#{sitiosManagedBean.lat}" readonly="#{facesContext.renderResponse}"
+												 required="true"/>
+									<p:message for="lat" />
+									<h:outputText value="Longitud"/>
+									<p:inputText id="lng" style="width:70px;" value="#{sitiosManagedBean.lng}" readonly="#{facesContext.renderResponse}"/>
+									<p:spacer/>
+									<h:outputText value="Radio"/>
+									<p:inputText id="radio" style="width:50px;" value="#{sitiosManagedBean.radio}" required="true" maxlength="4"/>
+									<p:message for="radio" />
+									<h:outputText value="Sitio"/>
+									<p:selectOneMenu id="sitio" style="width:125px" value="#{sitiosManagedBean.sitio}" required="true">
+							            <f:selectItem itemLabel="Bicicleta" itemValue="bicicleta" />
+							            <f:selectItem itemLabel="Centros Comerciales" itemValue="centros comerciales" />
+							            <f:selectItem itemLabel="Restaurante" itemValue="restaurante" />
+							            <f:selectItem itemLabel="Banco" itemValue="banco" />
+							            <f:selectItem itemLabel="Aeropuerto" itemValue="aeropuerto" />
+							        </p:selectOneMenu>
+							        <p:message for="sitio" />
+							        <h:outputText value="Otro"/>
+									<p:inputText id="otro" style="width:100px;" value="#{sitiosManagedBean.otro}"/>
+									<p:message for="otro" />
+								</h:panelGrid>
+								<h:panelGrid columns="2">
+									<p:commandButton value="Buscar Sitios" action="#{sitiosManagedBean.buscarSitios}" update="coordenada groupJson" oncomplete="pintarSitios();"/>
+									<p:commandButton value="Limpiar" type="button"  onclick="limpiarMapa();"/>
+								</h:panelGrid>
+								<p:separator/>
+								<h:panelGrid id="grillaResultados" columns="2" style="text-align:left;">
+									
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:panel>
+						<p:gmap id="mapaSitio" widgetVar="sitio_gmap" center="4.598889, -74.0808" zoom="15" type="MAPA" 
+							style="width:100%;height:500px"
+							model="#{sitiosManagedBean.mapModel}"/>
+					</h:panelGrid>
+				</h:form>
+    		</ui:define>				
+		</ui:composition>	
+	</h:body>
+</html> 
