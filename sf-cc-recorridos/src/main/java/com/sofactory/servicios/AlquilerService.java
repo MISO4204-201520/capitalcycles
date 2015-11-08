@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.sofactory.dtos.AlquilerDTO;
 import com.sofactory.dtos.BicicletaAlquilerDTO;
+import com.sofactory.dtos.EstacionEntregaDTO;
 import com.sofactory.dtos.RespuestaAlquilerDTO;
 import com.sofactory.dtos.SitioAlquilerDTO;
 import com.sofactory.dtos.SitioDTO;
@@ -94,7 +95,17 @@ public class AlquilerService {
 					ba.setDisponibles(ba.getCantidad()-sitioAlquilerBeanLocal.bicicletasAlquiladas(ba.getCodigo(),sa.getCodigo()).intValue());
 					listaBici.add(ba);
 				}
+				List<EstacionEntregaDTO> listaEE = new ArrayList<EstacionEntregaDTO>();
+				List<EstacionEntrega> estacionEntregas = sitioAlquilerBeanLocal.encontrarEstacionEntregaPorSitioAlquiler(sitioAlquilerDTO.getCodigoSitioAlquiler());
+				for(EstacionEntrega ee:estacionEntregas){
+					EstacionEntregaDTO estacionEntregaDTO = new EstacionEntregaDTO();
+					estacionEntregaDTO.setCodigo(ee.getCodigo());
+					estacionEntregaDTO.setNombre(ee.getNombre());
+					estacionEntregaDTO.setDireccion(ee.getDireccion());
+					listaEE.add(estacionEntregaDTO);
+				}
 				sitioAlquilerDTO.setBicicletaAlquilerDTOs(listaBici);
+				sitioAlquilerDTO.setEstacionEntregaDTOs(listaEE);
 				respuestaAlquilerDTO.setSitioAlquilerDTO(sitioAlquilerDTO);
 				return respuestaAlquilerDTO;
 			}

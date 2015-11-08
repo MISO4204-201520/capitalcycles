@@ -9,6 +9,7 @@ public class SitioAlquilerDTO extends RespuestaDTO{
 	private String nombre;
 	private String direccion;
 	private List<BicicletaAlquilerDTO> bicicletaAlquilerDTOs;
+	private List<EstacionEntregaDTO> estacionEntregaDTOs;
 	
 	public Double getLatitud() {
 		return latitud;
@@ -45,5 +46,11 @@ public class SitioAlquilerDTO extends RespuestaDTO{
 	}
 	public void setBicicletaAlquilerDTOs(List<BicicletaAlquilerDTO> bicicletaAlquilerDTOs) {
 		this.bicicletaAlquilerDTOs = bicicletaAlquilerDTOs;
+	}
+	public List<EstacionEntregaDTO> getEstacionEntregaDTOs() {
+		return estacionEntregaDTOs;
+	}
+	public void setEstacionEntregaDTOs(List<EstacionEntregaDTO> estacionEntregaDTOs) {
+		this.estacionEntregaDTOs = estacionEntregaDTOs;
 	}
 }

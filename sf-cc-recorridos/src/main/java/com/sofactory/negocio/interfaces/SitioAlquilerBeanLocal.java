@@ -16,5 +16,7 @@ public interface SitioAlquilerBeanLocal extends MetodosGenerales<SitioAlquiler>{
 	List<BicicletaAlquiler> encontrarBicicletaAlquilerPorSitioAlquiler(Long codigoSitioAlquiler);
 
 	Long bicicletasAlquiladas(Long codigoBicicleta, Long codigoSitio);
+
+	List<EstacionEntrega> encontrarEstacionEntregaPorSitioAlquiler(Long codigoSitioAlquiler);
 	
 }

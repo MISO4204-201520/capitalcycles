@@ -68,6 +68,8 @@ public class AlquileresManagedBean implements Serializable{
 	
 	private BicicletaAlquilerDTO bicicletaSeleccionada;
 	
+	private boolean visibleEE;
+	
 	@PostConstruct
 	private void iniciar(){
 		radio = "2000";
@@ -150,6 +152,22 @@ public class AlquileresManagedBean implements Serializable{
 		return null;
 	}
 	
+	public void limpiar(){
+		this.lat = "";
+		this.lng = "";
+		this.sitioSeleccionado = null;
+		this.bicicletaAlquilerDTOs = null;
+		this.visibleBicicletas = false;
+	}
+	
+	public void verEstacionesEntrega(){
+		this.visibleEE = true;
+	}
+	
+	public void cerrarEE(){
+		this.visibleEE = false;
+	}
+	
 	public UsuarioManagedBean getUsuarioManagedBean() {
 		return usuarioManagedBean;
 	}
@@ -220,5 +238,21 @@ public class AlquileresManagedBean implements Serializable{
 
 	public void setBicicletaSeleccionada(BicicletaAlquilerDTO bicicletaSeleccionada) {
 		this.bicicletaSeleccionada = bicicletaSeleccionada;
+	}
+
+	public boolean isVisibleEE() {
+		return visibleEE;
+	}
+
+	public void setVisibleEE(boolean visibleEE) {
+		this.visibleEE = visibleEE;
+	}
+
+	public SitioAlquilerDTO getSitioSeleccionado() {
+		return sitioSeleccionado;
+	}
+
+	public void setSitioSeleccionado(SitioAlquilerDTO sitioSeleccionado) {
+		this.sitioSeleccionado = sitioSeleccionado;
 	}
 }

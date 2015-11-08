@@ -61,4 +61,11 @@ public class SitioAlquilerBean extends GenericoBean<SitioAlquiler> implements Si
 		}
 		return 0l;
 	}
+
+	@Override
+	public List<EstacionEntrega> encontrarEstacionEntregaPorSitioAlquiler(Long codigoSitioAlquiler) {
+		TypedQuery<EstacionEntrega> typedQuery = em.createQuery("SELECT ee FROM EstacionEntrega ee LEFT JOIN FETCH ee.sitiosAlquileres sa WHERE sa.codigo = :codigoSitioAlquiler",EstacionEntrega.class);
+		typedQuery.setParameter("codigoSitioAlquiler", codigoSitioAlquiler);
+		return typedQuery.getResultList();
+	}
 }

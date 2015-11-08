@@ -175,25 +175,27 @@ function pintarSitios(){
 	markers = new Array();
 	ventanas = new Array();
 	var sitios = document.getElementById("formAlquileres:json_alquileres");
-	var listSitios = $(sitios).val();
-	listSitios = jQuery.parseJSON(listSitios);
-	ventanas = new Array();
-	for (var i=0;i<listSitios.length;i++){
-		var marker = new google.maps.Marker({
-			map: PF('sitio_gmap').getMap(),
-			position: new google.maps.LatLng(listSitios[i].latitud, listSitios[i].longitud)
-		});
-		var infowindow = new google.maps.InfoWindow();
-		infowindow.setContent("<div style='cursor: pointer;text-decoration:underline;' onclick='clickAlquiler("+listSitios[i].nombre+");'>"+listSitios[i].nombre+"</div><br/>"+listSitios[i].direccion);
-		ventanas[i] = infowindow; 
-		
-		google.maps.event.addListener(marker, 'click', (function (marker, i) {
-	    	return function(){
-	    		ventanas[i].open(PF('sitio_gmap').getMap(), marker);
-	    	};
-	    })(marker,i));
-		
-		markers.push(marker);
+	if (sitios && sitios.value && sitios.value!=""){
+		var listSitios = $(sitios).val();
+		listSitios = jQuery.parseJSON(listSitios);
+		ventanas = new Array();
+		for (var i=0;i<listSitios.length;i++){
+			var marker = new google.maps.Marker({
+				map: PF('sitio_gmap').getMap(),
+				position: new google.maps.LatLng(listSitios[i].latitud, listSitios[i].longitud)
+			});
+			var infowindow = new google.maps.InfoWindow();
+			infowindow.setContent("<div style='cursor: pointer;text-decoration:underline;' onclick='clickAlquiler("+listSitios[i].nombre+");'>"+listSitios[i].nombre+"</div><br/>"+listSitios[i].direccion);
+			ventanas[i] = infowindow; 
+			
+			google.maps.event.addListener(marker, 'click', (function (marker, i) {
+		    	return function(){
+		    		ventanas[i].open(PF('sitio_gmap').getMap(), marker);
+		    	};
+		    })(marker,i));
+			
+			markers.push(marker);
+		}
 	}
 }
 
