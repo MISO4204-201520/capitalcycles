@@ -18,10 +18,11 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import com.sofactory.app.seguridad.UsuarioManagedBean;
+import com.sofactory.dtos.AmigoDTO;
 import com.sofactory.dtos.MensajeDTO;
+import com.sofactory.dtos.RespuestaAmigoDTO;
 import com.sofactory.dtos.RespuestaMensajeDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
-import com.sofactory.dtos.UsuarioDTO;
 
 @ManagedBean
 @ViewScoped
@@ -41,6 +42,7 @@ public class VerMensajesManagedBean implements Serializable{
 	private String getEncontrarTodosUsuarios = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarTodosUsuarios";
 	private String postCrearNuevoMensaje = "http://localhost:8080/sf-cc-mensajes/rest/mensajeService/crearNuevoMensaje";
 	private String postEnviarCorreo = "http://localhost:8080/sf-cc-mensajes/rest/mensajeService/enviarCorreo";
+	private String getAmigosDeUsuario = "http://localhost:8080/sf-cc-mensajes/rest/mensajeService/amigosDeUsuario/";
 	private List<MensajeDTO> mensajesRecibidos;
 	private List<MensajeDTO> mensajesEnviados;
 	private boolean visibleVM = false;
@@ -174,17 +176,16 @@ public class VerMensajesManagedBean implements Serializable{
 	
 	public void abrirVentanaEnviar(Integer opcion){
 		//Obtener Usuarios
+		String servicio=getAmigosDeUsuario+usuarioManagedBean.getUsuarioDTO().getCodigo();
 		Client client = ClientBuilder.newClient();
-		WebTarget messages = client.target(getEncontrarTodosUsuarios);
-		RespuestaUsuarioDTO respuesta = messages.request("application/json").get(RespuestaUsuarioDTO.class);
+		WebTarget messages = client.target(servicio);
+		RespuestaAmigoDTO respuesta = messages.request("application/json").get(RespuestaAmigoDTO.class);
 		if (respuesta!=null && respuesta.getCodigo()==0){
-			List<UsuarioDTO> usuarioDTOs = respuesta.getUsuarios();
+			List<AmigoDTO> amigoDTOs  = respuesta.getAmigos();
 			usuarios = new ArrayList<SelectItem>();
-			for (UsuarioDTO u:usuarioDTOs){
-				if (u.getCodigo().longValue()!=usuarioManagedBean.getUsuarioDTO().getCodigo().longValue()){
-					SelectItem item = new SelectItem(u.getCodigo(), u.getLogin()+"-"+u.getNombres()+" "+u.getApellidos());
-					usuarios.add(item);
-				}
+			for (AmigoDTO a:amigoDTOs){
+				SelectItem item = new SelectItem(a.getCodAmigo(), a.getNombres()+" "+a.getApellidos()+"-"+a.getCorreo());
+				usuarios.add(item);
 			}
 			visibleEM = true;
 			this.opcion = opcion;
@@ -193,9 +194,8 @@ public class VerMensajesManagedBean implements Serializable{
 					new FacesMessage(
 							FacesMessage.SEVERITY_ERROR, 
 							null, 
-							"Hubo un error en el sistema"));
+							respuesta.getMensaje()));
 		}
-		
 	}
 	
 	public void cerrarEM(){

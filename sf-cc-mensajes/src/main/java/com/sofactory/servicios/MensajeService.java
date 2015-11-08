@@ -61,8 +61,11 @@ public class MensajeService {
 	private static final SimpleDateFormat FORMATO_FECHA = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	
-	@EJB
+	@EJB(beanName="MensajeBean")
 	private MensajeBeanLocal mensajeBeanLocal;
+	
+	@EJB(beanName="NotificacionBean")
+	private MensajeBeanLocal notificacionBeanLocal;
 	
 	@EJB
 	private AmigoBeanLocal amigoBeanLocal;
@@ -314,35 +317,16 @@ public class MensajeService {
 		if (resuSeg.getCodigo()==0){
 			
 			if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
-	
-				mDTO.setFecha(FORMATO_FECHA.format(new Date()));
-				mDTO.setStatus(false);
-				
-				try {				
-					
+				try {
 					client = ClientBuilder.newClient();
 					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
 					RespuestaUsuarioDTO resuDesde = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-				
 					if (resuDesde!=null && resuDesde.getCodigo()==0){
-					
 						targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
 						RespuestaUsuarioDTO resuPara = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-						
 						if (resuPara!=null && resuPara.getCodigo()==0){
-						
-							Mensaje mensaje = new Mensaje();
-					
-							mensaje.setUsrdesde(mDTO.getUsrdesde());
-							mensaje.setUsrpara(mDTO.getUsrpara());
-							mensaje.setTexto(mDTO.getTexto());
-							mensaje.setStatus(mDTO.getStatus());
-							mensaje.setFecha(FORMATO_FECHA.parse(mDTO.getFecha()));
-					
-							mensajeBeanLocal.insertar(mensaje);
-
+							respuestaMensajeDTO = mensajeBeanLocal.enviarMensaje(resuDesde.getUsuarios().get(0), resuPara.getUsuarios().get(0), mDTO.getTexto());
 							// Inicio Otorga Puntos por Fidelizacion
-							
 							RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
 							registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
 							registrarPuntosDTO.setServicio("crearNuevoMensaje");
@@ -352,56 +336,6 @@ public class MensajeService {
 							RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
 							
 							// Fin Otorga Puntos por Fidelizacion
-							
-							//Envio mensaje txt al Celular segun token del usuario				
-							
-							String TOKEN=resuPara.getUsuarios().get(0).getToken();
-							//System.out.println("TOKEN USUARIO PARA "+TOKEN);
-							
-							if (TOKEN!="SI")
-							{
-								String apiKey = "AIzaSyAUMsAY_oY3IgmtEyDVqXyLrZQxYbnMM_k";
-							//	TOKEN="elUpDaFOJjQ:APA91bEnkQCsE_A7LD-6qFIAbi3ixEMYw79rRqRgvUJKfrdY_bzGbIhJnQEA2wRkoqJ7FrTSh_qmech0y2JvVxo4t-J62Kje2ilugwcFAZDzS3eJZsWjRTtyeqIy7sqb51EqUS3y_TSc";
-					
-								try {
-									// Prepare JSON containing the GCM message content. What to send and where to send.
-									ObjectNode jGcmData = Json.newObject();
-									ObjectNode jData = Json.newObject();
-									jData.put("message", mensaje.getTexto());
-									jData.put("senderId", mensaje.getUsrdesde());
-									jData.put("senderName", resuDesde.getUsuarios().get(0).getNombres());
-									// Where to send GCM message.
-									jGcmData.put("to", TOKEN);
-									// What to send in GCM message.
-									jGcmData.put("data", jData);
-	
-									// Create connection to send GCM Message request.
-									URL url = new URL("https://android.googleapis.com/gcm/send");
-									HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-									conn.setRequestProperty("Authorization", "key=" + apiKey);
-									conn.setRequestProperty("Content-Type", "application/json");
-									conn.setRequestMethod("POST");
-									conn.setDoOutput(true);
-	
-									// Send GCM message content.
-									OutputStream outputStream = conn.getOutputStream();
-									outputStream.write(jGcmData.toString().getBytes());
-	
-									// Read GCM response.
-									InputStream inputStream = conn.getInputStream();
-									String resp = getStringFromInputStream(inputStream);
-									System.out.println(resp);
-									System.out.println("Check your device/emulator for notification or logcat for " +
-											"confirmation of the receipt of the GCM message.");
-								} catch (Exception e) {
-									System.out.println("Unable to send GCM message.");
-									System.out.println("Please ensure that API_KEY has been replaced by the server " +
-											"API key, and that the device's registration token is correct (if specified).");
-									e.printStackTrace();
-								}
-								
-							}
-							
 						}else{			
 							respuestaMensajeDTO.setCodigo(3);
 							respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe ... ");
@@ -416,7 +350,6 @@ public class MensajeService {
 					respuestaMensajeDTO.setCodigo(1);
 					respuestaMensajeDTO.setMensaje("Faltan Campos Obligatorios");
 				}
-			
 			}
 		
 		}else{
@@ -426,35 +359,6 @@ public class MensajeService {
 			
 		return respuestaMensajeDTO;
 	}
-
-	private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        return sb.toString();
-}
-	
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -620,73 +524,30 @@ public class MensajeService {
 		if (resuSeg.getCodigo()==0){
 		
 			if (mDTO.getUsrdesde()!=null && mDTO.getUsrpara()!=null && mDTO.getTexto()!=null){
-	
 				try {
-				
 					client = ClientBuilder.newClient();
 					targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrdesde());
 					RespuestaUsuarioDTO resuDesde = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-			
 					if (resuDesde!=null && resuDesde.getCodigo()==0){
-	
 						try {
-						
 							targetMensaje = client.target(servicioGetEncontrarUsuario+mDTO.getUsrpara());
 							RespuestaUsuarioDTO resuPara = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
-													
 							if (resuPara!=null && resuPara.getCodigo()==0){
 		
 								//Envio email segun dirección de correo usuario	destino			
-	
-								final String username = "capytalcycles@gmail.com";
-								final String password = "capytal2015";
-				
-								Properties props = new Properties();
-								props.put("mail.smtp.starttls.enable", "true");
-								props.put("mail.smtp.auth", "true");
-								props.put("mail.smtp.host", "smtp.gmail.com");
-								props.put("mail.smtp.port", "587");
-								props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-				
-								Session session = Session.getInstance(props,
-										new javax.mail.Authenticator() {
-											protected PasswordAuthentication getPasswordAuthentication() {
-												return new PasswordAuthentication(username, password);
-											}
-										}
-								);
-							
-								try {
-					
-									System.out.println("... Sending Mail ...");					
-										
-									Message message = new MimeMessage(session);
-									message.setFrom(new InternetAddress("capytalcycles@gmail.com"));
-									message.setRecipients(Message.RecipientType.TO,
-																				InternetAddress.parse(resuPara.getUsuarios().get(0).getCorreo()));
-									message.setSubject("Mensaje desde : "+ resuDesde.getUsuarios().get(0).getCorreo());
-									message.setText(mDTO.getTexto());
-									Transport.send(message);
-									
-									// Inicio Otorga Puntos por Fidelizacion
-									
-									RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-									registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-									registrarPuntosDTO.setServicio("enviarCorreo");
+								respuestaMensajeDTO = notificacionBeanLocal.enviarMensaje(resuDesde.getUsuarios().get(0),resuPara.getUsuarios().get(0),mDTO.getTexto());
 								
-									client = ClientBuilder.newClient();
-									targetMensaje = client.target(servicioRegistrarServicio);
-									RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-									
-									// Fin Otorga Puntos por Fidelizacion
-									
-					
-								} catch (MessagingException e) {
-			//										throw new RuntimeException(e);
-									respuestaMensajeDTO.setCodigo(2);
-									respuestaMensajeDTO.setMensaje("Error en el Envio del Email");
-								}
-		
+								// Inicio Otorga Puntos por Fidelizacion
+								
+								RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+								registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+								registrarPuntosDTO.setServicio("enviarCorreo");
+							
+								client = ClientBuilder.newClient();
+								targetMensaje = client.target(servicioRegistrarServicio);
+								RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+								
+								// Fin Otorga Puntos por Fidelizacion
 							}else{
 								respuestaMensajeDTO.setCodigo(3);
 								respuestaMensajeDTO.setMensaje("Usuario Destinatario No Existe");

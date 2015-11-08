@@ -78,24 +78,31 @@ public class AlquileresManagedBean implements Serializable{
 	}
 
 	public String buscarSitios(){
-		String servicio=getEncontrarSitios+lat+"/"+lng+"/"+radio+"/"+sitio.replaceAll(" ", "+")+"/"+usuarioManagedBean.getUsuarioDTO().getCodigo();
-		Client client = ClientBuilder.newClient();
-		WebTarget messages = client.target(servicio);
-		RespuestaSitioDTO respuesta = messages.request("application/json").get(RespuestaSitioDTO.class);
-		if (respuesta!=null){
-			if (respuesta.getCodigo()==0){
-				Gson gson = new Gson();
-				alquileresJson = gson.toJson(respuesta.getSitios());
-				if (respuesta.getSitios()!=null && !respuesta.getSitios().isEmpty()){
-					client = ClientBuilder.newClient();
-					messages = client.target(crearRelacionesBicicletaEstacion);
-					for (SitioDTO sitioDTO:respuesta.getSitios()){
-						messages.request("application/json").post(Entity.entity(sitioDTO, MediaType.APPLICATION_JSON),RespuestaAlquilerDTO.class);	
+		if (usuarioManagedBean!=null && usuarioManagedBean.getUsuarioDTO()!=null){
+			String servicio=getEncontrarSitios+lat+"/"+lng+"/"+radio+"/"+sitio.replaceAll(" ", "+")+"/"+usuarioManagedBean.getUsuarioDTO().getCodigo();
+			Client client = ClientBuilder.newClient();
+			WebTarget messages = client.target(servicio);
+			RespuestaSitioDTO respuesta = messages.request("application/json").get(RespuestaSitioDTO.class);
+			if (respuesta!=null){
+				if (respuesta.getCodigo()==0){
+					Gson gson = new Gson();
+					alquileresJson = gson.toJson(respuesta.getSitios());
+					if (respuesta.getSitios()!=null && !respuesta.getSitios().isEmpty()){
+						client = ClientBuilder.newClient();
+						messages = client.target(crearRelacionesBicicletaEstacion);
+						for (SitioDTO sitioDTO:respuesta.getSitios()){
+							messages.request("application/json").post(Entity.entity(sitioDTO, MediaType.APPLICATION_JSON),RespuestaAlquilerDTO.class);	
+						}
 					}
 				}
 			}
+		}else{
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, 
+							null, 
+							"No se encuentra en sesión"));	
 		}
-		
 		return null;
 	}
 	

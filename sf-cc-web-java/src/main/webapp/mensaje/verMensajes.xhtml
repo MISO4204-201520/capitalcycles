@@ -30,19 +30,19 @@
 								        Mensajes Recibidos
 								    </f:facet>
 									<p:column>
-					    				<f:facet name="header">Usuario que envia</f:facet>
+					    				<f:facet name="header">Amigo que envia</f:facet>
 					    				<h:outputText value="#{recibido.loginUsuario}"/>
 					    			</p:column>
 					    			<p:column>
-					    				<f:facet name="header">Nombre Usuario que envia</f:facet>
+					    				<f:facet name="header">Nombre Amigo que envia</f:facet>
 					    				<h:outputText value="#{recibido.nombres} #{recibido.apellidos}"/>
 					    			</p:column>
 					    			<p:column>
-					    				<f:facet name="header">Usuario que recibe</f:facet>
+					    				<f:facet name="header">Amigo que recibe</f:facet>
 					    				<h:outputText value="#{recibido.loginUsuarioRecibe}"/>
 					    			</p:column>
 					    			<p:column>
-					    				<f:facet name="header">Nombre Usuario que recibe</f:facet>
+					    				<f:facet name="header">Nombre Amigo que recibe</f:facet>
 					    				<h:outputText value="#{recibido.nombresRecibe} #{recibido.apellidosRecibe}"/>
 					    			</p:column>
 					    			<p:column>
@@ -80,19 +80,19 @@
 								        Mensajes Enviados
 								    </f:facet>
 									<p:column>
-					    				<f:facet name="header">Usuario que envia</f:facet>
+					    				<f:facet name="header">Amigo que envia</f:facet>
 					    				<h:outputText value="#{enviado.loginUsuario}"/>
 					    			</p:column>
 					    			<p:column>
-					    				<f:facet name="header">Nombre Usuario que envia</f:facet>
+					    				<f:facet name="header">Nombre Amigo que envia</f:facet>
 					    				<h:outputText value="#{enviado.nombres} #{enviado.apellidos}"/>
 					    			</p:column>
 					    			<p:column>
-					    				<f:facet name="header">Usuario que recibe</f:facet>
+					    				<f:facet name="header">Amigo que recibe</f:facet>
 					    				<h:outputText value="#{enviado.loginUsuarioRecibe}"/>
 					    			</p:column>
 					    			<p:column>
-					    				<f:facet name="header">Nombre Usuario que recibe</f:facet>
+					    				<f:facet name="header">Nombre Amigo que recibe</f:facet>
 					    				<h:outputText value="#{enviado.nombresRecibe} #{enviado.apellidosRecibe}"/>
 					    			</p:column>
 					    			<p:column>
@@ -133,10 +133,10 @@
 				<h:form id="formEnviarMensaje">
 					<p:dialog header="#{verMensajesManagedBean.opcion == 1 ? 'Enviar Mensaje' : 'Notificar'}" widgetVar="widgetVM" modal="true" height="250" width="650" visible="#{verMensajesManagedBean.visibleEM}" resizable="false" closable="false">
 						<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
-							<h:outputText value="Seleccione un usuario"/>
+							<h:outputText value="Seleccione un amigo"/>
 							<h:outputText value="*" styleClass="requerido"/>
 							<p:selectOneMenu id="usuario" value="#{verMensajesManagedBean.codigoUsuarioEnviar}" required="true" style="width:300px;">
- 								<f:selectItem itemLabel="--Seleccione un usuario--" itemValue=""/>
+ 								<f:selectItem itemLabel="--Seleccione un amigo--" itemValue=""/>
  								<f:selectItems value="#{verMensajesManagedBean.usuarios}"/>							
  							</p:selectOneMenu>
  							<p:message  for="usuario"/>

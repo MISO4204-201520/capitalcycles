@@ -5,8 +5,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import com.sofactory.dtos.RegistrarPuntosDTO;
+import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RespuestaSitioDTO;
 import com.sofactory.negocio.interfaces.SitioBeanLocal;
 
@@ -29,7 +35,20 @@ public class SitioService {
 			@PathParam("codigoUsuario")String codigoUsuario) {
 		RespuestaSitioDTO respuestaSitioDTO = new RespuestaSitioDTO();
 		try {
-			return sitioBeanLocal.encontrarSitios(lat, lng, radio, sitio);
+			respuestaSitioDTO = sitioBeanLocal.encontrarSitios(lat, lng, radio, sitio);
+		
+			if (respuestaSitioDTO!=null && respuestaSitioDTO.getSitios()!=null && !respuestaSitioDTO.getSitios().isEmpty()){
+				// Inicio Otorga Puntos por Fidelizacion
+				RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+				registrarPuntosDTO.setCodigoUsuario(codigoUsuario);
+				registrarPuntosDTO.setServicio("encontrarSitios");
+			
+				Client client = ClientBuilder.newClient();
+				WebTarget targetMensaje = client.target(servicioRegistrarServicio);
+				RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);
+				// Fin Otorga Puntos por Fidelizacion
+			}
+			return respuestaSitioDTO;
 		} catch (Exception e) {
 			respuestaSitioDTO = new RespuestaSitioDTO();
 			respuestaSitioDTO.setCodigo(1);
