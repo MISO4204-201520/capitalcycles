@@ -127,3 +127,13 @@ body{
 	vertical-align: top;
 	width: 63%;
 }
+
+.estiloColumnaAA{
+	vertical-align: top;
+	width: 50%;
+} 
+
+.estiloColumnaAB{
+	vertical-align: top;
+	width: 50%;
+}

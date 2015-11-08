@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14451150825040" configfile="/sf-cc-web-java/src/main/webapp/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="administracion/inicio.xhtml" x="338" y="178" id="pf14464117916370" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14464117916371" inlinks="pf14464117916372" path="/administracion/inicio.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="administracion/paginaBlanco.xhtml" x="554" y="178" id="pf14464117916373" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf14464117916371" path="/administracion/paginaBlanco.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="178" id="pf14464117916385" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14464117916372 pf144641196743616" path="*"/>
-  <nodes xsi:type="pageflow:PFPage" name="administracion/actualizarUsuario.xhtml" id="pf144641196743617" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf144641196743616" path="/administracion/actualizarUsuario.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="administracion/inicio.xhtml" x="338" y="178" id="pf14464117916370" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" outlinks="pf14464117916371" inlinks="pf14464117916372" path="/administracion/inicio.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="administracion/paginaBlanco.xhtml" x="554" y="178" id="pf14464117916373" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" inlinks="pf14464117916371 pf14469496379140" path="/administracion/paginaBlanco.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="178" id="pf14464117916385" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf14464117916372 pf144641196743616" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="administracion/actualizarUsuario.xhtml" id="pf144641196743617" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" inlinks="pf144641196743616" path="/administracion/actualizarUsuario.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="alquiler/alquiler.xhtml" id="pf14469496379151" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf14469496379140" path="/alquiler/alquiler.xhtml"/>
   <links id="pf14464117916371" target="pf14464117916373" source="pf14464117916370" outcome="CORRECTO" redirect="true"/>
   <links id="pf14464117916372" target="pf14464117916370" source="pf14464117916385" outcome="CORRECTO" redirect="true" fromaction="#{autenticarUsuarioManagedBean.cerrarSesion}"/>
   <links id="pf144641196743616" target="pf144641196743617" source="pf14464117916385" outcome="ACTUALIZAR_USUARIO" redirect="true"/>
+  <links id="pf14469496379140" target="pf14464117916373" source="pf14469496379151" outcome="CORRECTO" redirect="true"/>
 </pageflow:Pageflow>
