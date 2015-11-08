@@ -46,8 +46,8 @@ import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
 import com.sofactory.entidades.Amigo;
 import com.sofactory.entidades.Mensaje;
-import com.sofactory.negocio.interfaces.MensajeBeanLocal;
 import com.sofactory.negocio.interfaces.AmigoBeanLocal;
+import com.sofactory.negocio.interfaces.MensajeBeanLocal;
 
 import play.libs.Json;
 
@@ -57,6 +57,7 @@ public class MensajeService {
 	private static String servicioGetEncontrarUsuario = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarUsuarioPorCodigo/";
 	private static String servicioObtenerUsuarioSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/obtenerUsuarioSesion";
 	private static String servicioRegistrarServicio = "http://localhost:8080/sf-cc-fidelizacion/rest/fidelizacion/registrarServicio";
+	private String getUsuarioPorCodigo = "http://localhost:8080/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarUsuarioPorCodigo/";
 	private static final SimpleDateFormat FORMATO_FECHA = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	
@@ -841,9 +842,21 @@ public class MensajeService {
 			try {
 	
 				List<Amigo> Amigos = amigoBeanLocal.amigosDeUsuario(usuario);
-				
+				client = ClientBuilder.newClient();
+				targetMensaje = client.target(getUsuarioPorCodigo);
 				for  (Amigo a: Amigos){
 					AmigoDTO amigoDTO = new AmigoDTO(a.getId(), a.getCodUsuario(), a.getCodAmigo());
+					targetMensaje = client.target(getUsuarioPorCodigo+a.getCodAmigo());
+					RespuestaUsuarioDTO respuesta = targetMensaje.request("application/json").get(RespuestaUsuarioDTO.class);
+					if (respuesta!=null){
+						if (respuesta.getCodigo()==0){
+							usuarioDTO = respuesta.getUsuarios().get(0);
+							amigoDTO.setNombres(usuarioDTO.getNombres());
+							amigoDTO.setApellidos(usuarioDTO.getApellidos());
+							amigoDTO.setCorreo(usuarioDTO.getCorreo());
+							amigoDTO.setFoto(usuarioDTO.getFoto());
+						}
+					}
 					respuestaAmigoDTO.getAmigos().add(amigoDTO);
 				}
 				
@@ -863,16 +876,15 @@ public class MensajeService {
 	}
 	
 	@DELETE
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("removerAmigo")
-	public RespuestaAmigoDTO removerAmigo(AmigoDTO amigoDTO) {
+	@Path("removerAmigo/{id}/{codUsuario}/{codAmigo}")
+	public RespuestaAmigoDTO removerAmigo(@PathParam("id") Long id, @PathParam("codUsuario") Long codUsuario, @PathParam("codAmigo") Long codAmigo) {
 
 		RespuestaAmigoDTO respuestaAmigoDTO = new RespuestaAmigoDTO(0, "OK");
-		respuestaAmigoDTO.setCodigoUsuario(Long.toString(amigoDTO.getCodUsuario()));
+		respuestaAmigoDTO.setCodigoUsuario(Long.toString(codUsuario));
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
-		usuarioDTO.setCodigo(amigoDTO.getCodUsuario());
+		usuarioDTO.setCodigo(codUsuario);
 	
 		Client client = ClientBuilder.newClient();
 		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
@@ -886,26 +898,26 @@ public class MensajeService {
 			try {
 			
 				//Validar si el amigo existe en el sistema
-				Amigo amigoRemover = amigoBeanLocal.encontrarPorId(Amigo.class, amigoDTO.getId());
+				Amigo amigoRemover = amigoBeanLocal.encontrarPorId(Amigo.class, id);
 						
 				if (amigoRemover!=null){
 				
-					if (amigoRemover.getCodUsuario()==amigoDTO.getCodUsuario() && 
-						amigoRemover.getCodAmigo()==amigoDTO.getCodAmigo()) {
+					if (amigoRemover.getCodUsuario().longValue()==codUsuario.longValue() && 
+						amigoRemover.getCodAmigo().longValue()==codAmigo.longValue()) {
 				
 						amigoBeanLocal.remover(amigoRemover, amigoRemover.getId());
 					
 					}else{
 					
 						respuestaAmigoDTO.setCodigo(4);
-						respuestaAmigoDTO.setMensaje("El Amigo : "+amigoDTO.getCodAmigo()+ 
-											            " No pertence al Usuario " + amigoDTO.getCodUsuario());
+						respuestaAmigoDTO.setMensaje("El Amigo : "+codAmigo+ 
+											            " No pertence al Usuario " + codUsuario);
 					}
 						
 				}else{
 					System.out.println(amigoRemover);
 					respuestaAmigoDTO.setCodigo(1);
-					respuestaAmigoDTO.setMensaje("El Amigo con Id:  "+amigoDTO.getId() +" no existe en el sistema");
+					respuestaAmigoDTO.setMensaje("El Amigo con Id:  "+id +" no existe en el sistema");
 				}
 				
 			} catch (Exception e) {
@@ -922,4 +934,37 @@ public class MensajeService {
 		return respuestaAmigoDTO;
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("encontrarUsuariosNoAmigos/{usuario}/{completar}")
+	public RespuestaAmigoDTO encontrarUsuariosNoAmigos(@PathParam("usuario") Long usuario, @PathParam("completar") String completar) {
+		
+		RespuestaAmigoDTO respuestaAmigoDTO = new RespuestaAmigoDTO(0, "OK");
+		respuestaAmigoDTO.setCodigoUsuario(Long.toString(usuario));
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO();
+		usuarioDTO.setCodigo(usuario);
+	
+		Client client = ClientBuilder.newClient();
+		WebTarget targetMensaje = client.target(servicioObtenerUsuarioSesion);
+		RespuestaSeguridadDTO resu = targetMensaje.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+		
+		if (resu.getCodigo()==0){
+			try {
+				List<UsuarioDTO> usuarios = amigoBeanLocal.encontrarUsuariosNoAmigos(completar, usuario, 20);
+				respuestaAmigoDTO.setUsuarioDTOs(usuarios);
+			} catch (Exception e) {
+	
+				respuestaAmigoDTO.setCodigo(1);
+				respuestaAmigoDTO.setMensaje("Hubo un error en el sistema");
+				e.printStackTrace();
+				
+			}
+		}else{
+			respuestaAmigoDTO.setCodigo(10);
+			respuestaAmigoDTO.setMensaje(resu.getMensaje());	
+		}
+			
+		return respuestaAmigoDTO;
+	}
 }

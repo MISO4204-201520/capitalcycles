@@ -1,4 +1,4 @@
-package com.sofactory.app.alquiler;
+package com.sofactory.app.amigos;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
@@ -12,11 +12,11 @@ import javax.faces.event.PhaseId;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
-import com.sofactory.dtos.BicicletaAlquilerDTO;
+import com.sofactory.dtos.AmigoDTO;
 
 @ManagedBean
 @RequestScoped
-public class ImagenesBicicletaAlquilerManagedBean implements Serializable {
+public class ImagenAmigoManagedBean implements Serializable {
 
 	/** Constante serialVersionUID. */
 	private static final long serialVersionUID = 1L;
@@ -31,13 +31,17 @@ public class ImagenesBicicletaAlquilerManagedBean implements Serializable {
 		if (contexto.getCurrentPhaseId() != PhaseId.RENDER_RESPONSE) {
 			String idImagen = contexto.getExternalContext().getRequestParameterMap().get("idImagen");
 			if (idImagen!=null){
-				List<BicicletaAlquilerDTO> bicicletasAlquileres = (List<BicicletaAlquilerDTO>)contexto.getExternalContext().
-						getSessionMap().get("bicicletasAlquileres");
-				if (bicicletasAlquileres != null && !bicicletasAlquileres.isEmpty()){
-					for (BicicletaAlquilerDTO ba:bicicletasAlquileres){
-						if (ba.getCodigo()==Long.parseLong(idImagen)){
-							ByteArrayInputStream bytes=new ByteArrayInputStream(ba.getFoto());
-							return new DefaultStreamedContent(bytes);	
+				List<AmigoDTO> amigos = (List<AmigoDTO>)contexto.getExternalContext().
+						getSessionMap().get("amigos");
+				if (amigos != null && !amigos.isEmpty()){
+					for (AmigoDTO a:amigos){
+						if (a.getId()==Long.parseLong(idImagen)){
+							if (a.getFoto()!=null){
+								ByteArrayInputStream bytes=new ByteArrayInputStream(a.getFoto());
+								return new DefaultStreamedContent(bytes);	
+							}else{
+								return null;
+							}	
 						}
 					}
 				}
