@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="serverIp">http://157.253.139.101:8080</string>
+    <string name="serviceUserLoginURI">/sf-cc-gestion-usuario/rest/seguridadService/esValidoUsuario</string>
+    <string name="serviceNewUserURI">/sf-cc-gestion-usuario/rest/gestionarUsuarioService/crear</string>
+    <string name="serviceUpdateUserURI">/sf-cc-gestion-usuario/rest/gestionarUsuarioService/actualizar</string>
+    <string name="serviceGetAllUsersURI">/sf-cc-gestion-usuario/rest/gestionarUsuarioService/encontrarTodosUsuarios</string>
+    <string name="serviceGetInMessagesURI">/sf-cc-mensajes/rest/mensajeService/mensajesRecibidosPorUsuario</string>
+    <string name="serviceSendMessagesURI">/sf-cc-mensajes/rest/mensajeService/crearNuevoMensaje</string>
+    <string name="serviceGetOutMessagesURI">/sf-cc-mensajes/rest/mensajeService/mensajesEnviadosPorUsuario</string>
+    <string name="serviceGetUserScoreURI">/sf-cc-fidelizacion/rest/fidelizacion/obtenerPuntoUsuario</string>
+    <string name="serviceGetProductsURI">/sf-cc-fidelizacion/rest/fidelizacion/catalogoProductos</string>
+    <string name="serviceRediProductsURI">/sf-cc-fidelizacion/rest/fidelizacion/redimirProducto</string>
+    <string name="serviceSendRouteURI">/sf-cc-recorridos/rest/desplazamiento/registrarTodasPosiciones</string>
+
+</resources>

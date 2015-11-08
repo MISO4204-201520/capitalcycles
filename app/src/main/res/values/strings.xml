@@ -1,0 +1,106 @@
+<resources>
+    <string name="app_name">CycleTrip</string>
+    <string name="login_title">Inicio de sesión</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="button_login">Iniciar sesión</string>
+    <string name="no_account_label">¿No tienes una cuenta de CycleTrip?</string>
+    <string name="button_create_account">Crear cuenta CycleTrip</string>
+    <string name="error_email_required">Debes ingresar tu usuario</string>
+    <string name="error_password_required">Debes ingresar tu contraseña</string>
+    <string name="error_invalid_password">Las credenciales proporcionadas no son correctas.</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="create_user_txt">Crear usuario</string>
+    <string name="gender_txt">Género</string>
+    <string name="hint_login">Login</string>
+    <string name="hint_name">Nombre</string>
+    <string name="hint_lastName">Apellido</string>
+    <string name="hint_phoneNumber">Celular</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="text_select_genre">Selecciona tu género:</string>
+    <string name="error_required">Campo requerido</string>
+    <string name="error_encryption">Upss! Ocurrio un error interno, vuelve a intentarlo. E:11</string>
+    <string name="gender_f">Femenino</string>
+    <string name="gender_m">Masculino</string>
+    <string name="action_example">Example</string>
+    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_open">Drawer open</string>
+    <string name="navigation_drawer_close">Drawer close</string>
+    <string name="error_invalid_email">El email es inválido</string>
+    <string name="create_user_success">El usuario se creo en el sistema!!</string>
+    <string name="create_user_duplicate">El usuario con la información ingresada ya existe en el sistema.</string>
+    <string name="create_user_error">No se pudo crear el usuario en este momento...</string>
+    <string name="error_user_not_found">El usuario no existe en el sistema</string>
+
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item >Home</item>
+        <item >Envíar mensaje</item>
+        <item >Mensajes recibidos</item>
+        <item >Mensajes enviados</item>
+        <item >Perfil</item>
+        <item >Fidelización</item>
+        <item >Cerrar sesión</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@mipmap/ic_home</item>
+        <item>@mipmap/ic_messages</item>
+        <item>@mipmap/ic_inbox</item>
+        <item>@mipmap/ic_outbox</item>
+        <item>@mipmap/ic_profile</item>
+        <item>@mipmap/ic_fidel</item>
+        <item>@mipmap/ic_sign_out</item>
+    </array>
+
+    <string-array name="gender_list">
+        <item>@string/gender_f</item>
+        <item>@string/gender_m</item>
+    </string-array>
+
+    <string name="desc_list_item_icon">Item Icon</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="info_user_txt">Información del usuario</string>
+    <string name="button_update_user">Actualizar información</string>
+    <string name="update_user_success">Se actualizo la información del usuario de forma exitosa!</string>
+    <string name="update_user_error">No fue posible actualizar la información del usuario...</string>
+    <string name="error_users_list">Se produjo un error al tratar de obtener la lista de usuarios...</string>
+    <string name="info_text_userList">Usuarios disponibles</string>
+    <string name="title_activity_messages">MessagesActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="info_text_in_messages">Mensajes recibidos</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sent_message_success">Se envío el mensaje de forma exitosa!</string>
+    <string name="sent_message_error">Upss! No se pudo enviar el mensaje en este momento... Intentalo de nuevo.</string>
+    <string name="title_send_message">Escribe tu mensaje</string>
+    <string name="button_send_menssage">Enviar</string>
+    <string name="info_text_sent_messages">Mensajes enviados</string>
+    <string name="error_messages_list">No fue posible obtener los mensajes en este momento....</string>
+    <string name="text_alert_messageDetail">Detalle del mensaje</string>
+    <string name="button_close">Cerrar</string>
+    <string name="info_text_fidelization_score">Puntos disponibles</string>
+    <string name="error_product_list">Error al obtener los productos...</string>
+    <string name="text_redim_points">Redimir producto</string>
+    <string name="text_redin_confirmation">Esta a punto de cajear sus puntos por :</string>
+    <string name="text_redim_confirmation2">¿Desea canjear sus puntos?</string>
+    <string name="error_user_score">No fue posible obtener los puntos del usuario....</string>
+    <string name="text_redim_points_success">Se canjearon los puntos de forma exitósa!</string>
+    <string name="error_user_not_session">El usuario no esta en sesión....</string>
+    <string name="error_redim_noAvailablePoints">No cuentas con puntos disponibles para canjear este producto......</string>
+    <string name="button_calcular_ruta">Calcular ruta</string>
+    <string name="warning_route_attempt">Debes seleccionar un punto de destino para calcular tu ruta....</string>
+    <string name="button_start_tracking">Iniciar recorrido</string>
+    <string name="button_stop_tracking">Terminar recorrido</string>
+    <string name="warning_stop_track">Debes comenzar una ruta primero...</string>
+    <string name="warning_start_track">Debes fijar tu destino y calcular tu ruta, antes de comenzar tu recorrido...</string>
+    <string name="sent_rout_success">Felicidades completaste tu recorrido!! Este fue guardado de forma exitósa en tu perfil..</string>
+    <string name="sent_route_error">No fue posible guardar tu recorrido en el servidor...</string>
+</resources>
