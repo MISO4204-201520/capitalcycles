@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * Created by LuisSebastian on 10/4/15.
+ *
  */
 public class LoginActivity extends Activity {
 
