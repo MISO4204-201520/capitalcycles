@@ -41,4 +41,12 @@
 			<redirect/>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/alquiler/alquiler.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>CORRECTO</from-outcome>
+			<to-view-id>/administracion/paginaBlanco.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
 </faces-config>

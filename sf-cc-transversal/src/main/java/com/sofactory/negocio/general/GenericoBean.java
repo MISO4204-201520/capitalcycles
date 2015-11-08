@@ -101,6 +101,7 @@ public abstract class GenericoBean<T> {
 			if (e instanceof ConstraintViolationException){
 				throw new ConstraintViolationException(((ConstraintViolationException)e).getConstraintViolations());
 			}
+			e.printStackTrace();
 		} finally {
 
 		}

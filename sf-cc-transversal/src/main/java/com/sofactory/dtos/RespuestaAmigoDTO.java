@@ -6,6 +6,7 @@ import java.util.List;
 public class RespuestaAmigoDTO extends RespuestaDTO{
 
 	private List<AmigoDTO> amigos;
+	private List<UsuarioDTO> usuarioDTOs;
 	
 	public RespuestaAmigoDTO(){}
 	
@@ -20,5 +21,13 @@ public class RespuestaAmigoDTO extends RespuestaDTO{
 
 	public void setAmigos(List<AmigoDTO> amigos) {
 		this.amigos = amigos;
+	}
+
+	public List<UsuarioDTO> getUsuarioDTOs() {
+		return usuarioDTOs;
+	}
+
+	public void setUsuarioDTOs(List<UsuarioDTO> usuarioDTOs) {
+		this.usuarioDTOs = usuarioDTOs;
 	}
 }

@@ -5,6 +5,10 @@ public class AmigoDTO {
 	private Long id;
 	private Long codUsuario;
 	private Long codAmigo;
+	private String nombres;
+	private String apellidos;
+	private String correo;
+	private byte[] foto;
 	
 	public AmigoDTO(){}
 	
@@ -38,5 +42,36 @@ public class AmigoDTO {
 	public void setCodAmigo(Long codAmigo) {
 		this.codAmigo = codAmigo;
 	}
-	
+
+	public String getNombres() {
+		return nombres;
+	}
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
+	public byte[] getFoto() {
+		return foto;
+	}
+
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
+	}
 }
