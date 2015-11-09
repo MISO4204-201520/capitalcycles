@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.sofactory.capitalcycles.cycletrip"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -25,5 +25,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'org.jasypt:jasypt:1.9.2'
     compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
 
 }
