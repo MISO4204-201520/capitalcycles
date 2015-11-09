@@ -34,27 +34,10 @@ ffffffff
                     <p:inputText value="#{userWizard.user.age}" />
  
                     <h:outputText value="Skip to last: " />
-                    <h:selectBooleanCheckbox value="#{userWizard.skip}" />   
-                
+                    <h:selectBooleanCheckbox value="#{userWizard.skip}" />
                 </h:panelGrid>
             </p:panel>
         </p:tab>
- 
- 		<p:tab id="prueba" title="Prueba"> 
-	 		<p:panel header="Prueba Details">
-                <p:messages />
-    
-                    <h:graphicImage value="/images/box_shot.gif" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.marca}">
- 				  	<f:selectItem itemValue="Marca1" itemLabel="Marca 1 - Pinarello" />
-				   	<f:selectItem itemValue="Marca2" itemLabel="Marca 2 - GT" />
-				   	<f:selectItem itemValue="Marca3" itemLabel="Marca 3 - Carrera" />
-				</h:selectOneRadio>                
-    
-                
-                
-    	    </p:panel>
- 		</p:tab>
  
         <p:tab id="address" title="Address">
             <p:panel header="Address Details">
@@ -136,13 +119,11 @@ ffffffff
         </p:tab>
     </p:wizard>
 
-
 ffffff
 					
 				</h:form>
 				
-				
-   		</ui:define>				
+   			</ui:define>				
 		</ui:composition>	
 	</h:body>
 </html>
