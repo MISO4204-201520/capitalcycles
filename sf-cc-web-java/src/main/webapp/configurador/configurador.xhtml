@@ -96,56 +96,98 @@ ffffffff
 
 				<h:graphicImage value="/resources/imagenes/frenos.jpg" width="200" height="171" />
                 <h:selectOneRadio value="#{bicicletaWizard.bicicleta.frenos}">
- 				  	<f:selectItem itemValue="frenos" itemLabel="Frenos 1 - " />
-				   	<f:selectItem itemValue="frenos" itemLabel="Frenos 2 - " />
-				   	<f:selectItem itemValue="frenos" itemLabel="Frenos 3 - " />
+ 				  	<f:selectItem itemValue="frenos1" itemLabel="Frenos 1 - " />
+				   	<f:selectItem itemValue="frenos2" itemLabel="Frenos 2 - " />
+				   	<f:selectItem itemValue="frenos3" itemLabel="Frenos 3 - " />
 				</h:selectOneRadio>
 
             </p:panel>
         </p:tab>
  		
+ 		<p:tab id="cadena" title="Cadena">
+            <p:panel header="Cadena Information">
+                <p:messages />
+
+				<h:graphicImage value="/resources/imagenes/cadena.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.cadena}">
+ 				  	<f:selectItem itemValue="cadena1" itemLabel="Cadena 1 - " />
+				   	<f:selectItem itemValue="cadena2" itemLabel="Cadena 2 - " />
+				   	<f:selectItem itemValue="cadena3" itemLabel="Cadena 3 - " />
+				</h:selectOneRadio>
+
+            </p:panel>
+        </p:tab>
+        
+   		<p:tab id="platos" title="Platos">
+            <p:panel header="Platos Information">
+                <p:messages />
+
+				<h:graphicImage value="/resources/imagenes/platos.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.platos}">
+ 				  	<f:selectItem itemValue="platos1" itemLabel="Plato 1 - " />
+				   	<f:selectItem itemValue="platos2" itemLabel="Plato 2 - " />
+				   	<f:selectItem itemValue="platos3" itemLabel="Plato 3 - " />
+				</h:selectOneRadio>
+
+            </p:panel>
+        </p:tab>
+
+  		<p:tab id="cambios" title="Cambios">
+            <p:panel header="Cambios Information">
+                <p:messages />
+
+				<h:graphicImage value="/resources/imagenes/cambios.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.cambios}">
+ 				  	<f:selectItem itemValue="cambios1" itemLabel="Cambio 1 - " />
+				   	<f:selectItem itemValue="cambios2" itemLabel="Cambio 2 - " />
+				   	<f:selectItem itemValue="cambios3" itemLabel="Cambio 3 - " />
+				</h:selectOneRadio>
+
+            </p:panel>
+        </p:tab>
  
         <p:tab id="confirm" title="Confirmation">
             <p:panel header="Confirmation">
                 <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
                     <h:panelGrid columns="2" columnClasses="label, value">
-                        <h:outputText value="Firstname: " />
-                        <h:outputText value="#{userWizard.user.firstname}" styleClass="outputLabel"/>
+                        <h:outputText value="Marca: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.marca}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Lastname: " />
-                        <h:outputText value="#{userWizard.user.lastname}" styleClass="outputLabel"/>
+                  
+                        <h:outputText value="Marco: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.marco}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Age: " />
-                        <h:outputText value="#{userWizard.user.age}" styleClass="outputLabel"/>
+                        <h:outputText value="Tenedor: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.tenedor}" styleClass="outputLabel"/>
                     </h:panelGrid>
  
                     <h:panelGrid columns="2" columnClasses="label, value">
-                        <h:outputText value="Street: " />
-                        <h:outputText value="#{userWizard.user.street}" styleClass="outputLabel"/>
+                        <h:outputText value="Rines: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.rines}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Postal: " />
-                        <h:outputText value="#{userWizard.user.postalCode}" styleClass="outputLabel"/>
+                        <h:outputText value="Llantas: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.llantas}" styleClass="outputLabel"/>
  
-                        <h:outputText value="City: " />
-                        <h:outputText value="#{userWizard.user.city}" styleClass="outputLabel"/>
+                        <h:outputText value="Frenos: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.frenos}" styleClass="outputLabel"/>
                     </h:panelGrid>
  
                     <h:panelGrid columns="2" columnClasses="label, value">
-                        <h:outputText value="Email: " />
-                        <h:outputText value="#{userWizard.user.email}" styleClass="outputLabel"/>
+                        <h:outputText value="Cadena: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.cadena}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Phone " />
-                        <h:outputText value="#{userWizard.user.phone}" styleClass="outputLabel"/>
+                        <h:outputText value="Platos " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.platos}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Info: " />
-                        <h:outputText value="#{userWizard.user.info}" styleClass="outputLabel"/>
+                        <h:outputText value="Cambios: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.cambios}" styleClass="outputLabel"/>
  
                         <h:outputText />
                         <h:outputText />
                     </h:panelGrid>
                 </h:panelGrid>
  
-                <p:commandButton value="Submit" actionListener="#{userWizard.save}" update="growl" process="@this"/>
+                <p:commandButton value="Submit" actionListener="#{bicicletaWizard.save}" update="growl" process="@this"/>
             </p:panel>
         </p:tab>
     </p:wizard>
