@@ -48,40 +48,48 @@ ffffffff
     	    </p:panel>
  		</p:tab>
  
-        <p:tab id="address" title="Address">
-            <p:panel header="Address Details">
+        <p:tab id="tenedor" title="Tenedor">
+            <p:panel header="Tenedor Details">
                 <p:messages />
-                <h:panelGrid columns="2" columnClasses="label, value">
-                    <h:outputText value="Street: " />
-                    <p:inputText value="#{userWizard.user.street}" />
- 
-                    <h:outputText value="Postal Code: " />
-                    <p:inputText value="#{userWizard.user.postalCode}" />
- 
-                    <h:outputText value="City: " />
-                    <p:inputText value="#{userWizard.user.city}" />
- 
-                    <h:outputText value="Skip to last: " />
-                    <h:selectBooleanCheckbox value="#{userWizard.skip}" />
-                </h:panelGrid>
+
+                <h:graphicImage value="/resources/imagenes/tenedor.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.tenedor}">
+ 				  	<f:selectItem itemValue="Tenedor1" itemLabel="Tenedor 1 - " />
+				   	<f:selectItem itemValue="Tenedor2" itemLabel="Tenedor 2 - " />
+				   	<f:selectItem itemValue="Tenedor3" itemLabel="Tenedor 3 - " />
+				</h:selectOneRadio>                
+
             </p:panel>
         </p:tab>
  
-        <p:tab id="contact" title="Contact">
-            <p:panel header="Contact Information">
+        <p:tab id="rines" title="Rines">
+            <p:panel header="Rines Information">
                 <p:messages />
-                <h:panelGrid columns="2" columnClasses="label, value">
-                    <h:outputText value="Email: *" />
-                    <p:inputText value="#{userWizard.user.email}" required="true" label="Email"/>
- 
-                    <h:outputText value="Phone: " />
-                    <p:inputText value="#{userWizard.user.phone}"/>
- 
-                    <h:outputText value="Additional Info: " />
-                    <p:inputText value="#{userWizard.user.info}"/>
-                </h:panelGrid>
+
+				<h:graphicImage value="/resources/imagenes/rines.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.rines}">
+ 				  	<f:selectItem itemValue="Rines1" itemLabel="Rines 1 - " />
+				   	<f:selectItem itemValue="Rines2" itemLabel="Rines 2 - " />
+				   	<f:selectItem itemValue="Rines3" itemLabel="Rines 3 - " />
+				</h:selectOneRadio>
+
             </p:panel>
         </p:tab>
+ 
+ 		<p:tab id="llantas" title="Llantas">
+            <p:panel header="Llantas Information">
+                <p:messages />
+
+				<h:graphicImage value="/resources/imagenes/llantas.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.llantas}">
+ 				  	<f:selectItem itemValue="llantas1" itemLabel="Llantas 1 - " />
+				   	<f:selectItem itemValue="llantas2" itemLabel="Llantas 2 - " />
+				   	<f:selectItem itemValue="llantas3" itemLabel="Llantas 3 - " />
+				</h:selectOneRadio>
+
+            </p:panel>
+        </p:tab>
+ 		
  
         <p:tab id="confirm" title="Confirmation">
             <p:panel header="Confirmation">
