@@ -59,6 +59,7 @@
 		<module>../sf-cc-recorridos</module>
 		<module>../sf-cc-mensajes</module>
 		<module>../sf-cc-fidelizacion</module>
+		<module>../sf-cc-reportes</module>
 	</modules>
 
 </project>

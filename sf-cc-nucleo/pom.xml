@@ -41,6 +41,10 @@
 							<groupId>com.sofactory</groupId>
 							<artifactId>sf-cc-mensajes</artifactId>
 						</webModule>
+						<webModule>
+							<groupId>com.sofactory</groupId>
+							<artifactId>sf-cc-reportes</artifactId>
+						</webModule>
 					</modules>
 				</configuration>
 			</plugin>
@@ -104,6 +108,12 @@
 		<dependency>
 			<groupId>com.sofactory</groupId>
 			<artifactId>sf-cc-fidelizacion</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sofactory</groupId>
+			<artifactId>sf-cc-reportes</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
