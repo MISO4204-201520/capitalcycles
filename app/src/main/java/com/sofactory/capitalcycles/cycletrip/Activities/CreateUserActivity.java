@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.sofactory.capitalcycles.cycletrip.DTOs.RolDTO;
 import com.sofactory.capitalcycles.cycletrip.R;
 import com.sofactory.capitalcycles.cycletrip.Tasks.CreateUserTask;
+import com.sofactory.capitalcycles.cycletrip.Utils.Enums.LoginEnum;
 import com.sofactory.capitalcycles.cycletrip.Utils.Preferences.UserPreferences;
 import com.sofactory.capitalcycles.cycletrip.Utils.ProgressBar.GenericProgress;
 import com.sofactory.capitalcycles.cycletrip.Utils.Security.JasyptUtils;
@@ -137,7 +138,7 @@ public class CreateUserActivity extends Activity{
                 RolDTO rol = new RolDTO();
                 rol.setId(1);
                 newUSer.getRoles().add(rol);
-                mCreateUserTask = new CreateUserTask(newUSer,getApplicationContext(),genericProgress);
+                mCreateUserTask = new CreateUserTask(newUSer,getApplicationContext(),genericProgress, LoginEnum.CYCLETRIP.toString());
                 mCreateUserTask.execute((Void) null);
             } catch (UnsupportedEncodingException e) {
                 genericProgress.showProgress(false);

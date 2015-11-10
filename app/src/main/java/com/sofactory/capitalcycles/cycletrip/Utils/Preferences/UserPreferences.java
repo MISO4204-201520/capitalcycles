@@ -14,5 +14,6 @@ public class UserPreferences {
     public static final String USER_LASTNAME = "userLastName";
     public static final String USER_PHONE = "userPhone";
     public static final String USER_EMAIL = "userEmail";
+    public static final String LOGIN_TYPE = "loginType";
 
 }

@@ -38,12 +38,14 @@ public class CreateUserTask extends AsyncTask<Void, Void, RespuestaUsuarioDTO> {
     private UsuarioDTO usuarioDTO;
     private Context context;
     private GenericProgress genericProgress;
+    private String loginType;
 
-    public CreateUserTask(UsuarioDTO usuarioDTO, Context context,GenericProgress genericProgress) {
+    public CreateUserTask(UsuarioDTO usuarioDTO, Context context,GenericProgress genericProgress,String loginType) {
 
         this.usuarioDTO = usuarioDTO;
         this.context = context;
         this.genericProgress = genericProgress;
+        this.loginType = loginType;
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.sofactory.capitalcycles.cycletrip.Activities.MainActivity;
 import com.sofactory.capitalcycles.cycletrip.DTOs.RespuestaSeguridadDTO;
 import com.sofactory.capitalcycles.cycletrip.DTOs.UsuarioDTO;
 import com.sofactory.capitalcycles.cycletrip.R;
+import com.sofactory.capitalcycles.cycletrip.Utils.Enums.LoginEnum;
 import com.sofactory.capitalcycles.cycletrip.Utils.Preferences.UserPreferences;
 import com.sofactory.capitalcycles.cycletrip.Utils.ProgressBar.GenericProgress;
 import org.apache.http.HttpResponse;
@@ -93,6 +94,7 @@ public class UserLoginTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
             editor.putString(UserPreferences.USER_NAME, response.getNombres()).apply();
             editor.putString(UserPreferences.USER_LASTNAME, response.getApellidos()).apply();
             editor.putString(UserPreferences.USER_EMAIL, response.getCorreo()).apply();
+            editor.putString(UserPreferences.LOGIN_TYPE, LoginEnum.CYCLETRIP.toString()).apply();
             Intent intent = new Intent(context, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

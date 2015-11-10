@@ -29,9 +29,12 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.sofactory.capitalcycles.cycletrip.DTOs.RolDTO;
 import com.sofactory.capitalcycles.cycletrip.DTOs.UsuarioDTO;
 import com.sofactory.capitalcycles.cycletrip.R;
+import com.sofactory.capitalcycles.cycletrip.Tasks.CreateUserTask;
 import com.sofactory.capitalcycles.cycletrip.Tasks.UserLoginTask;
+import com.sofactory.capitalcycles.cycletrip.Utils.Enums.LoginEnum;
 import com.sofactory.capitalcycles.cycletrip.Utils.Preferences.UserPreferences;
 import com.sofactory.capitalcycles.cycletrip.Utils.ProgressBar.GenericProgress;
 import com.sofactory.capitalcycles.cycletrip.Utils.Security.JasyptUtils;
@@ -63,8 +66,9 @@ public class LoginActivity extends Activity {
     private SharedPreferences preferences;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
-    private ProfileTracker mProfileTracker;
     private UserLoginTask mAuthTask = null;
+    private CreateUserTask mCreateUserTask = null;
+    private GenericProgress genericProgress;
 
 
     @Override
@@ -121,7 +125,7 @@ public class LoginActivity extends Activity {
 
 
         loginButton = (LoginButton) findViewById(R.id.login_button_fb);
-        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_photos"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_photos,user_about_me"));
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -140,14 +144,28 @@ public class LoginActivity extends Activity {
                                 // Application code
 
                                 try {
-                                    String fbId = object.getString("id");
-                                    String birthday = object.getString("birthday");
-                                    String gender = object.getString("gender");
-                                    String email = object.getString("email");
-                                    String link = object.getString("link");
-                                    String name = object.getString("name");
+                                    if(object!=null) {
+                                        String fbId = object.getString("id");
+                                        String birthday = object.getString("birthday");
+                                        String gender = object.getString("gender");
+                                        String email = object.getString("email");
+                                        String firstName = object.getString("first_name");
+                                        String lastName = object.getString("last_name");
+                                        String genderFull = gender.equals(R.string.gender_f)?"F":"M";
+                                        genericProgress = new GenericProgress(mProgressView, mLoginFormView, getApplicationContext());
+                                        genericProgress.showProgress(true);
+                                        String ePassword = JasyptUtils.encryptPassword(fbId);
+                                        UsuarioDTO newUSer = new UsuarioDTO(Long.valueOf(0), fbId, ePassword, firstName, lastName, "1234", genderFull, email, preferences.getString(UserPreferences.TOKEN_ID, ""));
+                                        RolDTO rol = new RolDTO();
+                                        rol.setId(1);
+                                        newUSer.getRoles().add(rol);
+                                        mCreateUserTask = new CreateUserTask(newUSer, getApplicationContext(), genericProgress, LoginEnum.FACEBOOK.toString());
+                                        mCreateUserTask.execute((Void) null);
+                                    }
 
                                 } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (UnsupportedEncodingException e) {
                                     e.printStackTrace();
                                 }
 
@@ -155,7 +173,7 @@ public class LoginActivity extends Activity {
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,link,gender,birthday,email");
+                parameters.putString("fields", "id,gender,birthday,email,first_name,last_name");
                 request.setParameters(parameters);
                 request.executeAsync();
 
@@ -226,7 +244,7 @@ public class LoginActivity extends Activity {
         if(cancel) {
             focusView.requestFocus();
         }else{
-            GenericProgress genericProgress = new GenericProgress(mProgressView,mLoginFormView,getApplicationContext());
+            genericProgress = new GenericProgress(mProgressView,mLoginFormView,getApplicationContext());
             genericProgress.showProgress(true);
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setLogin(email);

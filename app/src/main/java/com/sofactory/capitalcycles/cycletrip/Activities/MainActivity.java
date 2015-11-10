@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.sofactory.capitalcycles.cycletrip.Fragments.FidelizationFragment;
+import com.sofactory.capitalcycles.cycletrip.Fragments.FriendsFragment;
 import com.sofactory.capitalcycles.cycletrip.Fragments.MapsFragment;
 import com.sofactory.capitalcycles.cycletrip.Fragments.OutboxFragment;
 import com.sofactory.capitalcycles.cycletrip.Fragments.UserProfileFragment;
@@ -91,6 +92,8 @@ public class MainActivity extends Activity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
         // Sign out
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
+
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(7, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -187,23 +190,26 @@ public class MainActivity extends Activity {
                 fragment = new MapsFragment();
                 break;
             case 1:
-                fragment = new UsersListFragment();
+                fragment = new FriendsFragment();
                 break;
             case 2:
+                fragment = new UsersListFragment();
+                break;
+            case 3:
                 Intent intent = new Intent(getApplicationContext(), MessagesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
                 break;
-            case 3:
+            case 4:
                 fragment = new OutboxFragment();
                 break;
-            case 4:
+            case 5:
                 fragment = new UserProfileFragment();
                 break;
-            case 5:
+            case 6:
                 fragment = new FidelizationFragment();
                 break;
-            case 6:
+            case 7:
             Intent intent2 = new Intent(getApplicationContext(), LoginActivity.class);
             intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(intent2);
