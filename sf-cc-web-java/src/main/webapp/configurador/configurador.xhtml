@@ -90,6 +90,20 @@ ffffffff
             </p:panel>
         </p:tab>
  		
+ 		<p:tab id="frenos" title="Frenos">
+            <p:panel header="Frenos Information">
+                <p:messages />
+
+				<h:graphicImage value="/resources/imagenes/frenos.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.frenos}">
+ 				  	<f:selectItem itemValue="frenos" itemLabel="Frenos 1 - " />
+				   	<f:selectItem itemValue="frenos" itemLabel="Frenos 2 - " />
+				   	<f:selectItem itemValue="frenos" itemLabel="Frenos 3 - " />
+				</h:selectOneRadio>
+
+            </p:panel>
+        </p:tab>
+ 		
  
         <p:tab id="confirm" title="Confirmation">
             <p:panel header="Confirmation">
