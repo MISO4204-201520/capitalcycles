@@ -20,35 +20,29 @@ ffffffff
     <p:growl id="growl" sticky="true" showDetail="true"/>
  
     <p:wizard flowListener="#{userWizard.onFlowProcess}">
-        <p:tab id="personal" title="Personal">
-            <p:panel header="Personal Details">
+        <p:tab id="marca" title="Marca">
+            <p:panel header="Marca Details">
                 <p:messages />
-                <h:panelGrid columns="2" columnClasses="label, value">
-                    <h:outputText value="Firstname: *" />
-                    <p:inputText value="#{userWizard.user.firstname}" required="true" label="Firstname"/>
+         
+                <h:graphicImage value="/resources/imagenes/marca.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.marca}">
+ 				  	<f:selectItem itemValue="Marca1" itemLabel="Marca 1 - " />
+				   	<f:selectItem itemValue="Marca2" itemLabel="Marca 2 - " />
+				   	<f:selectItem itemValue="Marca3" itemLabel="Marca 3 - " />
+				</h:selectOneRadio>
  
-                    <h:outputText value="Lastname: *" />
-                    <p:inputText value="#{userWizard.user.lastname}" required="true" label="Lastname"/>
- 
-                    <h:outputText value="Age: " />
-                    <p:inputText value="#{userWizard.user.age}" />
- 
-                    <h:outputText value="Skip to last: " />
-                    <h:selectBooleanCheckbox value="#{userWizard.skip}" />   
-                
-                </h:panelGrid>
             </p:panel>
         </p:tab>
  
- 		<p:tab id="prueba" title="Prueba"> 
-	 		<p:panel header="Prueba Details">
+ 		<p:tab id="marco" title="Marco"> 
+	 		<p:panel header="Marco Details">
                 <p:messages />
     
-                    <h:graphicImage value="/resources/imagenes/marco.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.marca}">
- 				  	<f:selectItem itemValue="Marca1" itemLabel="Marca 1 - Pinarello" />
-				   	<f:selectItem itemValue="Marca2" itemLabel="Marca 2 - GT" />
-				   	<f:selectItem itemValue="Marca3" itemLabel="Marca 3 - Carrera" />
+                <h:graphicImage value="/resources/imagenes/marco.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.marco}">
+ 				  	<f:selectItem itemValue="Marco1" itemLabel="Marco 1 - Pinarello" />
+				   	<f:selectItem itemValue="Marco2" itemLabel="Marco 2 - GT" />
+				   	<f:selectItem itemValue="Marco3" itemLabel="Marco 3 - Carrera" />
 				</h:selectOneRadio>                
                 
     	    </p:panel>
