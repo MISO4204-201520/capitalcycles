@@ -1,4 +1,10 @@
 $( document ).ready(function() {
+	if (window.location.search && window.location.search.length > 0){
+		var logg = document.getElementById("formAutenticar:loggin");
+		if (logg){
+			logg.setAttribute("style","display:none");
+		}
+	}
 	setTimeout(animacion, 2000);
 });
 

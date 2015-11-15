@@ -1,16 +1,28 @@
 package com.sofactory.servicios;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.EJB;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
+import com.sofactory.entidades.Persona;
+import com.sofactory.entidades.Rol;
 import com.sofactory.entidades.Usuario;
 import com.sofactory.enums.Estado;
+import com.sofactory.negocio.FactoriaRedSocialBean;
+import com.sofactory.negocio.UsuarioSingletonBean;
 import com.sofactory.negocio.interfaces.SeguridadBeanLocal;
 import com.sofactory.negocio.interfaces.UsuarioBeanLocal;
 
@@ -22,7 +34,16 @@ public class SeguridadService {
 
 	@EJB
 	private UsuarioBeanLocal usuarioBeanLocal;
+
+	@EJB
+	private UsuarioSingletonBean usuarioSingletonBean;
 	
+	@EJB
+	private FactoriaRedSocialBean factoriaRedSocialBean;
+	
+	@Context
+	private HttpServletRequest request;
+	 
 	@POST
 	@Path("esValidoUsuario")
 	@Consumes("application/json")
@@ -92,6 +113,7 @@ public class SeguridadService {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public RespuestaSeguridadDTO cerrarSesion(UsuarioDTO usuarioDTO){
+		request.getSession().invalidate();
 		return seguridadBeanLocal.cerrarSesion(usuarioDTO.getCodigo());
 	}
 	
@@ -108,5 +130,55 @@ public class SeguridadService {
 			respuestaSeguridadDTO.setMensaje("Faltan Campos Obligatorios");
 		}
 		return respuestaSeguridadDTO;
+	}
+	
+	@GET
+	@Path("redSocialObtenerUrl/{redSocial}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public String redSocialObtenerUrl(@PathParam("redSocial") String redSocial) {
+		return factoriaRedSocialBean.getRedSocial(redSocial).obtenerUrl();
+	}
+	
+	@POST
+	@Path("guardarUsuarioRedSocial")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public RespuestaSeguridadDTO guardarUsuarioRedSocial(UsuarioDTO usuarioDTO) {
+		RespuestaSeguridadDTO respuestaSeguridadDTO = new  RespuestaSeguridadDTO(0, "OK");
+		UsuarioDTO uDTO = factoriaRedSocialBean.getRedSocial(usuarioDTO.getRedSocial()).obtenerUsuarioRedSocial(usuarioDTO.getVerificador());
+		if (uDTO!=null){
+			if (!usuarioBeanLocal.existeUsuarioRedSocial(uDTO.getNombres(), usuarioDTO.getRedSocial())){
+				//Guardar Usuario Red Social
+				Rol rol = new Rol();
+				rol.setId(2);
+				List<Rol> roles = new ArrayList<Rol>();
+				roles.add(rol);
+				Persona usuario = new Persona();
+				usuario.setNombres(uDTO.getNombres());
+				usuario.setUserId(uDTO.getUserId());
+				usuario.setRedSocial(usuarioDTO.getRedSocial());
+				usuario.setRoles(roles);
+				usuario = (Persona) usuarioBeanLocal.insertarOActualizar(usuario);
+				uDTO.setCodigo(usuario.getCodigo());
+				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
+				respuestaSeguridadDTO.setNombres(usuario.getNombres());
+			}else{
+				Persona usuario = (Persona)usuarioBeanLocal.encontrarPorRedSocial(usuarioDTO.getRedSocial(),uDTO.getNombres());
+				uDTO.setCodigo(usuario.getCodigo());
+				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
+				respuestaSeguridadDTO.setNombres(usuario.getNombres());
+			}
+			usuarioSingletonBean.getUsuariosDTO().put(uDTO.getCodigo(), uDTO);
+		}
+		
+		return respuestaSeguridadDTO;
+	}
+	
+	@GET
+	@Path("redSocialCerrarSesion/{redSocial}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public String redSocialCerrarSesion(@PathParam("redSocial") String redSocial) {
+		factoriaRedSocialBean.getRedSocial(redSocial).cerrarSession();
+		return "OK";
 	}
 }

@@ -50,6 +50,11 @@ public abstract class Usuario implements Serializable {
 	@Lob
 	protected byte[] foto;
 	
+	@Column(name = "RED_SOCIAL")
+	protected String redSocial;
+	
+	@Column(name = "USER_ID")
+	protected Long userId;
 	
 	@ManyToMany
 	@JoinTable(
@@ -114,5 +119,21 @@ public abstract class Usuario implements Serializable {
 
 	public void setFoto(byte[] foto) {
 		this.foto = foto;
+	}
+
+	public String getRedSocial() {
+		return redSocial;
+	}
+
+	public void setRedSocial(String redSocial) {
+		this.redSocial = redSocial;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

@@ -2,10 +2,12 @@ package com.sofactory.app.seguridad;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -21,17 +23,11 @@ import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
 
 @ManagedBean
-@ViewScoped
+@RequestScoped
 public class AutenticarUsuarioManagedBean implements Serializable{
 
 	/** Constante serialVersionUID. */
 	private static final long serialVersionUID = 1L;
-
-	/** Constante COD_ADMIN. */
-	private static final Long COD_ADMIN = new Long(1);
-
-	/** Constante MAXIMO_INTENTOS. */
-	private static final Integer MAXIMO_INTENTOS = 3;
 
 	private static final String LLAVE_PASSWORD = "llavePassword?.";
 
@@ -57,13 +53,73 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	private String post = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/esValidoUsuario";
 	private String postCerrarSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cerrarSesion";
 	private String postCambiarCredencial = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cambiarCredencial";
+	private String getRedSocialObtenerUrl = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/redSocialObtenerUrl/";
+	private String postGuardarUsuarioRedSocial = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/guardarUsuarioRedSocial";
+	private String getRedSocialCerrarSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/redSocialCerrarSesion/";
 	
 	private boolean verError;
 	private String errorMensaje;
+	private String urlTwitter;
+	private String redSocial;
 	
 	@ManagedProperty("#{imagenPerfilManagedBean}")
 	private ImagenPerfilManagedBean imagenPerfilManagedBean;
+
+	@PostConstruct
+	private void iniciar(){
+		urlTwitter = null;
+		redSocial = "twitter";
+		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+		if ((usuarioManagedBean==null || usuarioManagedBean.getUsuarioDTO()==null) &&
+				context.getRequestParameterMap()!=null && !context.getRequestParameterMap().isEmpty() &&
+				context.getRequestParameterMap().get("oauth_verifier")!=null && !context.getRequestParameterMap().get("oauth_verifier").isEmpty()){
+			String verificador = context.getRequestParameterMap().get("oauth_verifier");
+			//POST
+			try{
+				Client client = ClientBuilder.newClient();
+				WebTarget messages = client.target(postGuardarUsuarioRedSocial);
+				UsuarioDTO usuarioDTO = new UsuarioDTO();
+				usuarioDTO.setVerificador(verificador);
+				usuarioDTO.setRedSocial(redSocial);
+				RespuestaSeguridadDTO respuesta = messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+				if (respuesta!=null){
+					if (respuesta.getCodigo()==0){
+						UsuarioDTO usuarioAutenticado = new UsuarioDTO();
+						usuarioAutenticado.setCodigo(new Long(respuesta.getCodigoUsuario()));
+						usuarioAutenticado.setNombres(respuesta.getNombres());
+						usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
+						usuarioManagedBean.setLogged(true);
+					}else{
+						verError = true;
+						errorMensaje = respuesta.getMensaje();
+					}
+				}else{
+					verError = true;
+					errorMensaje = "Hubo un error llamando el servicio";
+				}
+			}catch(Exception exc){
+				verError = true;
+				errorMensaje = "Hubo un error llamando el servicio";
+				exc.printStackTrace();
+			}		
 	
+		}else if(usuarioManagedBean==null || usuarioManagedBean.getUsuarioDTO()==null){
+			//GET
+			try{
+				Client client = ClientBuilder.newClient();
+				WebTarget messages = client.target(getRedSocialObtenerUrl+redSocial);
+				String respuesta = messages.request("text/plain").get(String.class);
+				if (respuesta!=null){
+					this.urlTwitter = respuesta;
+				}
+			}catch(Exception exc){
+				verError = true;
+				errorMensaje = "Hubo un error llamando el servicio";
+				exc.printStackTrace();
+			}		
+		}
+	}
+
 	/**
 	 * Método - acción que sirve para iniciar la sesión de un usuario.
 	 *
@@ -95,6 +151,7 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 					usuarioAutenticado.setFoto(respuesta.getFoto());
 					imagenPerfilManagedBean.setImgActualizar(usuarioAutenticado.getFoto());
 					usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
+					usuarioManagedBean.setLogged(true);
 					reglaNavegacion = "CORRECTO";
 				}else{
 					verError = true;
@@ -125,8 +182,13 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 			UsuarioDTO usuarioDTO = new UsuarioDTO();
 			usuarioDTO.setCodigo(usuarioManagedBean.getUsuarioDTO().getCodigo());
 			messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+			//GET
+			client = ClientBuilder.newClient();
+			messages = client.target(getRedSocialCerrarSesion+redSocial);
+			messages.request("text/plain").get(String.class);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
 			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			usuarioManagedBean.setLogged(false);
 		}catch(Exception exc){
 			FacesContext.getCurrentInstance().addMessage(null, 
 					new FacesMessage(
@@ -193,11 +255,11 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 							null, 
 							"Credenciales no coinciden"));
 		}
-	
+
 
 		return reglaNavegacion;
 	}
-	
+
 	/**
 	 * Obtiene el atributo usuario managed bean.
 	 *
@@ -328,5 +390,13 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 
 	public void setImagenPerfilManagedBean(ImagenPerfilManagedBean imagenPerfilManagedBean) {
 		this.imagenPerfilManagedBean = imagenPerfilManagedBean;
+	}
+
+	public String getUrlTwitter() {
+		return urlTwitter;
+	}
+
+	public void setUrlTwitter(String urlTwitter) {
+		this.urlTwitter = urlTwitter;
 	}
 }

@@ -20,23 +20,27 @@
 	        			<h:graphicImage library="imagenes" name="logoCycle.png" height="85" style="cursor:pointer;"/>
 	        			<h:graphicImage library="imagenes" name="tituloCapital.png" height="40" style="cursor:pointer;"/>
 	        		</h:panelGrid>
-					<h:panelGroup id="autenticacion" layout="block" style="float:right;" rendered="#{usuarioManagedBean.usuarioDTO == null}">
-						<h:panelGrid columns="3">
-							<h:outputText value="Usuario"/>
-							<h:outputText value="Contraseña"/>
-							<p:spacer/>
-							<p:inputText id="usuario" value="#{autenticarUsuarioManagedBean.usuario}" required="true"/>
-							<p:password id="contrasena" value="#{autenticarUsuarioManagedBean.contrasena}" required="true"/>
-							<p:commandButton id="entrar" value="Entrar" action="#{autenticarUsuarioManagedBean.iniciarSesion}" ajax="true" update="formAutenticar"/>
-							<p:message  for="usuario" />
-							<p:message  for="contrasena" />
-							<p:spacer/>
-							<h:outputText value="#{autenticarUsuarioManagedBean.errorMensaje}" styleClass="requerido" rendered="#{autenticarUsuarioManagedBean.verError}"/>
+					<h:panelGroup id="autenticacion" layout="block" style="float:right;">
+						<h:panelGrid id="loggin" columns="1" rendered="#{!usuarioManagedBean.logged}">
+							<h:panelGrid columns="3">
+								<h:outputText value="Usuario"/>
+								<h:outputText value="Contraseña"/>
+								<p:spacer/>
+								<p:inputText id="usuario" value="#{autenticarUsuarioManagedBean.usuario}" required="true"/>
+								<p:password id="contrasena" value="#{autenticarUsuarioManagedBean.contrasena}" required="true"/>
+								<p:commandButton id="entrar" value="Entrar" action="#{autenticarUsuarioManagedBean.iniciarSesion}" ajax="true" update="formAutenticar"/>
+								<p:message  for="usuario" />
+								<p:message  for="contrasena" />
+								<p:spacer/>
+								<h:outputText value="#{autenticarUsuarioManagedBean.errorMensaje}" styleClass="requerido" rendered="#{autenticarUsuarioManagedBean.verError}"/>
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+								<h:outputLink value="#{autenticarUsuarioManagedBean.urlTwitter}" title="Twitter">
+									<h:graphicImage library="imagenes" name="twitter.png" height="45" style="cursor:pointer;"/>
+								</h:outputLink>
+							</h:panelGrid>
 						</h:panelGrid>
-					</h:panelGroup>
-				
-	    			<h:panelGroup id="grupoSesion" layout="block" style="float:right;">
-	    				<h:panelGrid columns="2">
+						<h:panelGrid columns="2" rendered="#{usuarioManagedBean.logged}">
 	    					<p:panel rendered="#{imagenPerfilManagedBean.imagenActualizar != null}">
 	    						<h:panelGroup layout="block" style="width: 45px; height: 45px;">
 									<h:commandLink action="ACTUALIZAR_USUARIO">
@@ -44,7 +48,6 @@
 	          						</h:commandLink>
 	          					</h:panelGroup>
           					</p:panel>
-          					
 	    					<h:panelGrid columns="2" rendered="#{usuarioManagedBean.usuarioDTO != null}" style="font-size:1.2em;">
 		     					<p:spacer/>
 		     					<h:outputLabel value="#{usuarioManagedBean.usuarioDTO.login}" style="font-size:0.9em;" />
@@ -53,7 +56,7 @@
 		    					<h:outputLabel value=" "></h:outputLabel>
 		    					<h:commandLink value="Cerrar Sesión" action="#{autenticarUsuarioManagedBean.cerrarSesion}" style="color:black;"/>
 		    				</h:panelGrid>
-	    				</h:panelGrid>					
+	    				</h:panelGrid>				
 					</h:panelGroup>
 	    		</h:panelGrid>
 	        </h:panelGroup>

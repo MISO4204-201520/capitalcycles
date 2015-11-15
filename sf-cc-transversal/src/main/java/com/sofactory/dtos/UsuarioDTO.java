@@ -19,6 +19,9 @@ public class UsuarioDTO{
 	private String confirmacionCredencialNueva;
 	private byte[] foto;
 	private Date fechaNacimiento;
+	private String verificador;
+	private String redSocial;
+	private Long userId;
 	
 	public UsuarioDTO(){}
 	
@@ -140,5 +143,29 @@ public class UsuarioDTO{
 
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getVerificador() {
+		return verificador;
+	}
+
+	public void setVerificador(String verificador) {
+		this.verificador = verificador;
+	}
+
+	public String getRedSocial() {
+		return redSocial;
+	}
+
+	public void setRedSocial(String redSocial) {
+		this.redSocial = redSocial;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
