@@ -11,9 +11,16 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.sofactory.dtos.RegistrarPuntosDTO;
+import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RespuestaSeguridadDTO;
 import com.sofactory.dtos.RespuestaUsuarioDTO;
 import com.sofactory.dtos.UsuarioDTO;
@@ -29,13 +36,15 @@ import com.sofactory.negocio.interfaces.UsuarioBeanLocal;
 @Path("seguridadService")
 public class SeguridadService {
 
+	private static String servicioRegistrarServicio = "http://localhost:8080/sf-cc-fidelizacion/rest/fidelizacion/registrarServicio";
+	
 	@EJB
 	private SeguridadBeanLocal seguridadBeanLocal;
 
 	@EJB
 	private UsuarioBeanLocal usuarioBeanLocal;
 
-	@EJB
+	@EJB	
 	private UsuarioSingletonBean usuarioSingletonBean;
 	
 	@EJB
@@ -155,6 +164,7 @@ public class SeguridadService {
 				roles.add(rol);
 				Persona usuario = new Persona();
 				usuario.setNombres(uDTO.getNombres());
+				usuario.setApellidos(uDTO.getApellidos());
 				usuario.setUserId(uDTO.getUserId());
 				usuario.setRedSocial(usuarioDTO.getRedSocial());
 				usuario.setRoles(roles);
@@ -162,23 +172,39 @@ public class SeguridadService {
 				uDTO.setCodigo(usuario.getCodigo());
 				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
 				respuestaSeguridadDTO.setNombres(usuario.getNombres());
+				respuestaSeguridadDTO.setApellidos(usuario.getApellidos());
 			}else{
 				Persona usuario = (Persona)usuarioBeanLocal.encontrarPorRedSocial(usuarioDTO.getRedSocial(),uDTO.getNombres());
 				uDTO.setCodigo(usuario.getCodigo());
 				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
 				respuestaSeguridadDTO.setNombres(usuario.getNombres());
+				respuestaSeguridadDTO.setApellidos(usuario.getApellidos());
 			}
 			usuarioSingletonBean.getUsuariosDTO().put(uDTO.getCodigo(), uDTO);
+			
+			// Inicio Otorga Puntos por Fidelizacion
+			RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+			registrarPuntosDTO.setCodigoUsuario(respuestaSeguridadDTO.getCodigoUsuario());
+			registrarPuntosDTO.setServicio("autenticacionUsuario");
+			Client client = ClientBuilder.newClient();
+			WebTarget targetMensaje = client.target(servicioRegistrarServicio);
+			targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+			// Fin Otorga Puntos por Fidelizacion
 		}
 		
 		return respuestaSeguridadDTO;
 	}
 	
 	@GET
-	@Path("redSocialCerrarSesion/{redSocial}")
+	@Path("redSocialCerrarSesion")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String redSocialCerrarSesion(@PathParam("redSocial") String redSocial) {
-		factoriaRedSocialBean.getRedSocial(redSocial).cerrarSession();
+	public String redSocialCerrarSesion(@QueryParam("redesSociales") String redesSociales) {
+		if (redesSociales!=null && !redesSociales.isEmpty()){
+			String[] splitRed = redesSociales.split(",");
+			for (String redSocial:splitRed){
+				factoriaRedSocialBean.getRedSocial(redSocial).cerrarSession();	
+			}
+		}
 		return "OK";
 	}
 }

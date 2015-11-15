@@ -1,6 +1,8 @@
 package com.sofactory.app.seguridad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -55,12 +57,14 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	private String postCambiarCredencial = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/cambiarCredencial";
 	private String getRedSocialObtenerUrl = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/redSocialObtenerUrl/";
 	private String postGuardarUsuarioRedSocial = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/guardarUsuarioRedSocial";
-	private String getRedSocialCerrarSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/redSocialCerrarSesion/";
+	private String getRedSocialCerrarSesion = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/redSocialCerrarSesion";
 	
 	private boolean verError;
 	private String errorMensaje;
 	private String urlTwitter;
-	private String redSocial;
+	private List<String> redesSociales;
+	
+	private String urlFacebook;
 	
 	@ManagedProperty("#{imagenPerfilManagedBean}")
 	private ImagenPerfilManagedBean imagenPerfilManagedBean;
@@ -68,56 +72,73 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	@PostConstruct
 	private void iniciar(){
 		urlTwitter = null;
-		redSocial = "twitter";
+		urlFacebook = null;
+		redesSociales = new ArrayList<String>();
+		redesSociales.add("twitter");
+		redesSociales.add("facebook");
+		
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-		if ((usuarioManagedBean==null || usuarioManagedBean.getUsuarioDTO()==null) &&
-				context.getRequestParameterMap()!=null && !context.getRequestParameterMap().isEmpty() &&
-				context.getRequestParameterMap().get("oauth_verifier")!=null && !context.getRequestParameterMap().get("oauth_verifier").isEmpty()){
-			String verificador = context.getRequestParameterMap().get("oauth_verifier");
-			//POST
-			try{
-				Client client = ClientBuilder.newClient();
-				WebTarget messages = client.target(postGuardarUsuarioRedSocial);
-				UsuarioDTO usuarioDTO = new UsuarioDTO();
-				usuarioDTO.setVerificador(verificador);
-				usuarioDTO.setRedSocial(redSocial);
-				RespuestaSeguridadDTO respuesta = messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
-				if (respuesta!=null){
-					if (respuesta.getCodigo()==0){
-						UsuarioDTO usuarioAutenticado = new UsuarioDTO();
-						usuarioAutenticado.setCodigo(new Long(respuesta.getCodigoUsuario()));
-						usuarioAutenticado.setNombres(respuesta.getNombres());
-						usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
-						usuarioManagedBean.setLogged(true);
+		for (String redSocial:redesSociales){
+			if ((usuarioManagedBean==null || usuarioManagedBean.getUsuarioDTO()==null) &&
+					context.getRequestParameterMap()!=null && !context.getRequestParameterMap().isEmpty() &&
+					((context.getRequestParameterMap().get("oauth_verifier")!=null && !context.getRequestParameterMap().get("oauth_verifier").isEmpty()) ||
+							(context.getRequestParameterMap().get("code")!=null && !context.getRequestParameterMap().get("code").isEmpty()))){
+				String verificador = context.getRequestParameterMap().get("oauth_verifier");
+				if (verificador==null || verificador.isEmpty()){
+					verificador = context.getRequestParameterMap().get("code");	
+				}
+				//POST
+				try{
+					Client client = ClientBuilder.newClient();
+					WebTarget messages = client.target(postGuardarUsuarioRedSocial);
+					UsuarioDTO usuarioDTO = new UsuarioDTO();
+					usuarioDTO.setVerificador(verificador);
+					usuarioDTO.setRedSocial(redSocial);
+					RespuestaSeguridadDTO respuesta = messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
+					if (respuesta!=null){
+						if (respuesta.getCodigo()==0){
+							UsuarioDTO usuarioAutenticado = new UsuarioDTO();
+							usuarioAutenticado.setCodigo(new Long(respuesta.getCodigoUsuario()));
+							usuarioAutenticado.setNombres(respuesta.getNombres());
+							usuarioAutenticado.setApellidos(respuesta.getApellidos());
+							usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
+							usuarioManagedBean.setLogged(true);
+						}else{
+							verError = true;
+							errorMensaje = respuesta.getMensaje();
+						}
 					}else{
 						verError = true;
-						errorMensaje = respuesta.getMensaje();
+						errorMensaje = "Hubo un error llamando el servicio";
 					}
-				}else{
+				}catch(Exception exc){
 					verError = true;
 					errorMensaje = "Hubo un error llamando el servicio";
-				}
-			}catch(Exception exc){
-				verError = true;
-				errorMensaje = "Hubo un error llamando el servicio";
-				exc.printStackTrace();
-			}		
-	
-		}else if(usuarioManagedBean==null || usuarioManagedBean.getUsuarioDTO()==null){
-			//GET
-			try{
-				Client client = ClientBuilder.newClient();
-				WebTarget messages = client.target(getRedSocialObtenerUrl+redSocial);
-				String respuesta = messages.request("text/plain").get(String.class);
-				if (respuesta!=null){
-					this.urlTwitter = respuesta;
-				}
-			}catch(Exception exc){
-				verError = true;
-				errorMensaje = "Hubo un error llamando el servicio";
-				exc.printStackTrace();
-			}		
+					exc.printStackTrace();
+				}		
+		
+			}else if(usuarioManagedBean==null || usuarioManagedBean.getUsuarioDTO()==null){
+				//GET
+				try{
+					Client client = ClientBuilder.newClient();
+					WebTarget messages = client.target(getRedSocialObtenerUrl+redSocial);
+					String respuesta = messages.request("text/plain").get(String.class);
+					if (respuesta!=null){
+						if (redSocial.equalsIgnoreCase("twitter")){
+							this.urlTwitter = respuesta;	
+						}else if (redSocial.equalsIgnoreCase("facebook")){
+							this.urlFacebook = respuesta;
+						}
+						
+					}
+				}catch(Exception exc){
+					verError = true;
+					errorMensaje = "Hubo un error llamando el servicio";
+					exc.printStackTrace();
+				}		
+			}
 		}
+		
 	}
 
 	/**
@@ -184,7 +205,15 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 			messages.request("application/json").post(Entity.entity(usuarioDTO, MediaType.APPLICATION_JSON),RespuestaSeguridadDTO.class);
 			//GET
 			client = ClientBuilder.newClient();
-			messages = client.target(getRedSocialCerrarSesion+redSocial);
+			String redes = "";
+			int cont = 0;
+			for (String redSocial:redesSociales){
+				redes+=redSocial;
+				if (cont++ < redesSociales.size()-1){
+					redes+=",";
+				}
+			}
+			messages = client.target(getRedSocialCerrarSesion+"?redesSociales="+redes);
 			messages.request("text/plain").get(String.class);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
 			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -398,5 +427,13 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 
 	public void setUrlTwitter(String urlTwitter) {
 		this.urlTwitter = urlTwitter;
+	}
+
+	public String getUrlFacebook() {
+		return urlFacebook;
+	}
+
+	public void setUrlFacebook(String urlFacebook) {
+		this.urlFacebook = urlFacebook;
 	}
 }

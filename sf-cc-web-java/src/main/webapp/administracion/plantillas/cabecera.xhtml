@@ -34,9 +34,12 @@
 								<p:spacer/>
 								<h:outputText value="#{autenticarUsuarioManagedBean.errorMensaje}" styleClass="requerido" rendered="#{autenticarUsuarioManagedBean.verError}"/>
 							</h:panelGrid>
-							<h:panelGrid columns="1">
+							<h:panelGrid columns="2">
 								<h:outputLink value="#{autenticarUsuarioManagedBean.urlTwitter}" title="Twitter">
-									<h:graphicImage library="imagenes" name="twitter.png" height="45" style="cursor:pointer;"/>
+									<h:graphicImage library="imagenes" name="twitter.png" height="40" style="cursor:pointer;"/>
+								</h:outputLink>
+								<h:outputLink value="#{autenticarUsuarioManagedBean.urlFacebook}" title="Facebook">
+									<h:graphicImage library="imagenes" name="facebook.png" height="30" style="cursor:pointer;"/>
 								</h:outputLink>
 							</h:panelGrid>
 						</h:panelGrid>
