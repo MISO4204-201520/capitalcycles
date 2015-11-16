@@ -19,6 +19,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.sofactory.dtos.RedSocialDTO;
 import com.sofactory.dtos.RegistrarPuntosDTO;
 import com.sofactory.dtos.RespuestaDTO;
 import com.sofactory.dtos.RespuestaSeguridadDTO;
@@ -163,6 +164,7 @@ public class SeguridadService {
 				List<Rol> roles = new ArrayList<Rol>();
 				roles.add(rol);
 				Persona usuario = new Persona();
+				usuario.setLogin(uDTO.getLogin());
 				usuario.setNombres(uDTO.getNombres());
 				usuario.setApellidos(uDTO.getApellidos());
 				usuario.setUserId(uDTO.getUserId());
@@ -170,12 +172,14 @@ public class SeguridadService {
 				usuario.setRoles(roles);
 				usuario = (Persona) usuarioBeanLocal.insertarOActualizar(usuario);
 				uDTO.setCodigo(usuario.getCodigo());
+				respuestaSeguridadDTO.setLogin(usuario.getLogin());
 				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
 				respuestaSeguridadDTO.setNombres(usuario.getNombres());
 				respuestaSeguridadDTO.setApellidos(usuario.getApellidos());
 			}else{
 				Persona usuario = (Persona)usuarioBeanLocal.encontrarPorRedSocial(usuarioDTO.getRedSocial(),uDTO.getNombres());
 				uDTO.setCodigo(usuario.getCodigo());
+				respuestaSeguridadDTO.setLogin(usuario.getLogin());
 				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
 				respuestaSeguridadDTO.setNombres(usuario.getNombres());
 				respuestaSeguridadDTO.setApellidos(usuario.getApellidos());
@@ -206,5 +210,13 @@ public class SeguridadService {
 			}
 		}
 		return "OK";
+	}
+	
+	@POST
+	@Path("redSocialCompartir")
+	@Consumes("application/json")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String redSocialCompartir(RedSocialDTO redSocialDTO) {
+		return factoriaRedSocialBean.getRedSocial(redSocialDTO.getRedSocial()).compartir(redSocialDTO.getMensaje(), redSocialDTO.getUsuarioToken());
 	}
 }

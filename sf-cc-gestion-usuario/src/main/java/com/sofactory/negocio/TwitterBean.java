@@ -41,6 +41,7 @@ public class TwitterBean implements RedSocialBean {
 			User user = twitter.showUser(accessToken.getScreenName());
 			if (user != null){
 				usuarioDTO = new UsuarioDTO();
+				usuarioDTO.setLogin(accessToken.getScreenName());
 				usuarioDTO.setUserId(user.getId());
 				usuarioDTO.setNombres(user.getName());
 				usuarioDTO.setRedSocial("twitter");
@@ -59,4 +60,18 @@ public class TwitterBean implements RedSocialBean {
 		}catch(Exception exc){
 		}
 	}
+	
+	@Override
+	public String compartir(String mensaje, String usuarioToken) {
+		String esCorrecto = "OK";
+		try {
+			Twitter twitter = TwitterFactory.getSingleton();
+			twitter.updateStatus(mensaje.length()<=140?mensaje:mensaje.substring(0,140));
+		} catch (Exception e) {
+			esCorrecto = "BAD";
+			e.printStackTrace();
+		}
+		return esCorrecto;
+	}
+
 }

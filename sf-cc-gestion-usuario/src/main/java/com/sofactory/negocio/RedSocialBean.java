@@ -6,4 +6,5 @@ public interface RedSocialBean {
 	String obtenerUrl();
 	UsuarioDTO obtenerUsuarioRedSocial(String verificador);
 	void cerrarSession();
+	String compartir(String mensaje, String usuarioToken);
 }

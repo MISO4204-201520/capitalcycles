@@ -58,4 +58,10 @@ public class FacebookBean implements RedSocialBean{
 		}catch(Exception exc){
 		}
 	}
+
+	@Override
+	public String compartir(String mensaje, String usuarioToken) {
+		//TODO
+		return null;
+	}
 }

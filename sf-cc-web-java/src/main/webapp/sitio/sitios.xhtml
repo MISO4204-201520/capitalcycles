@@ -49,12 +49,16 @@
 									<p:message for="otro" />
 								</h:panelGrid>
 								<h:panelGrid columns="2">
-									<p:commandButton value="Buscar Sitios" action="#{sitiosManagedBean.buscarSitios}" update="coordenada groupJson" oncomplete="pintarSitios();"/>
+									<p:commandButton value="Buscar Sitios" action="#{sitiosManagedBean.buscarSitios}" update="coordenada groupJson grillaResultados" oncomplete="pintarSitios();"/>
 									<p:commandButton value="Limpiar" type="button"  onclick="limpiarMapa();"/>
 								</h:panelGrid>
+								
 								<p:separator/>
 								<h:panelGrid id="grillaResultados" columns="2" style="text-align:left;">
-									
+									<h:commandLink actionListener="#{sitiosManagedBean.tweet}" immediate="true" rendered="#{not empty sitiosManagedBean.sitioDTOs}">
+										<f:ajax execute="@this"/>
+										<h:graphicImage library="imagenes" name="tweet.png" height="40" style="cursor:pointer;"/>
+									</h:commandLink>	
 								</h:panelGrid>
 							</h:panelGrid>
 						</p:panel>
