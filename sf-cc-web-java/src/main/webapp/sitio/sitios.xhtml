@@ -54,10 +54,14 @@
 								</h:panelGrid>
 								
 								<p:separator/>
-								<h:panelGrid id="grillaResultados" columns="2" style="text-align:left;">
-									<h:commandLink actionListener="#{sitiosManagedBean.tweet}" immediate="true" rendered="#{not empty sitiosManagedBean.sitioDTOs}">
+								<h:panelGrid id="grillaResultados" columns="2" style="text-align:left;" rendered="#{not empty usuarioManagedBean.usuarioDTO.redSocial}">
+									<h:commandLink actionListener="#{sitiosManagedBean.tweet}" immediate="true" rendered="#{not empty sitiosManagedBean.sitioDTOs and usuarioManagedBean.usuarioDTO.redSocial eq 'twitter'}">
 										<f:ajax execute="@this"/>
-										<h:graphicImage library="imagenes" name="tweet.png" height="40" style="cursor:pointer;"/>
+										<h:graphicImage library="imagenes" name="share-twitter.png" height="40" style="cursor:pointer;"/>
+									</h:commandLink>
+									<h:commandLink actionListener="#{sitiosManagedBean.facebook}" immediate="true" rendered="#{not empty sitiosManagedBean.sitioDTOs and usuarioManagedBean.usuarioDTO.redSocial eq 'facebook'}">
+										<f:ajax execute="@this"/>
+										<h:graphicImage library="imagenes" name="share-facebook.png" height="40" style="cursor:pointer;"/>
 									</h:commandLink>	
 								</h:panelGrid>
 							</h:panelGrid>

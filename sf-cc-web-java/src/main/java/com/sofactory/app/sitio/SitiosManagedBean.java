@@ -52,6 +52,8 @@ public class SitiosManagedBean implements Serializable{
 	
 	private String postRedSocialCompartir = "http://localhost:8080/sf-cc-gestion-usuario/rest/seguridadService/redSocialCompartir/";
 	
+	private String facebookAccessTokenCompartir;
+	
 	private List<SitioDTO> sitioDTOs;
 	
 	private static final String TWITTER = "twitter";
@@ -59,7 +61,12 @@ public class SitiosManagedBean implements Serializable{
 	
 	@PostConstruct
 	private void iniciar(){
-		
+		if (usuarioManagedBean!=null && usuarioManagedBean.getUsuarioDTO()!=null){
+			if (usuarioManagedBean.getUsuarioDTO().getRedSocial()!=null && usuarioManagedBean.getUsuarioDTO().getRedSocial().equalsIgnoreCase(FACEBOOK)){
+				//Este token es temporal para cada cuenta de facebook se debe crear un token, esto solo pasa con facebook.
+				facebookAccessTokenCompartir = "CAACEdEose0cBAE3w8Vx2hDAFgnJc17inWZBZBwsUf7lLYLBQg9DOALurldPTRnXZCh3QxOCbpKZCHzNKI7YIbErafhBbjlGVBAZCAofHIpORlHMNxP8ikMfZCUwOpDl1Aan1ZB5JR2BuU3I9sGznhn2lQlrwkdCR12rMHmnQZCD9JV22D45KyWAZBNcCKv2qNzZAhSj7r4qZAVYmwZDZD";
+			}
+		}
 	}
 
 	public String buscarSitios(){
@@ -112,6 +119,42 @@ public class SitiosManagedBean implements Serializable{
 								FacesMessage.SEVERITY_ERROR, 
 								null, 
 								"No se realizó el tweet"));
+			}
+		}catch(Exception exc){
+			exc.printStackTrace();
+		}
+	}
+	
+	public void facebook(ActionEvent evento){
+		StringBuilder stringBuilder = new StringBuilder("Sitios Cercanos de "+sitio+": \n");
+		int cont=0;
+		for (SitioDTO s:sitioDTOs){
+			stringBuilder.append("Nombre: "+s.getNombre()+", ");
+			stringBuilder.append("Direccion: "+s.getDireccion());
+			if (cont++<sitioDTOs.size()-1){
+				stringBuilder.append(", ");
+			}
+		}
+		try{
+			RedSocialDTO redSocialDTO = new RedSocialDTO();
+			redSocialDTO.setRedSocial(FACEBOOK);
+			redSocialDTO.setMensaje(stringBuilder.toString());
+			redSocialDTO.setUsuarioToken(facebookAccessTokenCompartir);
+			Client client = ClientBuilder.newClient();
+			WebTarget messages = client.target(postRedSocialCompartir);
+			String respuesta = messages.request("application/json","text/plain").accept("application/json","text/plain").post(Entity.entity(redSocialDTO, MediaType.APPLICATION_JSON),String.class);
+			if (respuesta!=null && respuesta.equalsIgnoreCase("OK")){
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(
+								FacesMessage.SEVERITY_INFO, 
+								null, 
+								"Se compartió en facebook"));
+			}else{
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(
+								FacesMessage.SEVERITY_ERROR, 
+								null, 
+								"No se compartió en facebook"));
 			}
 		}catch(Exception exc){
 			exc.printStackTrace();

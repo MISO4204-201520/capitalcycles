@@ -102,6 +102,7 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 							usuarioAutenticado.setNombres(respuesta.getNombres());
 							usuarioAutenticado.setApellidos(respuesta.getApellidos());
 							usuarioAutenticado.setLogin(respuesta.getLogin());
+							usuarioAutenticado.setRedSocial(respuesta.getRedSocial());
 							usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
 							usuarioManagedBean.setLogged(true);
 						}else{

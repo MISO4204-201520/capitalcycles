@@ -5,6 +5,7 @@ import com.sofactory.dtos.UsuarioDTO;
 import facebook4j.Facebook;
 import facebook4j.FacebookFactory;
 import facebook4j.User;
+import facebook4j.auth.AccessToken;
 
 public class FacebookBean implements RedSocialBean{
 	private static final String APP_ID = "1633916530190069";
@@ -61,7 +62,17 @@ public class FacebookBean implements RedSocialBean{
 
 	@Override
 	public String compartir(String mensaje, String usuarioToken) {
-		//TODO
-		return null;
+		String esCorrecto = "OK";
+		try {
+			Facebook facebook = FacebookFactory.getSingleton();
+			AccessToken at = new AccessToken(usuarioToken);
+			facebook.setOAuthAccessToken(at);
+			facebook.setOAuthPermissions("email,user_posts");
+			facebook.postStatusMessage(mensaje.length()<=140?mensaje:mensaje.substring(0,140));
+		} catch (Exception e) {
+			esCorrecto = "BAD";
+			e.printStackTrace();
+		}
+		return esCorrecto;
 	}
 }

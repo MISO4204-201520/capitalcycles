@@ -176,6 +176,7 @@ public class SeguridadService {
 				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
 				respuestaSeguridadDTO.setNombres(usuario.getNombres());
 				respuestaSeguridadDTO.setApellidos(usuario.getApellidos());
+				respuestaSeguridadDTO.setRedSocial(uDTO.getRedSocial());
 			}else{
 				Persona usuario = (Persona)usuarioBeanLocal.encontrarPorRedSocial(usuarioDTO.getRedSocial(),uDTO.getNombres());
 				uDTO.setCodigo(usuario.getCodigo());
@@ -183,6 +184,7 @@ public class SeguridadService {
 				respuestaSeguridadDTO.setCodigoUsuario(usuario.getCodigo().toString());
 				respuestaSeguridadDTO.setNombres(usuario.getNombres());
 				respuestaSeguridadDTO.setApellidos(usuario.getApellidos());
+				respuestaSeguridadDTO.setRedSocial(uDTO.getRedSocial());
 			}
 			usuarioSingletonBean.getUsuariosDTO().put(uDTO.getCodigo(), uDTO);
 			

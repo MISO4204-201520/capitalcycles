@@ -7,6 +7,7 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 	private String apellidos;
 	private String correo;
 	private byte[] foto;
+	private String redSocial;
 	
 	public RespuestaSeguridadDTO(){}
 	
@@ -60,5 +61,13 @@ public class RespuestaSeguridadDTO extends RespuestaDTO{
 
 	public void setFoto(byte[] foto) {
 		this.foto = foto;
+	}
+
+	public String getRedSocial() {
+		return redSocial;
+	}
+
+	public void setRedSocial(String redSocial) {
+		this.redSocial = redSocial;
 	}
 }
