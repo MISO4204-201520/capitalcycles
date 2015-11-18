@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<featureModel chosenLayoutAlgorithm="4">
+		<struct>
+			<and abstract="true" mandatory="true" name="ProyectoBicicletas">
+				<alt mandatory="true" name="Extension">
+					<feature mandatory="true" name="Fidelizacion"/>
+					<feature mandatory="true" name="Domicilios"/>
+					<feature mandatory="true" name="Gamification"/>
+					<feature mandatory="true" name="PromocionesContexto"/>
+					<feature mandatory="true" name="Directorio"/>
+				</alt>
+				<alt mandatory="true" name="FrontEnd">
+					<feature mandatory="true" name="Web"/>
+					<feature mandatory="true" name="Movil"/>
+				</alt>
+				<feature name="ConfiguradorBicicletas"/>
+				<or name="Reportes">
+					<feature mandatory="true" name="ReporteHistorialViajes"/>
+					<feature mandatory="true" name="ReporteRutas"/>
+					<feature mandatory="true" name="ReporteMetricas"/>
+				</or>
+				<and mandatory="true" name="Comunicacion">
+					<feature name="Notificaciones"/>
+					<feature mandatory="true" name="Mensaje"/>
+					<feature name="GestionAmigos"/>
+					<feature name="CompartirRedesSociales"/>
+				</and>
+				<and mandatory="true" name="GestionUsuario">
+					<or name="RedesSociales">
+						<feature mandatory="true" name="Facebook"/>
+						<feature mandatory="true" name="Twitter"/>
+					</or>
+					<feature name="ManejoPerfiles"/>
+					<feature mandatory="true" name="Seguridad"/>
+				</and>
+				<and mandatory="true" name="Recorridos">
+					<feature name="HistorialViajes"/>
+					<feature name="Metricas"/>
+					<alt mandatory="true" name="Desplazamiento">
+						<feature mandatory="true" name="Grupal"/>
+						<feature mandatory="true" name="Individual"/>
+					</alt>
+					<and mandatory="true" name="Mapas">
+						<feature mandatory="true" name="Posicion"/>
+					</and>
+					<feature mandatory="true" name="MejorRuta"/>
+					<feature name="Alquileres"/>
+					<feature name="Sitios"/>
+				</and>
+			</and>
+		</struct>
+		<constraints>
+			<rule>
+				<imp>
+					<var>CompartirRedesSociales</var>
+					<var>RedesSociales</var>
+				</imp>
+			</rule>
+			<rule>
+				<imp>
+					<var>Grupal</var>
+					<var>GestionAmigos</var>
+				</imp>
+			</rule>
+			<rule>
+				<imp>
+					<var>ReporteHistorialViajes</var>
+					<var>HistorialViajes</var>
+				</imp>
+			</rule>
+		</constraints>
+		<calculations Auto="true" Constraints="true" Features="true" Redundant="true" Tautology="true"/>
+		<comments/>
+		<featureOrder userDefined="false"/>
+	</featureModel>
