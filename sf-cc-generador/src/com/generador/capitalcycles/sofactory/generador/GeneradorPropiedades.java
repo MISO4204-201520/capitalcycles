@@ -1,13 +1,12 @@
-package com.generador.capitalcycles.sofactory.archivo;
+package com.generador.capitalcycles.sofactory.generador;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,30 +18,38 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.generador.capitalcycles.sofactory.archivo.ManejadorArchivos;
+
 public class GeneradorPropiedades {
 
-	private Map<String,Boolean> properties;
+	private Map<String,Boolean> features;
+	private Map<String,Boolean> fearuteExcludes;
 	private List<String> configuracion;
 
 	public GeneradorPropiedades(File xmlFeatures, File config) 
 			throws SAXException, IOException, ParserConfigurationException{
-		properties = new HashMap<String,Boolean>();
+		features = new HashMap<String,Boolean>();
+		fearuteExcludes = new HashMap<String,Boolean>();
 		configuracion = new ArrayList<String>();
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(xmlFeatures);
-		obtenerConfigs(config);
+		configuracion = ManejadorArchivos.obtenerConfigs(config);
 		procesar(doc);
 	}
 
-	private void procesar(Document xmlFeatures){
+	private void procesar(Document xmlFeatures) throws IOException{
 		xmlFeatures.getDocumentElement().normalize();
 		NodeList nList = xmlFeatures.getElementsByTagName("struct");
 
 		comparar(nList, "");
 		
-		System.out.println(properties.toString());
+		ManejadorArchivos.generarArchivoPropieddades(features, ManejadorArchivos.TipoPropiedades.FEATURES);
+		
+		obtenerFeaturesExcludes();
+		
+		ManejadorArchivos.generarArchivoPropieddades(fearuteExcludes, ManejadorArchivos.TipoPropiedades.FEATURES_EXCLUDES);
 	}
 
 	private void comparar(NodeList nList, String prefijo){
@@ -55,7 +62,7 @@ public class GeneradorPropiedades {
 				String property = prefijo.concat("."+featureName.toLowerCase());
 				
 				if (!".".equals(property)){
-					properties.put(property.substring(2), configuracion.contains(featureName));
+					features.put(property.substring(2), configuracion.contains(featureName));
 				}
 				
 				comparar(eElement.getChildNodes(), property);
@@ -63,15 +70,13 @@ public class GeneradorPropiedades {
 		}
 	}
 
-	private void obtenerConfigs(File config) throws IOException{
-		FileReader fr = new FileReader(config);
-		BufferedReader br = new BufferedReader(fr);
-		String linea = br.readLine();
-		while(null!=linea){
-			configuracion.add(linea);
-			linea = br.readLine();
+	private void obtenerFeaturesExcludes(){
+		for (Entry<String, Boolean> entry : features.entrySet()) {
+			if (!entry.getKey().equals("proyectobicicletas")){
+				fearuteExcludes.put(entry.getKey().replace("proyectobicicletas.", "").concat("excludes")
+						, !entry.getValue());
+			}
 		}
-
-		br.close();
 	}
+	
 }

@@ -1,0 +1,1 @@
+@javac C:\Users\EIG7269A\Desktop\prueba\Prueba.java
