@@ -60,6 +60,7 @@
 		<module>../sf-cc-mensajes</module>
 		<module>../sf-cc-fidelizacion</module>
 		<module>../sf-cc-reportes</module>
+		<module>../sf-cc-configurador-bici</module>
 	</modules>
 
 </project>
