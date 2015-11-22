@@ -108,6 +108,7 @@
     <string name="sent_rout_success">Felicidades completaste tu recorrido!! Este fue guardado de forma exitósa en tu perfil..</string>
     <string name="sent_route_error">No fue posible guardar tu recorrido en el servidor...</string>
     <string name="facebook_app_id">434201796771555</string>
+    <string name="twtr_app_key">4YW7sxP7IZrRDb2egJhkXKAEi</string>
     <string name="add_friend_success">Se agrego tu amigo de forma exitosa!</string>
     <string name="add_friend_fail">Se presento un error, intentalo de nuevo.</string>
     <string name="add_friend">Agregar amigo</string>

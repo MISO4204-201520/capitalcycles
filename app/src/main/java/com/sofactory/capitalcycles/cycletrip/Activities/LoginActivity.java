@@ -26,6 +26,11 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -65,6 +70,7 @@ public class LoginActivity extends Activity {
     private boolean isLogged;
     private SharedPreferences preferences;
     private LoginButton loginButton;
+    private TwitterLoginButton twtrLoginButton;
     private CallbackManager callbackManager;
     private UserLoginTask mAuthTask = null;
     private CreateUserTask mCreateUserTask = null;
@@ -178,6 +184,80 @@ public class LoginActivity extends Activity {
                 request.executeAsync();
 
 
+            }
+
+            @Override
+            public void onCancel() {
+                Toast toast = Toast.makeText(getApplicationContext(), "Se cancelo", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                Toast toast = Toast.makeText(getApplicationContext(), exception.toString(), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        });
+
+        twtrLoginButton = (TwitterLoginButton) findViewById(R.id.login_button);
+        twtrLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // App code
+                Log.e("onSuccess", "--------" + result.getAccessToken());
+                Log.e("Token", "--------" + result.getAccessToken().getToken());
+                Log.e("Permision", "--------" + result.getRecentlyGrantedPermissions());
+                GraphRequest request = GraphRequest.newMeRequest(
+                        result.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                // Application code
+
+                                try {
+                                    if(object!=null) {
+                                        String fbId = object.getString("id");
+                                        String birthday = object.getString("birthday");
+                                        String gender = object.getString("gender");
+                                        String email = object.getString("email");
+                                        String firstName = object.getString("first_name");
+                                        String lastName = object.getString("last_name");
+                                        String genderFull = gender.equals(R.string.gender_f)?"F":"M";
+                                        genericProgress = new GenericProgress(mProgressView, mLoginFormView, getApplicationContext());
+                                        genericProgress.showProgress(true);
+                                        String ePassword = JasyptUtils.encryptPassword(fbId);
+                                        UsuarioDTO newUSer = new UsuarioDTO(Long.valueOf(0), fbId, ePassword, firstName, lastName, "1234", genderFull, email, preferences.getString(UserPreferences.TOKEN_ID, ""));
+                                        RolDTO rol = new RolDTO();
+                                        rol.setId(1);
+                                        newUSer.getRoles().add(rol);
+                                        mCreateUserTask = new CreateUserTask(newUSer, getApplicationContext(), genericProgress, LoginEnum.TWITTER.toString());
+                                        mCreateUserTask.execute((Void) null);
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
+
+                                Log.i("GraphResponse", "-------------" + response.toString());
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,gender,birthday,email,first_name,last_name");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
             }
 
             @Override
