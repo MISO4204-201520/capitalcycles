@@ -1,11 +1,15 @@
 package com.sofactory.utilidades;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class UtilidadGeneral {
 	
@@ -65,4 +69,20 @@ public class UtilidadGeneral {
 		}
 		return null;
 	}
+	
+	public static List<String> partes(String archivo)throws FileNotFoundException, IOException {
+		
+	    List<String> partesBici = null;
+		
+	      String cadena;
+	      FileReader f = new FileReader(archivo);
+	      BufferedReader b = new BufferedReader(f);
+	      while((cadena = b.readLine())!=null) {
+	          partesBici.add(cadena);
+	      }
+	      b.close();
+	    
+		return partesBici;
+	}
+	
 }
