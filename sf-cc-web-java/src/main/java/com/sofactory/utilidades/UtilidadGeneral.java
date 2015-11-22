@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UtilidadGeneral {
@@ -72,7 +73,7 @@ public class UtilidadGeneral {
 	
 	public static List<String> partes(String archivo)throws FileNotFoundException, IOException {
 		
-	    List<String> partesBici = null;
+	    List<String> partesBici = new ArrayList<String>();
 		
 	      String cadena;
 	      FileReader f = new FileReader(archivo);
