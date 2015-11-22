@@ -90,48 +90,35 @@ ffffffff
 
             </p:panel>
         </p:tab>
- 				
- 		<p:tab id="cadena" title="Cadena">
-            <p:panel header="Cadena Information">
+ 		
+ 		<p:tab id="traccion" title="Traccion">
+            <p:panel header="Traccion Information">
                 <p:messages />
 
-				<h:graphicImage value="/resources/imagenes/cadena.jpg" width="200" height="171" />
+				<h:graphicImage value="/resources/imagenes/traccion.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.traccion}">
+ 				  	<f:selectItem itemValue="traccion1" itemLabel="Plato Piñon 1 - " />
+				   	<f:selectItem itemValue="traccion2" itemLabel="Cambios -	 " />
+				</h:selectOneRadio>
+
+            </p:panel>
+        </p:tab>
+ 				
+ 		<p:tab id="pedal" title="Pedal">
+            <p:panel header="Pedal Information">
+                <p:messages />
+
+				<h:graphicImage value="/resources/imagenes/pedal.jpg" width="200" height="171" />
                 <h:selectOneRadio value="#{bicicletaWizard.bicicleta.cadena}">
- 				  	<f:selectItem itemValue="cadena1" itemLabel="Cadena 1 - " />
-				   	<f:selectItem itemValue="cadena2" itemLabel="Cadena 2 - " />
-				   	<f:selectItem itemValue="cadena3" itemLabel="Cadena 3 - " />
+ 				  	<f:selectItem itemValue="pedal" itemLabel="Pedal 1 - " />
+				   	<f:selectItem itemValue="pedal2" itemLabel="Pedal 2 - " />
+				   	<f:selectItem itemValue="pedal3" itemLabel="Pedal 3 - " />
 				</h:selectOneRadio>
 
             </p:panel>
         </p:tab>
         
-   		<p:tab id="plato" title="Platos">
-            <p:panel header="Platos Information">
-                <p:messages />
 
-				<h:graphicImage value="/resources/imagenes/plato.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.plato}">
- 				  	<f:selectItem itemValue="platos1" itemLabel="Plato 1 - " />
-				   	<f:selectItem itemValue="platos2" itemLabel="Plato 2 - " />
-				   	<f:selectItem itemValue="platos3" itemLabel="Plato 3 - " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
-
-  		<p:tab id="cambio" title="Cambios">
-            <p:panel header="Cambios Information">
-                <p:messages />
-
-				<h:graphicImage value="/resources/imagenes/cambio.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.cambio}">
- 				  	<f:selectItem itemValue="cambios1" itemLabel="Cambio 1 - " />
-				   	<f:selectItem itemValue="cambios2" itemLabel="Cambio 2 - " />
-				   	<f:selectItem itemValue="cambios3" itemLabel="Cambio 3 - " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
  
         <p:tab id="confirm" title="Confirmation">
             <p:panel header="Confirmation">
@@ -146,8 +133,6 @@ ffffffff
                     </h:panelGrid>
  
                     <h:panelGrid columns="2" columnClasses="label, value">
-                        <h:outputText value="Rines: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.rin}" styleClass="outputLabel"/>
  
                         <h:outputText value="Llanta: " />
                         <h:outputText value="#{bicicletaWizard.bicicleta.llanta}" styleClass="outputLabel"/>
@@ -159,10 +144,7 @@ ffffffff
                     <h:panelGrid columns="2" columnClasses="label, value">
                         <h:outputText value="Cadena: " />
                         <h:outputText value="#{bicicletaWizard.bicicleta.cadena}" styleClass="outputLabel"/>
- 
-                        <h:outputText value="Platos " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.plato}" styleClass="outputLabel"/>
- 
+  
                         <h:outputText value="Cambios: " />
                         <h:outputText value="#{bicicletaWizard.bicicleta.cambio}" styleClass="outputLabel"/>
  

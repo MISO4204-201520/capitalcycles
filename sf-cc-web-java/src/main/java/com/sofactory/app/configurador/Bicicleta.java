@@ -23,6 +23,8 @@ public class Bicicleta implements Serializable {
     private String cambio;
     
     private String traccion;
+    
+    private String pedal;
 
 	public String getMarca() {
 		return marca;
@@ -63,6 +65,10 @@ public class Bicicleta implements Serializable {
 	public String getTraccion() {
 		return traccion;
 	}
+	
+	public String getPedal() {
+		return pedal;
+	}
 
 	public void setMarca(String marca) {
 		this.marca = marca;
@@ -102,5 +108,8 @@ public class Bicicleta implements Serializable {
 	
 	public void setTraccion(String traccion) {
 		this.traccion = traccion;
+	}
+	public void setPedal(String pedal) {
+		this.pedal = pedal;
 	}
 }
