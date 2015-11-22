@@ -9,18 +9,20 @@ public class Bicicleta implements Serializable {
     private String marco;
      
     private String tenedor;
+    
+    private String manubrio;
      
-    private String rines;
+    private String llanta;
      
-    private String llantas;
-     
-    private String frenos;
+    private String freno;
     
     private String cadena;
     
-    private String platos;
+    private String plato;
     
-    private String cambios;
+    private String cambio;
+    
+    private String traccion;
 
 	public String getMarca() {
 		return marca;
@@ -33,29 +35,33 @@ public class Bicicleta implements Serializable {
 	public String getTenedor() {
 		return tenedor;
 	}
-
-	public String getRines() {
-		return rines;
+	
+	public String getManubrio() {
+		return manubrio;
 	}
 
-	public String getLlantas() {
-		return llantas;
+	public String getLlanta() {
+		return llanta;
 	}
 
-	public String getFrenos() {
-		return frenos;
+	public String getFreno() {
+		return freno;
 	}
 
 	public String getCadena() {
 		return cadena;
 	}
 
-	public String getPlatos() {
-		return platos;
+	public String getPlato() {
+		return plato;
 	}
 
-	public String getCambios() {
-		return cambios;
+	public String getCambio() {
+		return cambio;
+	}
+	
+	public String getTraccion() {
+		return traccion;
 	}
 
 	public void setMarca(String marca) {
@@ -70,27 +76,31 @@ public class Bicicleta implements Serializable {
 		this.tenedor = tenedor;
 	}
 
-	public void setRines(String rines) {
-		this.rines = rines;
+	public void setManubrio(String manubrio) {
+		this.manubrio = manubrio;
 	}
 
-	public void setLlantas(String llantas) {
-		this.llantas = llantas;
+	public void setLlanta(String llanta) {
+		this.llanta = llanta;
 	}
 
-	public void setFrenos(String frenos) {
-		this.frenos = frenos;
+	public void setFreno(String freno) {
+		this.freno = freno;
 	}
 
 	public void setCadena(String cadena) {
 		this.cadena = cadena;
 	}
 
-	public void setPlatos(String platos) {
-		this.platos = platos;
+	public void setPlato(String plato) {
+		this.plato = plato;
 	}
 
-	public void setCambios(String cambios) {
-		this.cambios = cambios;
+	public void setCambio(String cambio) {
+		this.cambio = cambio;
+	}
+	
+	public void setTraccion(String traccion) {
+		this.traccion = traccion;
 	}
 }

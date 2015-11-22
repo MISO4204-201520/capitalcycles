@@ -20,19 +20,6 @@ ffffffff
     <p:growl id="growl" sticky="true" showDetail="true"/>
  
     <p:wizard flowListener="#{userWizard.onFlowProcess}">
-        <p:tab id="marca" title="Marca">
-            <p:panel header="Marca Details">
-                <p:messages />
-         
-                <h:graphicImage value="/resources/imagenes/marca.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.marca}">
- 				  	<f:selectItem itemValue="Marca1" itemLabel="Marca 1 - " />
-				   	<f:selectItem itemValue="Marca2" itemLabel="Marca 2 - " />
-				   	<f:selectItem itemValue="Marca3" itemLabel="Marca 3 - " />
-				</h:selectOneRadio>
- 
-            </p:panel>
-        </p:tab>
  
  		<p:tab id="marco" title="Marco"> 
 	 		<p:panel header="Marco Details">
@@ -61,41 +48,27 @@ ffffffff
 
             </p:panel>
         </p:tab>
- 
-        <p:tab id="rines" title="Rines">
-            <p:panel header="Rines Information">
+
+		<p:tab id="manubrio" title="Manubrio">
+            <p:panel header="Manubrio Information">
                 <p:messages />
 
-				<h:graphicImage value="/resources/imagenes/rines.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.rines}">
- 				  	<f:selectItem itemValue="Rines1" itemLabel="Rines 1 - " />
-				   	<f:selectItem itemValue="Rines2" itemLabel="Rines 2 - " />
-				   	<f:selectItem itemValue="Rines3" itemLabel="Rines 3 - " />
+				<h:graphicImage value="/resources/imagenes/manubrio.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.manubrio}">
+ 				  	<f:selectItem itemValue="Manubrio1" itemLabel="Manubrio 1 - " />
+				   	<f:selectItem itemValue="Manubrio2" itemLabel="Manubrio 2 - " />
+				   	<f:selectItem itemValue="Manubrio3" itemLabel="Manubrio 3 - " />
 				</h:selectOneRadio>
 
             </p:panel>
         </p:tab>
  
- 		<p:tab id="llantas" title="Llantas">
-            <p:panel header="Llantas Information">
-                <p:messages />
-
-				<h:graphicImage value="/resources/imagenes/llantas.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.llantas}">
- 				  	<f:selectItem itemValue="llantas1" itemLabel="Llantas 1 - " />
-				   	<f:selectItem itemValue="llantas2" itemLabel="Llantas 2 - " />
-				   	<f:selectItem itemValue="llantas3" itemLabel="Llantas 3 - " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
- 		
- 		<p:tab id="frenos" title="Frenos">
+  		<p:tab id="freno" title="Freno">
             <p:panel header="Frenos Information">
                 <p:messages />
 
-				<h:graphicImage value="/resources/imagenes/frenos.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.frenos}">
+				<h:graphicImage value="/resources/imagenes/freno.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.freno}">
  				  	<f:selectItem itemValue="frenos1" itemLabel="Frenos 1 - " />
 				   	<f:selectItem itemValue="frenos2" itemLabel="Frenos 2 - " />
 				   	<f:selectItem itemValue="frenos3" itemLabel="Frenos 3 - " />
@@ -103,7 +76,21 @@ ffffffff
 
             </p:panel>
         </p:tab>
- 		
+ 
+ 		<p:tab id="llanta" title="Llantas">
+            <p:panel header="Llantas Information">
+                <p:messages />
+
+				<h:graphicImage value="/resources/imagenes/llanta.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.llanta}">
+ 				  	<f:selectItem itemValue="llantas1" itemLabel="Llantas 1 - " />
+				   	<f:selectItem itemValue="llantas2" itemLabel="Llantas 2 - " />
+				   	<f:selectItem itemValue="llantas3" itemLabel="Llantas 3 - " />
+				</h:selectOneRadio>
+
+            </p:panel>
+        </p:tab>
+ 				
  		<p:tab id="cadena" title="Cadena">
             <p:panel header="Cadena Information">
                 <p:messages />
@@ -118,12 +105,12 @@ ffffffff
             </p:panel>
         </p:tab>
         
-   		<p:tab id="platos" title="Platos">
+   		<p:tab id="plato" title="Platos">
             <p:panel header="Platos Information">
                 <p:messages />
 
-				<h:graphicImage value="/resources/imagenes/platos.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.platos}">
+				<h:graphicImage value="/resources/imagenes/plato.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.plato}">
  				  	<f:selectItem itemValue="platos1" itemLabel="Plato 1 - " />
 				   	<f:selectItem itemValue="platos2" itemLabel="Plato 2 - " />
 				   	<f:selectItem itemValue="platos3" itemLabel="Plato 3 - " />
@@ -132,12 +119,12 @@ ffffffff
             </p:panel>
         </p:tab>
 
-  		<p:tab id="cambios" title="Cambios">
+  		<p:tab id="cambio" title="Cambios">
             <p:panel header="Cambios Information">
                 <p:messages />
 
-				<h:graphicImage value="/resources/imagenes/cambios.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.cambios}">
+				<h:graphicImage value="/resources/imagenes/cambio.jpg" width="200" height="171" />
+                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.cambio}">
  				  	<f:selectItem itemValue="cambios1" itemLabel="Cambio 1 - " />
 				   	<f:selectItem itemValue="cambios2" itemLabel="Cambio 2 - " />
 				   	<f:selectItem itemValue="cambios3" itemLabel="Cambio 3 - " />
@@ -149,10 +136,7 @@ ffffffff
         <p:tab id="confirm" title="Confirmation">
             <p:panel header="Confirmation">
                 <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
-                    <h:panelGrid columns="2" columnClasses="label, value">
-                        <h:outputText value="Marca: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.marca}" styleClass="outputLabel"/>
- 
+                    <h:panelGrid columns="2" columnClasses="label, value"> 
                   
                         <h:outputText value="Marco: " />
                         <h:outputText value="#{bicicletaWizard.bicicleta.marco}" styleClass="outputLabel"/>
@@ -163,13 +147,13 @@ ffffffff
  
                     <h:panelGrid columns="2" columnClasses="label, value">
                         <h:outputText value="Rines: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.rines}" styleClass="outputLabel"/>
+                        <h:outputText value="#{bicicletaWizard.bicicleta.rin}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Llantas: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.llantas}" styleClass="outputLabel"/>
+                        <h:outputText value="Llanta: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.llanta}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Frenos: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.frenos}" styleClass="outputLabel"/>
+                        <h:outputText value="Freno: " />
+                        <h:outputText value="#{bicicletaWizard.bicicleta.freno}" styleClass="outputLabel"/>
                     </h:panelGrid>
  
                     <h:panelGrid columns="2" columnClasses="label, value">
@@ -177,10 +161,10 @@ ffffffff
                         <h:outputText value="#{bicicletaWizard.bicicleta.cadena}" styleClass="outputLabel"/>
  
                         <h:outputText value="Platos " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.platos}" styleClass="outputLabel"/>
+                        <h:outputText value="#{bicicletaWizard.bicicleta.plato}" styleClass="outputLabel"/>
  
                         <h:outputText value="Cambios: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.cambios}" styleClass="outputLabel"/>
+                        <h:outputText value="#{bicicletaWizard.bicicleta.cambio}" styleClass="outputLabel"/>
  
                         <h:outputText />
                         <h:outputText />
