@@ -1,30 +1,30 @@
 package com.sofactory.capitalcycles.cycletrip.Tasks;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.view.Gravity;
-import android.widget.Toast;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.os.AsyncTask;
+        import android.view.Gravity;
+        import android.widget.Toast;
 
-import com.google.gson.GsonBuilder;
-import com.sofactory.capitalcycles.cycletrip.Activities.MainActivity;
-import com.sofactory.capitalcycles.cycletrip.DTOs.RespuestaUsuarioDTO;
-import com.sofactory.capitalcycles.cycletrip.DTOs.UsuarioDTO;
-import com.sofactory.capitalcycles.cycletrip.Fragments.UsersListFragment;
-import com.sofactory.capitalcycles.cycletrip.R;
-import com.sofactory.capitalcycles.cycletrip.Utils.ProgressBar.GenericProgress;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
+        import com.google.gson.GsonBuilder;
+        import com.sofactory.capitalcycles.cycletrip.Activities.MainActivity;
+        import com.sofactory.capitalcycles.cycletrip.DTOs.RespuestaUsuarioDTO;
+        import com.sofactory.capitalcycles.cycletrip.DTOs.UsuarioDTO;
+        import com.sofactory.capitalcycles.cycletrip.Fragments.UsersListFragment;
+        import com.sofactory.capitalcycles.cycletrip.R;
+        import com.sofactory.capitalcycles.cycletrip.Utils.ProgressBar.GenericProgress;
+        import org.apache.http.HttpResponse;
+        import org.apache.http.client.ClientProtocolException;
+        import org.apache.http.client.HttpClient;
+        import org.apache.http.client.methods.HttpGet;
+        import org.apache.http.impl.client.DefaultHttpClient;
+        import org.apache.http.params.HttpConnectionParams;
+        import org.apache.http.params.HttpParams;
+        import org.apache.http.util.EntityUtils;
+        import java.io.IOException;
+        import java.io.UnsupportedEncodingException;
+        import java.util.List;
 
 /**
  * Created by LuisSebastian on 10/17/15.

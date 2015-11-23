@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -23,30 +22,28 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
-import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.sofactory.capitalcycles.cycletrip.DTOs.RolDTO;
 import com.sofactory.capitalcycles.cycletrip.DTOs.UsuarioDTO;
 import com.sofactory.capitalcycles.cycletrip.R;
-import com.sofactory.capitalcycles.cycletrip.Tasks.CreateUserTask;
+import com.sofactory.capitalcycles.cycletrip.Tasks.UserLoginSocialTask;
 import com.sofactory.capitalcycles.cycletrip.Tasks.UserLoginTask;
 import com.sofactory.capitalcycles.cycletrip.Utils.Enums.LoginEnum;
+import com.sofactory.capitalcycles.cycletrip.Utils.Parser.ParseFile;
 import com.sofactory.capitalcycles.cycletrip.Utils.Preferences.UserPreferences;
 import com.sofactory.capitalcycles.cycletrip.Utils.ProgressBar.GenericProgress;
 import com.sofactory.capitalcycles.cycletrip.Utils.Security.JasyptUtils;
 import com.sofactory.capitalcycles.cycletrip.Utils.Services.RegistrationIntentService;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.List;
+
 import com.facebook.FacebookSdk;
+import com.sofactory.capitalcycles.cycletrip.VO.Feature;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,15 +67,19 @@ public class LoginActivity extends Activity {
     private boolean isLogged;
     private SharedPreferences preferences;
     private LoginButton loginButton;
-    private TwitterLoginButton twtrLoginButton;
+    private TwitterLoginButton loginButtonTwitter;
     private CallbackManager callbackManager;
     private UserLoginTask mAuthTask = null;
-    private CreateUserTask mCreateUserTask = null;
+    private UserLoginSocialTask mUserLoginSocialTask = null;
     private GenericProgress genericProgress;
+    private static List<Feature> featureList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        featureList = ParseFile.parseFile(getApplicationContext());
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         preferences=getSharedPreferences(USER_PREFERENCES,Context.MODE_PRIVATE);
@@ -131,6 +132,14 @@ public class LoginActivity extends Activity {
 
 
         loginButton = (LoginButton) findViewById(R.id.login_button_fb);
+        for(Feature feature : featureList){
+            if(feature.getFeature().equals("gestionUsuario.redesSociales.facebook.excludes")){
+                if(feature.getValue().equals("false")){
+                    loginButton.setVisibility(View.GONE);
+                    break;
+                }
+            }
+        }
         loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_photos,user_about_me"));
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -160,18 +169,14 @@ public class LoginActivity extends Activity {
                                         String genderFull = gender.equals(R.string.gender_f)?"F":"M";
                                         genericProgress = new GenericProgress(mProgressView, mLoginFormView, getApplicationContext());
                                         genericProgress.showProgress(true);
-                                        String ePassword = JasyptUtils.encryptPassword(fbId);
-                                        UsuarioDTO newUSer = new UsuarioDTO(Long.valueOf(0), fbId, ePassword, firstName, lastName, "1234", genderFull, email, preferences.getString(UserPreferences.TOKEN_ID, ""));
-                                        RolDTO rol = new RolDTO();
-                                        rol.setId(1);
-                                        newUSer.getRoles().add(rol);
-                                        mCreateUserTask = new CreateUserTask(newUSer, getApplicationContext(), genericProgress, LoginEnum.FACEBOOK.toString());
-                                        mCreateUserTask.execute((Void) null);
+                                        UsuarioDTO newUSer = new UsuarioDTO();
+                                        newUSer.setVerificador(fbId);
+                                        newUSer.setRedSocial(LoginEnum.facebook.name());
+                                        mUserLoginSocialTask = new UserLoginSocialTask(newUSer,getApplicationContext(),genericProgress,LoginEnum.facebook.name());
+                                        mUserLoginSocialTask.execute((Void) null);
                                     }
 
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (UnsupportedEncodingException e) {
                                     e.printStackTrace();
                                 }
 
@@ -203,79 +208,15 @@ public class LoginActivity extends Activity {
             }
         });
 
-        twtrLoginButton = (TwitterLoginButton) findViewById(R.id.login_button);
-        twtrLoginButton.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> result) {
-                // App code
-                Log.e("onSuccess", "--------" + result.getAccessToken());
-                Log.e("Token", "--------" + result.getAccessToken().getToken());
-                Log.e("Permision", "--------" + result.getRecentlyGrantedPermissions());
-                GraphRequest request = GraphRequest.newMeRequest(
-                        result.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONObject object,
-                                    GraphResponse response) {
-                                // Application code
-
-                                try {
-                                    if(object!=null) {
-                                        String fbId = object.getString("id");
-                                        String birthday = object.getString("birthday");
-                                        String gender = object.getString("gender");
-                                        String email = object.getString("email");
-                                        String firstName = object.getString("first_name");
-                                        String lastName = object.getString("last_name");
-                                        String genderFull = gender.equals(R.string.gender_f)?"F":"M";
-                                        genericProgress = new GenericProgress(mProgressView, mLoginFormView, getApplicationContext());
-                                        genericProgress.showProgress(true);
-                                        String ePassword = JasyptUtils.encryptPassword(fbId);
-                                        UsuarioDTO newUSer = new UsuarioDTO(Long.valueOf(0), fbId, ePassword, firstName, lastName, "1234", genderFull, email, preferences.getString(UserPreferences.TOKEN_ID, ""));
-                                        RolDTO rol = new RolDTO();
-                                        rol.setId(1);
-                                        newUSer.getRoles().add(rol);
-                                        mCreateUserTask = new CreateUserTask(newUSer, getApplicationContext(), genericProgress, LoginEnum.TWITTER.toString());
-                                        mCreateUserTask.execute((Void) null);
-                                    }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-
-                                Log.i("GraphResponse", "-------------" + response.toString());
-                            }
-                        });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,gender,birthday,email,first_name,last_name");
-                request.setParameters(parameters);
-                request.executeAsync();
+        loginButtonTwitter = (TwitterLoginButton) findViewById(R.id.login_button_twtr);
+        for(Feature feature : featureList){
+            if(feature.getFeature().equals("gestionUsuario.redesSociales.twitter.excludes")){
+                if(feature.getValue().equals("false")){
+                    loginButtonTwitter.setVisibility(View.GONE);
+                    break;
+                }
             }
-
-            @Override
-            public void failure(TwitterException exception) {
-                // Do something on failure
-            }
-
-            @Override
-            public void onCancel() {
-                Toast toast = Toast.makeText(getApplicationContext(), "Se cancelo", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-                Toast toast = Toast.makeText(getApplicationContext(), exception.toString(), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            }
-        });
+        }
 
 
     }
@@ -333,7 +274,7 @@ public class LoginActivity extends Activity {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            mAuthTask = new UserLoginTask(usuarioDTO,getApplicationContext(),genericProgress);
+            mAuthTask = new UserLoginTask(usuarioDTO,getApplicationContext(),genericProgress,LoginEnum.cycletrip.name());
             mAuthTask.execute((Void) null);
         }
 
@@ -378,4 +319,8 @@ public class LoginActivity extends Activity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    public static List<Feature> getFeatureList() {
+        return featureList;
+    }
 }

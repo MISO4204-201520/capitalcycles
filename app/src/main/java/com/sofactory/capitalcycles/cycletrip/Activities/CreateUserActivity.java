@@ -138,7 +138,7 @@ public class CreateUserActivity extends Activity{
                 RolDTO rol = new RolDTO();
                 rol.setId(1);
                 newUSer.getRoles().add(rol);
-                mCreateUserTask = new CreateUserTask(newUSer,getApplicationContext(),genericProgress, LoginEnum.CYCLETRIP.toString());
+                mCreateUserTask = new CreateUserTask(newUSer,getApplicationContext(),genericProgress, LoginEnum.cycletrip.toString());
                 mCreateUserTask.execute((Void) null);
             } catch (UnsupportedEncodingException e) {
                 genericProgress.showProgress(false);

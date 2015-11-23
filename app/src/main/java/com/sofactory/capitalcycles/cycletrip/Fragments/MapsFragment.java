@@ -24,6 +24,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -44,9 +48,7 @@ import com.sofactory.capitalcycles.cycletrip.Tasks.RouteRegisterTask;
 import com.sofactory.capitalcycles.cycletrip.Utils.Connections.HttpConnection;
 import com.sofactory.capitalcycles.cycletrip.Utils.Maps.PathJSONParser;
 import com.sofactory.capitalcycles.cycletrip.Utils.Preferences.UserPreferences;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,12 +72,16 @@ public class MapsFragment extends Fragment {
     private String userName;
     private String userLastName;
     private List<PosicionDTO> posicionDTOList;
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
+    private AccessTokenTracker accessTokenTracker;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // inflat and return the layout
+        callbackManager = CallbackManager.Factory.create();
         posicionDTOList = new LinkedList<PosicionDTO>();
         preferences=getActivity().getApplicationContext().getSharedPreferences(LoginActivity.USER_PREFERENCES,Context.MODE_PRIVATE);
         View v = inflater.inflate(R.layout.fragment_maps, container,
@@ -84,6 +90,18 @@ public class MapsFragment extends Fragment {
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume();// needed to get the map to display immediately
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                                                       AccessToken currentAccessToken) {
+                Intent intent2 = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().getApplicationContext().startActivity(intent2);
+                preferences.edit().clear().commit();
+
+            }
+        };
 
 
         Button mButtonCalculateRoute = (Button) v.findViewById(R.id.buttonRoute);

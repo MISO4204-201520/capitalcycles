@@ -1,6 +1,5 @@
 package com.sofactory.capitalcycles.cycletrip.Tasks;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,9 +28,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by LuisSebastian on 10/5/15.
+ * Created by LuisSebastian on 11/22/15.
  */
-public class UserLoginTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
+public class UserLoginSocialTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
 
     private UsuarioDTO usuarioDTO;
     private GenericProgress genericProgress;
@@ -40,8 +39,7 @@ public class UserLoginTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
     private String loginType;
 
 
-
-    public UserLoginTask(UsuarioDTO usuarioDTO, Context context, GenericProgress genericProgress, String loginType ) {
+    public UserLoginSocialTask(UsuarioDTO usuarioDTO, Context context, GenericProgress genericProgress,String loginType) {
         this.usuarioDTO = usuarioDTO;
         this.genericProgress = genericProgress;
         this.context = context;
@@ -53,7 +51,7 @@ public class UserLoginTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
 
         String json = new GsonBuilder().create().toJson(usuarioDTO);
         String serverIp = context.getResources().getString(R.string.serverIp);
-        String serviceUri = context.getResources().getString(R.string.serviceUserLoginURI);
+        String serviceUri = context.getResources().getString(R.string.serviceLoginSocial);
         RespuestaSeguridadDTO response = null;
         try {
             HttpPost httpPost = new HttpPost(serverIp.concat(serviceUri));
@@ -67,9 +65,8 @@ public class UserLoginTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpResponse httpResponse = httpClient.execute(httpPost);
             String json2 = EntityUtils.toString(httpResponse.getEntity());
-            response = new GsonBuilder().create().fromJson(json2,RespuestaSeguridadDTO.class);
+            response = new GsonBuilder().create().fromJson(json2, RespuestaSeguridadDTO.class);
             return response;
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {
@@ -85,14 +82,12 @@ public class UserLoginTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
 
     @Override
     protected void onPostExecute(final RespuestaSeguridadDTO response) {
-
         genericProgress.showProgress(false);
-
-        if (response.getCodigo()==0) {
+        if (response.getCodigo() == 0) {
             sharedpreferences = context.getSharedPreferences(LoginActivity.USER_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(UserPreferences.LOGIN_TYPE,loginType).apply();
-            editor.putString(UserPreferences.USER_CODE, response.getCodigoUsuario()+"").apply();
+            editor.putString(UserPreferences.USER_CODE, response.getCodigoUsuario() + "").apply();
             editor.putString(UserPreferences.USER_LOGIN, response.getLogin()).apply();
             editor.putString(UserPreferences.USER_NAME, response.getNombres()).apply();
             editor.putString(UserPreferences.USER_LASTNAME, response.getApellidos()).apply();
@@ -100,17 +95,18 @@ public class UserLoginTask extends AsyncTask<Void,Void,RespuestaSeguridadDTO> {
             Intent intent = new Intent(context, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-        } else if(response.getCodigo()==1){
+        } else if (response.getCodigo() == 1) {
             Toast toast = Toast.makeText(context, R.string.error_user_not_found, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-
-        }else if(response.getCodigo()==2){
+        } else if (response.getCodigo() == 2) {
             Toast toast = Toast.makeText(context, R.string.error_invalid_password, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
     }
-
-
 }
+
+
+
+

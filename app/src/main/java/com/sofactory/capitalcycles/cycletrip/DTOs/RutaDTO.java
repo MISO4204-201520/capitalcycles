@@ -9,7 +9,7 @@ public class RutaDTO extends RespuestaDTO{
 
     protected Long id;
 
-    protected String codigoUsuario;
+   // protected String codigoUssuario;
 
     protected List<PosicionDTO> posiciones;
 

@@ -12,12 +12,22 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.sofactory.capitalcycles.cycletrip.DTOs.UsuarioDTO;
 import com.sofactory.capitalcycles.cycletrip.Fragments.FidelizationFragment;
 import com.sofactory.capitalcycles.cycletrip.Fragments.FriendsFragment;
 import com.sofactory.capitalcycles.cycletrip.Fragments.MapsFragment;
@@ -25,12 +35,20 @@ import com.sofactory.capitalcycles.cycletrip.Fragments.OutboxFragment;
 import com.sofactory.capitalcycles.cycletrip.Fragments.UserProfileFragment;
 import com.sofactory.capitalcycles.cycletrip.Fragments.UsersListFragment;
 import com.sofactory.capitalcycles.cycletrip.R;
+import com.sofactory.capitalcycles.cycletrip.Tasks.UserLoginSocialTask;
+import com.sofactory.capitalcycles.cycletrip.Utils.Enums.LoginEnum;
 import com.sofactory.capitalcycles.cycletrip.Utils.Navigation.NavDrawerItem;
 import com.sofactory.capitalcycles.cycletrip.Utils.Navigation.NavDrawerListAdapter;
 import com.sofactory.capitalcycles.cycletrip.Utils.Preferences.UserPreferences;
+import com.sofactory.capitalcycles.cycletrip.Utils.ProgressBar.GenericProgress;
+import com.sofactory.capitalcycles.cycletrip.VO.Feature;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by LuisSebastian on 10/12/15.
@@ -55,6 +73,8 @@ public class MainActivity extends Activity {
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,23 +98,41 @@ public class MainActivity extends Activity {
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
         // adding nav drawer items to array
-        // Home
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        // Send message
+
+        for(Feature feature : LoginActivity.getFeatureList()){
+            if(feature.getFeature().equals("recorridos.excludes")){
+                if(feature.getValue().equals("true")){
+                    // Home
+                    navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+                }
+            }
+            if(feature.getFeature().equals("comunicacion.mensajes.excludes")){
+                if(feature.getValue().equals("true")){
+                    // Sent Message
+                    navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+                    // Inbox
+                    navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+                    // Outbox
+                    navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
+                }
+            }
+            if(feature.getFeature().equals("extension.fidelizacion.excludes")){
+                if(feature.getValue().equals("true")){
+                    // Fidelization
+                    navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
+                }
+            }
+        }
+        // Friends
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        // Inbox
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        // Outbox
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+
         // Profile
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-        // Fidelization
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
-        // Sign out
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
 
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(7, -1)));
-
+        if(sharedpreferences.getString(UserPreferences.LOGIN_TYPE,"").equals(LoginEnum.cycletrip.name())) {
+            //Sign out
+            navDrawerItems.add(new NavDrawerItem(navMenuTitles[7], navMenuIcons.getResourceId(7, -1)));
+        }
         // Recycle the typed array
         navMenuIcons.recycle();
 
@@ -132,6 +170,7 @@ public class MainActivity extends Activity {
             // on first time display view for first nav item
             displayView(0);
         }
+
     }
 
     /**
@@ -211,8 +250,8 @@ public class MainActivity extends Activity {
                 break;
             case 7:
             Intent intent2 = new Intent(getApplicationContext(), LoginActivity.class);
-            intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplicationContext().startActivity(intent2);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startActivity(intent2);
                 sharedpreferences = getSharedPreferences(LoginActivity.USER_PREFERENCES, Context.MODE_PRIVATE);
                 sharedpreferences.edit().clear().commit();
                 //TODO Call log out service

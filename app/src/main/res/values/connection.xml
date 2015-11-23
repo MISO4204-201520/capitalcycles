@@ -14,4 +14,5 @@
     <string name="serviceSendRouteURI">/sf-cc-recorridos/rest/desplazamiento/registrarTodasPosiciones</string>
     <string name="serviceGetFriendsURI">/sf-cc-mensajes/rest/mensajeService/amigosDeUsuario</string>
     <string name="serviceAddFriendsURI">/sf-cc-mensajes/rest/mensajeService/crearAmigo</string>
+    <string name="serviceLoginSocial">/sf-cc-gestion-usuario/rest/seguridadService/guardarUsuarioRedSocial</string>
 </resources>

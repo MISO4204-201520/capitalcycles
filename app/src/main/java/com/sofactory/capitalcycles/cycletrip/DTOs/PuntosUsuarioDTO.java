@@ -7,7 +7,7 @@ public class PuntosUsuarioDTO extends RespuestaDTO{
 
     private Integer puntos;
 
-    private String codigoUsuario;
+   // private String codigoUsuario;
 
     public Integer getPuntos() {
         return puntos;

@@ -20,6 +20,9 @@ public class UsuarioDTO {
     private List<RolDTO> roles;
     private String credencialNueva;
     private String confirmacionCredencialNueva;
+    private String verificador;
+    private String redSocial;
+
 
     public UsuarioDTO(){}
 
@@ -39,6 +42,22 @@ public class UsuarioDTO {
     }
 
 
+
+    public String getVerificador() {
+        return verificador;
+    }
+
+    public void setVerificador(String verificador) {
+        this.verificador = verificador;
+    }
+
+    public String getRedSocial() {
+        return redSocial;
+    }
+
+    public void setRedSocial(String redSocial) {
+        this.redSocial = redSocial;
+    }
 
     public Long getCodigo() {
         return codigo;
