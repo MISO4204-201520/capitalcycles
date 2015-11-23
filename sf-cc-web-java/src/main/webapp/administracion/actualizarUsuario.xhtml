@@ -15,77 +15,79 @@
 					<p:panel id="panelActualizarUsuario" header="Mi Perfil" style="text-align:center;">
 						<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
 						<h:panelGrid columns="2" columnClasses="estiloColumnaAA, estiloColumnaAB" style="width:100%;">
-							<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
-								<h:outputText value="Login"/>
-								<h:outputText value="*" styleClass="requerido"/>
-								<p:inputText id="login" value="#{gestionarUsuarioManagedBean.usuarioDTO.login}" required="true" maxlength="100" style="width:200px;">
-	 							</p:inputText>
-	 							<p:message  for="login"/>
-	 							<h:outputText value="Nombres"/>
-								<h:outputText value="*" styleClass="requerido"/>
-								<p:inputText id="nombres" value="#{gestionarUsuarioManagedBean.usuarioDTO.nombres}" required="true" maxlength="100" style="width:200px;">
-	 							</p:inputText>
-	 							<p:message  for="nombres"/>
-	 							<h:outputText value="Apellidos"/>
-								<h:outputText value="*" styleClass="requerido"/>
-								<p:inputText id="apellidos" value="#{gestionarUsuarioManagedBean.usuarioDTO.apellidos}" required="true" maxlength="100" style="width:200px;">
-	 							</p:inputText>
-	 							<p:message  for="apellidos"/>
-	 							<h:outputText value="Celular"/>
-								<p:spacer/>
-								<p:inputText id="celular" value="#{gestionarUsuarioManagedBean.usuarioDTO.celular}" maxlength="100" style="width:200px;">
-	 							</p:inputText>
-	 							<p:message  for="celular"/>
-	 							<h:outputText value="Correo"/>
-	 							<p:spacer/>
-	 							<p:inputText id="correo" value="#{gestionarUsuarioManagedBean.usuarioDTO.correo}" maxlength="100" style="width:200px;">
-	 							</p:inputText>
-	 							<p:message  for="correo" />
-	 							<h:outputText value="Genero"/>
-	 							<p:spacer/>
-	 							<p:selectOneMenu id="genero" value="#{gestionarUsuarioManagedBean.usuarioDTO.genero}" required="true" style="width:210px;">
-	 								<f:selectItem itemLabel="Masculino" itemValue="M"/>
-	 								<f:selectItem itemLabel="Femenino" itemValue="F"/> 								
-	 							</p:selectOneMenu>
-	 							<p:message  for="genero"/>
-	 							<h:outputText value="Fecha de Nacimiento" />
-								<p:spacer />
-								<p:calendar id="fechaNacimiento" 
-		                       				pattern="yyyy-MM-dd" 
-		                       				mask="true" 
-		                       				locale="es" 
-		                       				navigator="true"
-		                       				yearRange="c-100:c"
-		                       				value="#{gestionarUsuarioManagedBean.usuarioDTO.fechaNacimiento}"
-		                       				styleClass="estiloCalendario"/>
-								<p:message  for="fechaNacimiento" />
-	 							<h:outputText value="Foto"/>
-	 							<p:spacer/>
-	 							<h:panelGrid columns="1">
-	 								<h:panelGrid id="gridCargue" columns="3">
-	 									<p:fileUpload fileUploadListener="#{gestionarUsuarioManagedBean.cargarArchivo}" mode="advanced" dragDropSupport="false"
-	          								  process="@this" update="gridImagen @this" sizeLimit="1048576" allowTypes="/(\.|\/)(png|jpeg|jpg|jpe)$/" 
-	          								  previewWidth="40"
-	          								  cancelLabel="Cancelar"
-	          								  uploadLabel="Cargar"
-	          								  label="Seleccionar"
-	          								  fileLimit="1"
-	          								  fileLimitMessage="Muchos archivos"
-	          								  invalidFileMessage="Formato inválido"
-	          								  invalidSizeMessage="Tamaño inválido (1 MB)"
-	          								  style="width:200px;"/>
-	 								</h:panelGrid>
-	 								<h:panelGrid id="gridImagen" columns="1" style="margin: 0 auto;text-align:left;">
-										<p:panel rendered="#{imagenPerfilManagedBean.imagenActualizar != null}">
-											<h:panelGroup layout="block" style="width: 170px; height: 170px; overflow: auto;">
-				          						<p:graphicImage id="imagen" value="#{imagenPerfilManagedBean.imagenActualizar}" cache="false"/>
-				          					</h:panelGroup>
-			          					</p:panel>
-		          					</h:panelGrid>
-	 							</h:panelGrid>
-	 							
-							</h:panelGrid>
-							<p:panel id="panelMisAmigos" header="Mis Amigos" style="text-align:center;">
+							<p:panel style="text-align:center;" rendered="#{gestionarUsuarioManagedBean.visible}">
+								<h:panelGrid columns="4" style="margin: 0 auto;text-align:left;">
+									<h:outputText value="Login"/>
+									<h:outputText value="*" styleClass="requerido"/>
+									<p:inputText id="login" value="#{gestionarUsuarioManagedBean.usuarioDTO.login}" required="true" maxlength="100" style="width:200px;">
+		 							</p:inputText>
+		 							<p:message  for="login"/>
+		 							<h:outputText value="Nombres"/>
+									<h:outputText value="*" styleClass="requerido"/>
+									<p:inputText id="nombres" value="#{gestionarUsuarioManagedBean.usuarioDTO.nombres}" required="true" maxlength="100" style="width:200px;">
+		 							</p:inputText>
+		 							<p:message  for="nombres"/>
+		 							<h:outputText value="Apellidos"/>
+									<h:outputText value="*" styleClass="requerido"/>
+									<p:inputText id="apellidos" value="#{gestionarUsuarioManagedBean.usuarioDTO.apellidos}" required="true" maxlength="100" style="width:200px;">
+		 							</p:inputText>
+		 							<p:message  for="apellidos"/>
+		 							<h:outputText value="Celular"/>
+									<p:spacer/>
+									<p:inputText id="celular" value="#{gestionarUsuarioManagedBean.usuarioDTO.celular}" maxlength="100" style="width:200px;">
+		 							</p:inputText>
+		 							<p:message  for="celular"/>
+		 							<h:outputText value="Correo"/>
+		 							<p:spacer/>
+		 							<p:inputText id="correo" value="#{gestionarUsuarioManagedBean.usuarioDTO.correo}" maxlength="100" style="width:200px;">
+		 							</p:inputText>
+		 							<p:message  for="correo" />
+		 							<h:outputText value="Genero"/>
+		 							<p:spacer/>
+		 							<p:selectOneMenu id="genero" value="#{gestionarUsuarioManagedBean.usuarioDTO.genero}" required="true" style="width:210px;">
+		 								<f:selectItem itemLabel="Masculino" itemValue="M"/>
+		 								<f:selectItem itemLabel="Femenino" itemValue="F"/> 								
+		 							</p:selectOneMenu>
+		 							<p:message  for="genero"/>
+		 							<h:outputText value="Fecha de Nacimiento" />
+									<p:spacer />
+									<p:calendar id="fechaNacimiento" 
+			                       				pattern="yyyy-MM-dd" 
+			                       				mask="true" 
+			                       				locale="es" 
+			                       				navigator="true"
+			                       				yearRange="c-100:c"
+			                       				value="#{gestionarUsuarioManagedBean.usuarioDTO.fechaNacimiento}"
+			                       				styleClass="estiloCalendario"/>
+									<p:message  for="fechaNacimiento" />
+		 							<h:outputText value="Foto"/>
+		 							<p:spacer/>
+		 							<h:panelGrid columns="1">
+		 								<h:panelGrid id="gridCargue" columns="3">
+		 									<p:fileUpload fileUploadListener="#{gestionarUsuarioManagedBean.cargarArchivo}" mode="advanced" dragDropSupport="false"
+		          								  process="@this" update="gridImagen @this" sizeLimit="1048576" allowTypes="/(\.|\/)(png|jpeg|jpg|jpe)$/" 
+		          								  previewWidth="40"
+		          								  cancelLabel="Cancelar"
+		          								  uploadLabel="Cargar"
+		          								  label="Seleccionar"
+		          								  fileLimit="1"
+		          								  fileLimitMessage="Muchos archivos"
+		          								  invalidFileMessage="Formato inválido"
+		          								  invalidSizeMessage="Tamaño inválido (1 MB)"
+		          								  style="width:200px;"/>
+		 								</h:panelGrid>
+		 								<h:panelGrid id="gridImagen" columns="1" style="margin: 0 auto;text-align:left;">
+											<p:panel rendered="#{imagenPerfilManagedBean.imagenActualizar != null}">
+												<h:panelGroup layout="block" style="width: 170px; height: 170px; overflow: auto;">
+					          						<p:graphicImage id="imagen" value="#{imagenPerfilManagedBean.imagenActualizar}" cache="false"/>
+					          					</h:panelGroup>
+				          					</p:panel>
+			          					</h:panelGrid>
+		 							</h:panelGrid>
+		 							
+								</h:panelGrid>
+							</p:panel>
+							<p:panel id="panelMisAmigos" header="Mis Amigos" style="text-align:center;" rendered="#{asociarAmigoManagedBean.visible}">
 								<h:panelGrid columns="3"  style="width:100%">
 									<h:outputText value="Seleccione Amigo"/>
 									<p:autoComplete value="#{asociarAmigoManagedBean.usuarioSeleccionado}" completeMethod="#{asociarAmigoManagedBean.completarUsuarios}"

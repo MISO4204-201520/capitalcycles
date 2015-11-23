@@ -1,8 +1,11 @@
 package com.sofactory.app.seguridad;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -69,13 +72,44 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 	@ManagedProperty("#{imagenPerfilManagedBean}")
 	private ImagenPerfilManagedBean imagenPerfilManagedBean;
 
+	private boolean visibleFacebook;
+	private boolean visibleTwitter;
+	
 	@PostConstruct
 	private void iniciar(){
 		urlTwitter = null;
 		urlFacebook = null;
 		redesSociales = new ArrayList<String>();
-		redesSociales.add("twitter");
-		redesSociales.add("facebook");
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream input = classLoader.getResourceAsStream("features_excludes.properties");
+		if (input!=null){
+			Properties prop = new Properties();
+			try {
+				prop.load(input);
+				String variabilidadTwitter = prop.getProperty("gestionusuario.redessociales.twitter.excludes");
+				String variabilidadFacebook= prop.getProperty("gestionusuario.redessociales.facebook.excludes");
+				if (variabilidadFacebook!=null){
+					if (!new Boolean(variabilidadFacebook)){
+						visibleFacebook=true;
+						redesSociales.add("facebook");
+					}
+				}else{
+					visibleFacebook=true;
+				}
+				if (variabilidadTwitter!=null){
+					if (!new Boolean(variabilidadTwitter)){
+						visibleTwitter=true;
+						redesSociales.add("twitter");
+					}
+				}else{
+					visibleTwitter=true;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
 		
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 		for (String redSocial:redesSociales){
@@ -437,5 +471,21 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 
 	public void setUrlFacebook(String urlFacebook) {
 		this.urlFacebook = urlFacebook;
+	}
+
+	public boolean isVisibleFacebook() {
+		return visibleFacebook;
+	}
+
+	public void setVisibleFacebook(boolean visibleFacebook) {
+		this.visibleFacebook = visibleFacebook;
+	}
+
+	public boolean isVisibleTwitter() {
+		return visibleTwitter;
+	}
+
+	public void setVisibleTwitter(boolean visibleTwitter) {
+		this.visibleTwitter = visibleTwitter;
 	}
 }

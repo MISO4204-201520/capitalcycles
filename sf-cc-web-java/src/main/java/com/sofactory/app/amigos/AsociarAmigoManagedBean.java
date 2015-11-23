@@ -1,9 +1,12 @@
 package com.sofactory.app.amigos;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -20,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.primefaces.component.commandbutton.CommandButton;
 
+import com.sofactory.app.configurador.BicicletaWizard;
 import com.sofactory.app.seguridad.UsuarioManagedBean;
 import com.sofactory.dtos.AmigoDTO;
 import com.sofactory.dtos.RespuestaAmigoDTO;
@@ -53,8 +57,28 @@ public class AsociarAmigoManagedBean implements Serializable{
 	
 	private Long codigoUsuarioAmigo;
 	
+	private boolean visible;
+	
 	@PostConstruct
 	private void iniciar(){
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream input = classLoader.getResourceAsStream("features_excludes.properties");
+		if (input!=null){
+			Properties prop = new Properties();
+			try {
+				prop.load(input);
+				String variabilidadAmigos = prop.getProperty("comunicacion.gestionamigos.excludes");
+				if (variabilidadAmigos!=null){
+					if (!new Boolean(variabilidadAmigos)){
+						visible=true;
+					}
+				}else{
+					visible=true;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		amigoDTOs = new ArrayList<AmigoDTO>();
 		String servicio=getAmigosDeUsuario+usuarioManagedBean.getUsuarioDTO().getCodigo();
 		Client client = ClientBuilder.newClient();
@@ -208,5 +232,13 @@ public class AsociarAmigoManagedBean implements Serializable{
 
 	public void setCodigoUsuarioAmigo(Long codigoUsuarioAmigo) {
 		this.codigoUsuarioAmigo = codigoUsuarioAmigo;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 }

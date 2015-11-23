@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -60,9 +61,28 @@ public class GestionarUsuarioManagedBean implements Serializable{
 	@ManagedProperty("#{imagenPerfilManagedBean}")
 	private ImagenPerfilManagedBean imagenPerfilManagedBean;
 	
+	private boolean visible;
 	
 	@PostConstruct
 	private void iniciar(){
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream input = classLoader.getResourceAsStream("features_excludes.properties");
+		if (input!=null){
+			Properties prop = new Properties();
+			try {
+				prop.load(input);
+				String variabilidadPerfil = prop.getProperty("gestionusuario.manejoperfiles.excludes");
+				if (variabilidadPerfil!=null){
+					if (!new Boolean(variabilidadPerfil)){
+						visible=true;
+					}
+				}else{
+					visible=true;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		usuarioDTO = new UsuarioDTO();
 		if (usuarioManagedBean!=null && usuarioManagedBean.getUsuarioDTO()!=null && usuarioManagedBean.getUsuarioDTO().getCodigo()!=null){
 			//Buscar Usuario
@@ -344,5 +364,13 @@ public class GestionarUsuarioManagedBean implements Serializable{
 
 	public void setImagenPerfilManagedBean(ImagenPerfilManagedBean imagenPerfilManagedBean) {
 		this.imagenPerfilManagedBean = imagenPerfilManagedBean;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 }
