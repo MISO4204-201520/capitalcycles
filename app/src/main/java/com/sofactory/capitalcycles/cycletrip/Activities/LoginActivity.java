@@ -31,6 +31,9 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import io.fabric.sdk.android.Fabric;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -80,6 +83,8 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig("4YW7sxP7IZrRDb2egJhkXKAEi", "NkFMK9Pm88YxTerXBV4Lgzndjcb0rzzszQdpXjdqp5BLsejYBL");
+        Fabric.with(this, new Twitter(authConfig));
         callbackManager = CallbackManager.Factory.create();
         preferences=getSharedPreferences(USER_PREFERENCES,Context.MODE_PRIVATE);
         isLogged = preferences.getBoolean(UserPreferences.IS_LOGGED,false);
@@ -203,14 +208,14 @@ public class LoginActivity extends Activity {
             }
         });
 
-        twtrLoginButton = (TwitterLoginButton) findViewById(R.id.login_button);
+        twtrLoginButton = (TwitterLoginButton) findViewById(R.id.login_button_twtr);
         twtrLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
                 // App code
                 Log.e("onSuccess", "--------" + result.getAccessToken());
                 Log.e("Token", "--------" + result.getAccessToken().getToken());
-                Log.e("Permision", "--------" + result.getRecentlyGrantedPermissions());
+                //Log.e("Permision", "--------" + result.getRecentlyGrantedPermissions());
                 GraphRequest request = GraphRequest.newMeRequest(
                         result.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -258,23 +263,18 @@ public class LoginActivity extends Activity {
             @Override
             public void failure(TwitterException exception) {
                 // Do something on failure
-            }
-
-            @Override
-            public void onCancel() {
-                Toast toast = Toast.makeText(getApplicationContext(), "Se cancelo", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
                 Toast toast = Toast.makeText(getApplicationContext(), exception.toString(), Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }
+
+            @Override
+            public void cancel() {
+                Toast toast = Toast.makeText(getApplicationContext(), "Se cancelo", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+
         });
 
 

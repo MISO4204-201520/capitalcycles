@@ -9,9 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.location.*;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -47,11 +45,8 @@ import com.sofactory.capitalcycles.cycletrip.Utils.Preferences.UserPreferences;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 public class MapsFragment extends Fragment {
 
@@ -136,6 +131,67 @@ public class MapsFragment extends Fragment {
                         rutaDTO.setPosiciones(posicionDTOList);
                         RouteRegisterTask mRouteRegisterTask = new RouteRegisterTask(rutaDTO,getActivity());
                         mRouteRegisterTask.execute((Void) null);
+
+                        PosicionDTO posicionInicial = posicionDTOList.get(0);
+                        PosicionDTO posicionFinal = posicionDTOList.get(posicionDTOList.size()-1);
+                        Long diferenciaMilisegundos = posicionFinal.getTiempo().getTime() - posicionInicial.getTiempo().getTime();
+                        Long dias = diferenciaMilisegundos/(1000*60*60*24);
+                        Long diferenciaSinDias = diferenciaMilisegundos - dias*(1000*60*60*24);
+                        Long horas = diferenciaSinDias/(1000*60*60);
+                        Long diferenciaSinHoras = diferenciaSinDias - horas*(1000*60*60);
+                        Long minutos = diferenciaSinHoras/(1000*60);
+                        Long diferenciaSinMinutos = diferenciaSinHoras - minutos*(1000*60);
+                        Long segundos = diferenciaSinMinutos/(1000);
+
+                        Geocoder geocoder;
+                        List<Address> addresses = new ArrayList<Address>();
+                        List<Address> addressesFinal = new ArrayList<Address>();
+                        geocoder = new Geocoder(Locale.getDefault());
+
+                        try {
+                            addresses = geocoder.getFromLocation(posicionInicial.getLatitud(), posicionInicial.getLongitud(), 1);
+                            addressesFinal = geocoder.getFromLocation(posicionFinal.getLatitud(), posicionFinal.getLongitud(), 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        String direccionInicial = addresses.get(0).getAddressLine(0);
+                        String city = addresses.get(0).getLocality();
+                        String direccionFinal = addressesFinal.get(0).getAddressLine(0);
+                        String cityFinal = addressesFinal.get(0).getLocality();
+
+                        float distancia = 0;
+                        for(int i = 1; i < posicionDTOList.size(); i++)
+                        {
+                            PosicionDTO punto1 = posicionDTOList.get(i - 1);
+                            Location loc1 = new Location("");
+                            loc1.setLatitude(punto1.getLatitud());
+                            loc1.setLongitude(punto1.getLongitud());
+
+                            PosicionDTO punto2 = posicionDTOList.get(i);
+                            Location loc2 = new Location("");
+                            loc2.setLatitude(punto2.getLatitud());
+                            loc2.setLongitude(punto2.getLongitud());
+
+                            distancia += loc1.distanceTo(loc2);
+                        }
+
+                        String mensaje = "Dirección de inicio: " + direccionInicial + ", " + city + ",\n"
+                                + "Dirección final: " + direccionFinal + ", " + cityFinal + ",\n"
+                                + "Distancia recorrida: " + String.format("%.2f", distancia) + " metros.\n";
+                        String duracionRecorrido = "Duración del recorrido: " + dias + " días, " + horas + " horas, " + minutos + " minutos, " + segundos + " segundos.";
+                        mensaje += duracionRecorrido;
+                        // Use the Builder class for convenient dialog construction
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage(mensaje)
+                                .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        // Create the AlertDialog object
+                        AlertDialog dialogResumenRecorrido = builder.create();
+                        dialogResumenRecorrido.show();
+
                         Intent intent = new Intent(getActivity(),MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
