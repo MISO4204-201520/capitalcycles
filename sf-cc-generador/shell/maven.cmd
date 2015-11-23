@@ -1,1 +1,2 @@
-@javac C:\Users\EIG7269A\Desktop\prueba\Prueba.java
+cd %2
+%1\bin\\mvn.cmd clean install

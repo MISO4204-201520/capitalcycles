@@ -73,7 +73,7 @@ public class GeneradorPropiedades {
 	private void obtenerFeaturesExcludes(){
 		for (Entry<String, Boolean> entry : features.entrySet()) {
 			if (!entry.getKey().equals("proyectobicicletas")){
-				fearuteExcludes.put(entry.getKey().replace("proyectobicicletas.", "").concat("excludes")
+				fearuteExcludes.put(entry.getKey().replace("proyectobicicletas.", "").concat(".excludes")
 						, !entry.getValue());
 			}
 		}

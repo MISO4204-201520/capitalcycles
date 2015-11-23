@@ -35,19 +35,22 @@
 						<webModule>
 							<groupId>com.sofactory</groupId>
 							<artifactId>sf-cc-fidelizacion</artifactId>
-							<excluded>false</excluded>
+							<excluded>${extension.fidelizacion.excludes}</excluded>
 						</webModule>
 						<webModule>
 							<groupId>com.sofactory</groupId>
 							<artifactId>sf-cc-mensajes</artifactId>
+							<excluded>${comunicacion.mensaje.excludes}</excluded>
 						</webModule>
 						<webModule>
 							<groupId>com.sofactory</groupId>
 							<artifactId>sf-cc-reportes</artifactId>
+							<excluded>${reportes.excludes}</excluded>
 						</webModule>
 						<webModule>
 							<groupId>com.sofactory</groupId>
 							<artifactId>sf-cc-configurador-bici</artifactId>
+							<excluded>${configuradorbicicletas.excludes}</excluded>
 						</webModule>
 					</modules>
 				</configuration>

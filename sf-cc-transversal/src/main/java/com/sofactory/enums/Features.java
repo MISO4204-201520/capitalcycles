@@ -1,4 +1,4 @@
-package src.main.java.com.sofactory.enums;
+package com.sofactory.enums;
 
 public enum Features {
 	

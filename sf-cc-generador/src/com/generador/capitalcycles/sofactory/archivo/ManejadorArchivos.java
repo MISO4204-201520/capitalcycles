@@ -36,16 +36,17 @@ public class ManejadorArchivos {
 	
 	public static void generarArchivoPropieddades
 	(Map<String,?> properties, TipoPropiedades tipo) throws IOException{
-		File archivo = new File("sf-cc-transversal/src/main/resources/",
+		File archivo = new File("..\\sf-cc-transversal\\src\\main\\resources\\",
 				tipo.name().toLowerCase()+".properties");
-		archivo.createNewFile();
+		archivo.getAbsolutePath();
 		FileWriter fw = new FileWriter(archivo);
 		BufferedWriter bw = new BufferedWriter(fw);
 		
 		for (Entry<String, ?> entry : properties.entrySet()) {
-			bw.append(entry.getKey()+(entry.getValue().toString())+"\n");
+			bw.append(entry.getKey()+"="+(entry.getValue().toString())+"\n");
 		}
 		
+		bw.flush();
 		bw.close();
 	}
 
