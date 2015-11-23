@@ -1,11 +1,11 @@
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Sillin', 'Marco','com.sofactory.entidades.Sillin');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Canguro', 'Marco','com.sofactory.entidades.Canguro');
-INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('GuardaBarroTrasero', 'Marco','com.sofactory.entidades.GuardaBarroTrasero');
+INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('GuardabarroTrasero', 'Marco','com.sofactory.entidades.GuardabarroTrasero');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Marco','com.sofactory.entidades.Marco');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Fijo', 'Suspension','com.sofactory.entidades.Fijo');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Amortiguador', 'Suspension','com.sofactory.entidades.Amortiguador');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Suspension', 'Tenedor','com.sofactory.entidades.Suspension');
-INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('GuardaBarroDelantero', 'Tenedor','com.sofactory.entidades.GuardaBarroDelantero');
+INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('GuardabarroDelantero', 'Tenedor','com.sofactory.entidades.GuardabarroDelantero');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Tenedor','com.sofactory.entidades.Tenedor');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Manubrio','com.sofactory.entidades.Manubrio');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Disco', 'Freno','com.sofactory.entidades.Disco');
@@ -21,7 +21,7 @@ INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('CadenaAntirobo', 'Accesorios','com.sofactory.entidades.CadenaAntirobo');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Parrilla', 'Accesorios','com.sofactory.entidades.Parrilla');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`, `NOMBRE_PADRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Canasta', 'Accesorios','com.sofactory.entidades.Canasta');
-INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Accesorios','com.sofactory.entidades.Accesorios');
+INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Accesorios','com.sofactory.entidades.Accesorio');
 INSERT INTO `capitalcycles`.`cb_listado_partes` (`NOMBRE_FEATURE`,`NOMBRE_CLASE_PARTE`) VALUES ('Traccion','com.sofactory.entidades.Traccion');
 
 INSERT INTO `capitalcycles`.`cb_especificacion` (`COLOR`, `MARCA`, `PRECIO`) VALUES ('Azul', 'Trek', '2500');

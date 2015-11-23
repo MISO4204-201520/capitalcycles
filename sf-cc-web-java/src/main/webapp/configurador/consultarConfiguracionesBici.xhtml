@@ -40,27 +40,33 @@
 				</h:form>
 				
 				<h:form id="formVer">
-					<p:dialog header="Mi Configuracion" widgetVar="widgetConfiguracion" modal="true" height="400" width="650" showEffect="fade" resizable="false" closable="false">
+					<p:dialog header="Mi Configuracion" widgetVar="widgetConfiguracion" modal="true" height="450" width="650" showEffect="fade" resizable="false" closable="false">
 						<br /><br />
-						<p:carousel value="#{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.partes}" headerText="#{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.nombre}" var="parte" itemStyle="text-align:center" responsive="true">
-					        <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
-						       	<h:outputText value="Parte" />
-					            <h:outputText value="#{parte.nombre}" />
-					 
-					            <h:outputText value="Marca" />
-					            <h:outputText value="#{parte.marca}" />
-					 
-					            <h:outputText value="Color" />
-					            <h:outputText value="#{parte.color}"/>
-					 
-					            <h:outputText value="Precio" />
-					            <h:outputText value="$#{parte.precio}" />
-					        </p:panelGrid>
-					 
-					        <f:facet name="footer">
-					                Total Partes: #{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.partes.size()}.
-					        </f:facet>
-					    </p:carousel>
+						 <p:dataGrid var="parte" value="#{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.partes}" columns="3" layout="grid"
+								        rows="6" paginator="true" id="bicicletas"
+								        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								        >
+								 
+								        <f:facet name="header">
+								            #{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.nombre}
+								        </f:facet>
+										<p:panel>
+											<p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+										       	<h:outputText value="Parte" />
+									            <h:outputText value="#{parte.nombre}" />
+									 
+									            <h:outputText value="Marca" />
+									            <h:outputText value="#{parte.marca}" />
+									 
+									            <h:outputText value="Color" />
+									            <h:outputText value="#{parte.color}"/>
+									 
+									            <h:outputText value="Precio" />
+									            <h:outputText value="$#{parte.precio}" />
+									        </p:panelGrid>
+								        </p:panel>
+						</p:dataGrid>
+						
 					    <br /><br />
 						<center>
 	                        <p:commandButton value="Cancelar" oncomplete="PF('widgetConfiguracion').hide();">

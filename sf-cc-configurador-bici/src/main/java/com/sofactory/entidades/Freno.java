@@ -1,8 +1,10 @@
 package com.sofactory.entidades;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-@MappedSuperclass
+@Entity
+@DiscriminatorValue("FRENO")
 public class Freno extends Parte{
 
 }

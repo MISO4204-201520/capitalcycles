@@ -7,164 +7,47 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 	<h:body>
 		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
 			<ui:define name="contenido">
-				
-				<h:form id="formVerMensajes">
+				<h:form id="formConfigurador">
 					<p:messages id="mensaje" showDetail="true" autoUpdate="true" globalOnly="true" style="text-align:left;" />
-
-ffffffff
-
-    <p:growl id="growl" sticky="true" showDetail="true"/>
- 
-    <p:wizard flowListener="#{userWizard.onFlowProcess}">
- 
- 		<p:tab id="marco" title="Marco"> 
-	 		<p:panel header="Marco Details">
-                <p:messages />
-    
-                <h:graphicImage value="/resources/imagenes/marco.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.marco}">
- 				  	<f:selectItem itemValue="Marco1" itemLabel="Marco 1 - Pinarello" />
-				   	<f:selectItem itemValue="Marco2" itemLabel="Marco 2 - GT" />
-				   	<f:selectItem itemValue="Marco3" itemLabel="Marco 3 - Carrera" />
-				</h:selectOneRadio>                
-                
-    	    </p:panel>
- 		</p:tab>
- 
-        <p:tab id="tenedor" title="Tenedor">
-            <p:panel header="Tenedor Details">
-                <p:messages />
-
-                <h:graphicImage value="/resources/imagenes/tenedor.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.tenedor}">
- 				  	<f:selectItem itemValue="Tenedor1" itemLabel="Tenedor 1 - " />
-				   	<f:selectItem itemValue="Tenedor2" itemLabel="Tenedor 2 - " />
-				   	<f:selectItem itemValue="Tenedor3" itemLabel="Tenedor 3 - " />
-				</h:selectOneRadio>                
-
-            </p:panel>
-        </p:tab>
-
-		<p:tab id="manubrio" title="Manubrio">
-            <p:panel header="Manubrio Information">
-                <p:messages />
-
-				<h:graphicImage value="/resources/imagenes/manubrio.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.manubrio}">
- 				  	<f:selectItem itemValue="Manubrio1" itemLabel="Manubrio 1 - " />
-				   	<f:selectItem itemValue="Manubrio2" itemLabel="Manubrio 2 - " />
-				   	<f:selectItem itemValue="Manubrio3" itemLabel="Manubrio 3 - " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
- 
-  		<p:tab id="freno" title="Freno">
-            <p:panel header="Frenos Information">
-                <p:messages />
-
-				<h:graphicImage value="/resources/imagenes/freno.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.freno}">
- 				  	<f:selectItem itemValue="frenos1" itemLabel="Frenos 1 - " />
-				   	<f:selectItem itemValue="frenos2" itemLabel="Frenos 2 - " />
-				   	<f:selectItem itemValue="frenos3" itemLabel="Frenos 3 - " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
- 
- 		<p:tab id="llanta" title="Llantas">
-            <p:panel header="Llantas Information">
-                <p:messages />
-
-				<h:graphicImage value="/resources/imagenes/llanta.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.llanta}">
- 				  	<f:selectItem itemValue="llantas1" itemLabel="Llantas 1 - " />
-				   	<f:selectItem itemValue="llantas2" itemLabel="Llantas 2 - " />
-				   	<f:selectItem itemValue="llantas3" itemLabel="Llantas 3 - " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
- 		
- 		<p:tab id="traccion" title="Traccion">
-            <p:panel header="Traccion Information">
-                <p:messages />
-
-				<h:graphicImage value="/resources/imagenes/traccion.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.traccion}">
- 				  	<f:selectItem itemValue="traccion1" itemLabel="Plato Piñon 1 - " />
-				   	<f:selectItem itemValue="traccion2" itemLabel="Cambios -	 " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
- 				
- 		<p:tab id="pedal" title="Pedal">
-            <p:panel header="Pedal Information">
-                <p:messages />
-
-				<h:graphicImage value="/resources/imagenes/pedal.jpg" width="200" height="171" />
-                <h:selectOneRadio value="#{bicicletaWizard.bicicleta.cadena}">
- 				  	<f:selectItem itemValue="pedal" itemLabel="Pedal 1 - " />
-				   	<f:selectItem itemValue="pedal2" itemLabel="Pedal 2 - " />
-				   	<f:selectItem itemValue="pedal3" itemLabel="Pedal 3 - " />
-				</h:selectOneRadio>
-
-            </p:panel>
-        </p:tab>
-        
-
- 
-        <p:tab id="confirm" title="Confirmation">
-            <p:panel header="Confirmation">
-                <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
-                    <h:panelGrid columns="2" columnClasses="label, value"> 
-                  
-                        <h:outputText value="Marco: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.marco}" styleClass="outputLabel"/>
- 
-                        <h:outputText value="Tenedor: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.tenedor}" styleClass="outputLabel"/>
-                    </h:panelGrid>
- 
-                    <h:panelGrid columns="2" columnClasses="label, value">
- 
-                        <h:outputText value="Llanta: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.llanta}" styleClass="outputLabel"/>
- 
-                        <h:outputText value="Freno: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.freno}" styleClass="outputLabel"/>
-                    </h:panelGrid>
- 
-                    <h:panelGrid columns="2" columnClasses="label, value">
-                        <h:outputText value="Cadena: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.cadena}" styleClass="outputLabel"/>
-  
-                        <h:outputText value="Cambios: " />
-                        <h:outputText value="#{bicicletaWizard.bicicleta.cambio}" styleClass="outputLabel"/>
- 
-                        <h:outputText />
-                        <h:outputText />
-                    </h:panelGrid>
-                </h:panelGrid>
- 
-                <p:commandButton value="Submit" actionListener="#{bicicletaWizard.save}" update="growl" process="@this"/>
-            </p:panel>
-        </p:tab>
-    </p:wizard>
-
-
-ffffff
-					
-				</h:form>
-				
-				
-   		</ui:define>				
+					<p:panel header="Configurador de Bicicleta">
+						<center>
+							<h:panelGrid columns="4">
+								<h:outputText value="Nombre Configuracion"/>
+								<h:outputText value="*" styleClass="requerido"/>
+								<p:inputText id="nombre" value="#{bicicletaWizard.nombreConfiguracion}" required="true" maxlength="100" style="width:200px;">
+	 							</p:inputText>
+	 							<p:message  for="nombre"/>
+							</h:panelGrid>
+						</center>
+						<br/>
+						<p:accordionPanel id="accordion" style="width:600px;margin: 0 auto;">
+							<c:forEach items="#{bicicletaWizard.listadoPartesDTOs}" var="lp">
+								<p:tab title="#{lp.nombreFeauture}">
+						            <h:panelGrid columns="3" cellpadding="10">
+						            	<p:spacer />
+						                <p:selectOneRadio id="radio#{lp.nombreFeauture}" value="#{lp.especificacionSeleccionada}" layout="grid" columns="1" required="true">
+								            <f:selectItems value="#{lp.especificacionesSI}"/>
+								        </p:selectOneRadio>
+								        <p:message for="radio#{lp.nombreFeauture}"/>
+						            </h:panelGrid>
+						        </p:tab>
+							</c:forEach>
+					    </p:accordionPanel>
+					    <br/>
+					    <p:panel>
+							<h:panelGroup layout="block" styleClass="estiloDiv">
+								<p:commandButton value="Guardar Configuracion" action="#{bicicletaWizard.guardar}" update="@form" ajax="true"/>
+								<p:commandButton value="Cancelar" action="paginaBlanco?faces-redirect=true" immediate="true"/>
+							</h:panelGroup>
+						</p:panel>
+				    </p:panel>
+				</h:form>				
+   			</ui:define>				
 		</ui:composition>	
 	</h:body>
 </html>
