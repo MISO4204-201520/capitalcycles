@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="../administracion/plantillas/plantilla.xhtml">
+			<ui:define name="contenido">
+				<h:form id="formConfBici">
+					<p:panel style="text-align:center;">
+						<h:panelGrid columns="1" style="width:100%;text-align:center;">
+							<p:dataTable id="tablaBicicletas" value="#{consultarConfiguradorBiciManagedBean.bicicletaDTOs}" var="bicicleta" style="width:50%;margin: 0 auto;"
+								 paginator="true" 
+								 paginatorAlwaysVisible="false"
+								 rows="10"
+								 currentPageReportTemplate="({startRecord}-{endRecord}) de {totalRecords} registros encontrados"
+								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								 paginatorPosition="bottom"
+								 emptyMessage="No hay registros para mostrar"
+								 widgetVar="widgetTablaBicicletas"
+								 >
+								<p:column>
+				    				<f:facet name="header">Nombre Configuracion Bicicleta</f:facet>
+				    				<h:outputText value="#{bicicleta.nombre}"/>
+				    			</p:column>
+				    			
+				    			<p:column style="width:24px">
+						            <p:commandLink  update=":formVer" oncomplete="PF('widgetConfiguracion').show()" title="Ver configuracion" styleClass="ui-icon ui-icon-search">
+						            	<f:setPropertyActionListener value="#{bicicleta}" target="#{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada}" />
+						            </p:commandLink>
+						        </p:column>
+				    		</p:dataTable>
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+				
+				<h:form id="formVer">
+					<p:dialog header="Mi Configuracion" widgetVar="widgetConfiguracion" modal="true" height="400" width="650" showEffect="fade" resizable="false" closable="false">
+						<br /><br />
+						<p:carousel value="#{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.partes}" headerText="#{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.nombre}" var="parte" itemStyle="text-align:center" responsive="true">
+					        <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+						       	<h:outputText value="Parte" />
+					            <h:outputText value="#{parte.nombre}" />
+					 
+					            <h:outputText value="Marca" />
+					            <h:outputText value="#{parte.marca}" />
+					 
+					            <h:outputText value="Color" />
+					            <h:outputText value="#{parte.color}"/>
+					 
+					            <h:outputText value="Precio" />
+					            <h:outputText value="$#{parte.precio}" />
+					        </p:panelGrid>
+					 
+					        <f:facet name="footer">
+					                Total Partes: #{consultarConfiguradorBiciManagedBean.bicicletaSeleccionada.partes.size()}.
+					        </f:facet>
+					    </p:carousel>
+					    <br /><br />
+						<center>
+	                        <p:commandButton value="Cancelar" oncomplete="PF('widgetConfiguracion').hide();">
+                            </p:commandButton>
+                        </center>
+					</p:dialog>
+				</h:form>
+    		</ui:define>				
+		</ui:composition>	
+	</h:body>
+</html>

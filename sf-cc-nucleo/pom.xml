@@ -74,7 +74,7 @@
 										file="${project.src}\sf-cc-nucleo\src/main/resources/standalone.xml" />
 								</copy>
 								<replace file="${server.dir}\standalone\configuration\standalone.xml" 
-									replacefilterfile="${project.src}/sf-cc-transversal/src/main/resources/user-conf.properties"/>
+									replacefilterfile="${project.src}/sf-cc-transversal/src/main/resources/user_conf.properties"/>
 							</target>
 						</configuration>
 					</execution>
