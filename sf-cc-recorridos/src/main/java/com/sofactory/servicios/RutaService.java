@@ -75,17 +75,19 @@ public class RutaService {
 			respuesta.setMensaje("OK");
 			
 			// Inicio Otorga Puntos por Fidelizacion
+			try{
+				RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+				UsuarioDTO usuarioDTO = new UsuarioDTO();
+				usuarioDTO.setCodigo(new Long(codigoUsuario));
+				registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+				registrarPuntosDTO.setServicio("encontrarMejor");
 			
-			RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-			UsuarioDTO usuarioDTO = new UsuarioDTO();
-			usuarioDTO.setCodigo(new Long(codigoUsuario));
-			registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-			registrarPuntosDTO.setServicio("encontrarMejor");
-		
-			Client client = ClientBuilder.newClient();
-			WebTarget targetMensaje = client.target(servicioRegistrarServicio);
-			RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-			
+				Client client = ClientBuilder.newClient();
+				WebTarget targetMensaje = client.target(servicioRegistrarServicio);
+				RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+			}catch(Exception exc){
+				System.out.println("Fidelizacion deshabilidado");
+			}
 			// Fin Otorga Puntos por Fidelizacion
 		} catch (Exception e) {
 			e.printStackTrace();

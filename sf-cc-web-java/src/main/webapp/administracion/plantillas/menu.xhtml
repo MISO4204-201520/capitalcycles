@@ -18,17 +18,17 @@
 			</p:submenu>
 			<p:submenu label="Recorridos">
 				<p:menuitem value="Mejor Ruta" url="../recorridos/mejorRuta.xhtml" />
-				<p:menuitem value="Sitios" url="../sitio/sitios.xhtml" />
-				<p:menuitem value="Alquiler" url="../alquiler/alquiler.xhtml" />
+				<p:menuitem value="Sitios" url="../sitio/sitios.xhtml" rendered="#{autenticarUsuarioManagedBean.visibleMenuSitios}"/>
+				<p:menuitem value="Alquiler" url="../alquiler/alquiler.xhtml" rendered="#{autenticarUsuarioManagedBean.visibleMenuAlquileres}"/>
 			</p:submenu>
-			<p:submenu label="Fidelizacion">
+			<p:submenu label="Fidelizacion" rendered="#{autenticarUsuarioManagedBean.visibleMenuFidelizacion}">
 				<p:menuitem value="Redimir puntos" url="../fidelizacion/redimir.xhtml" />
 				<p:menuitem value="Historia transacciones" url="../fidelizacion/historial.xhtml" />
 			</p:submenu>
 			<p:submenu label="Mensajes">
 				<p:menuitem value="Ver Mensajes" url="../mensaje/verMensajes.xhtml" />
 			</p:submenu>
-			<p:submenu label="Mi Configurador Bicis">
+			<p:submenu label="Mi Configurador Bicis" rendered="#{autenticarUsuarioManagedBean.visibleMenuBicicletas}">
 				<p:menuitem value="Configurar Bici" url="../configurador/configurador.xhtml" />
 				<p:menuitem value="Mis Configuraciones" url="../configurador/consultarConfiguracionesBici.xhtml" />
 			</p:submenu>

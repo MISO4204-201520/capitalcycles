@@ -23,7 +23,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.primefaces.component.commandbutton.CommandButton;
 
-import com.sofactory.app.configurador.BicicletaWizard;
 import com.sofactory.app.seguridad.UsuarioManagedBean;
 import com.sofactory.dtos.AmigoDTO;
 import com.sofactory.dtos.RespuestaAmigoDTO;

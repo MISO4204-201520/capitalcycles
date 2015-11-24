@@ -160,15 +160,17 @@ public class AlquilerService {
 				alquilerBeanLocal.insertarOActualizar(alquiler);
 				
 				// Inicio Otorga Puntos por Fidelizacion
+				try{
+					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+					registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+					registrarPuntosDTO.setServicio("alquilerBicicleta");
 				
-				RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-				registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-				registrarPuntosDTO.setServicio("alquilerBicicleta");
-			
-				client = ClientBuilder.newClient();
-				targetMensaje = client.target(servicioRegistrarServicio);
-				RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-				
+					client = ClientBuilder.newClient();
+					targetMensaje = client.target(servicioRegistrarServicio);
+					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+				}catch(Exception exc){
+					System.out.println("Fidelizacion deshabilidado");
+				}
 				// Fin Otorga Puntos por Fidelizacion
 			} catch (Exception e) {
 				respuestaAlquilerDTO = new RespuestaAlquilerDTO();

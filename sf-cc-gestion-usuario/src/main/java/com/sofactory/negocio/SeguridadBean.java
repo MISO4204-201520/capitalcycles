@@ -89,17 +89,19 @@ public class SeguridadBean  extends GenericoBean<Usuario> implements SeguridadBe
 						respuestaDTO.setCorreo(((Persona)usuario).getCorreo());
 					}
 					// Inicio Otorga Puntos por Fidelizacion
+					try{
+						RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+						UsuarioDTO usuarioDTO = new UsuarioDTO();
+						usuarioDTO.setCodigo(esValidoUsuarioDTO.getCodigo());
+						registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+						registrarPuntosDTO.setServicio("autenticacionUsuario");
 					
-					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-					UsuarioDTO usuarioDTO = new UsuarioDTO();
-					usuarioDTO.setCodigo(esValidoUsuarioDTO.getCodigo());
-					registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-					registrarPuntosDTO.setServicio("autenticacionUsuario");
-				
-					Client client = ClientBuilder.newClient();
-					WebTarget targetMensaje = client.target(servicioRegistrarServicio);
-					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-					
+						Client client = ClientBuilder.newClient();
+						WebTarget targetMensaje = client.target(servicioRegistrarServicio);
+						RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+					}catch(Exception exc){
+						System.out.println("Fidelizacion deshabilidado");
+					}
 					// Fin Otorga Puntos por Fidelizacion
 				}else{
 					respuestaDTO.setCodigo(2);

@@ -1,8 +1,11 @@
 package com.sofactory.app.mensaje;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -52,9 +55,29 @@ public class VerMensajesManagedBean implements Serializable{
 	private String mensajeAEnviar;
 	private boolean visibleEM = false;
 	private Integer opcion;
+	private boolean visibleNotificacion;
 	
 	@PostConstruct
 	private void iniciar(){
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream input = classLoader.getResourceAsStream("features_excludes.properties");
+			if (input!=null){
+				Properties prop = new Properties();
+				prop.load(input);
+				String variabilidadNotificacion = prop.getProperty("comunicacion.notificaciones.excludes");
+				if (variabilidadNotificacion!=null){
+					if (!new Boolean(variabilidadNotificacion)){
+						visibleNotificacion=true;
+					}
+				}else{
+					visibleNotificacion=true;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		mensajesRecibidos = new ArrayList<MensajeDTO>();
 		mensajesEnviados = new ArrayList<MensajeDTO>();
 		if (usuarioManagedBean!=null && usuarioManagedBean.getUsuarioDTO()!=null && usuarioManagedBean.getUsuarioDTO().getCodigo()!=null){
@@ -356,5 +379,13 @@ public class VerMensajesManagedBean implements Serializable{
 
 	public void setOpcion(Integer opcion) {
 		this.opcion = opcion;
+	}
+
+	public boolean isVisibleNotificacion() {
+		return visibleNotificacion;
+	}
+
+	public void setVisibleNotificacion(boolean visibleNotificacion) {
+		this.visibleNotificacion = visibleNotificacion;
 	}
 }

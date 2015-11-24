@@ -7,10 +7,18 @@ import java.io.InputStreamReader;
 public class EjecutorComandos {
 	public static void ejecutarMaven(String rutaMaven, String rutaProyecto){
 		try {
-			Process p = Runtime.getRuntime().exec("shell/maven.cmd "+rutaMaven+" "+rutaProyecto+"\\sf-cc-raiz"); 
+			Process p = Runtime.getRuntime().exec("shell/maven.cmd "+rutaMaven+" "+rutaProyecto); 
 			BufferedReader in = new BufferedReader(  
 					new InputStreamReader(p.getInputStream()));  
 			String line = null;
+			while ((line = in.readLine()) != null) {  
+				System.out.println(line);
+			} 
+			
+			p = Runtime.getRuntime().exec("shell/mavenWeb.cmd "+rutaMaven+" "+rutaProyecto); 
+			in = new BufferedReader(  
+					new InputStreamReader(p.getInputStream()));  
+			line = null;
 			while ((line = in.readLine()) != null) {  
 				System.out.println(line);
 			} 

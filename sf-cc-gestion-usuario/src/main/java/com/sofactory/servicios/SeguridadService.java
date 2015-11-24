@@ -188,13 +188,18 @@ public class SeguridadService {
 			}
 			usuarioSingletonBean.getUsuariosDTO().put(uDTO.getCodigo(), uDTO);
 			
+			
 			// Inicio Otorga Puntos por Fidelizacion
-			RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-			registrarPuntosDTO.setCodigoUsuario(respuestaSeguridadDTO.getCodigoUsuario());
-			registrarPuntosDTO.setServicio("autenticacionUsuario");
-			Client client = ClientBuilder.newClient();
-			WebTarget targetMensaje = client.target(servicioRegistrarServicio);
-			targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+			try{
+				RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+				registrarPuntosDTO.setCodigoUsuario(respuestaSeguridadDTO.getCodigoUsuario());
+				registrarPuntosDTO.setServicio("autenticacionUsuario");
+				Client client = ClientBuilder.newClient();
+				WebTarget targetMensaje = client.target(servicioRegistrarServicio);
+				targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);
+			}catch(Exception exc){
+				System.out.println("Fidelizacion deshabilidado");
+			}
 			// Fin Otorga Puntos por Fidelizacion
 		}
 		

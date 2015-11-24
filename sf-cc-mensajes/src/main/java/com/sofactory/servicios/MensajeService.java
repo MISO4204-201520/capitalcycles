@@ -144,15 +144,17 @@ public class MensajeService {
 						respuestaMensajeDTO.getMensajes().add(mensajeDTO);
 						
 						// Inicio Otorga Puntos por Fidelizacion
+						try{
+							RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+							registrarPuntosDTO.setCodigoUsuario(Long.toString(codUsuario));
+							registrarPuntosDTO.setServicio("encontrarMensajePorId");
 						
-						RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-						registrarPuntosDTO.setCodigoUsuario(Long.toString(codUsuario));
-						registrarPuntosDTO.setServicio("encontrarMensajePorId");
-					
-						client = ClientBuilder.newClient();
-						targetMensaje = client.target(servicioRegistrarServicio);
-						RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-						
+							client = ClientBuilder.newClient();
+							targetMensaje = client.target(servicioRegistrarServicio);
+							RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+						}catch(Exception exc){
+							System.out.println("Fidelizacion deshabilidado");
+						}
 						// Fin Otorga Puntos por Fidelizacion
 						
 					}else{
@@ -208,15 +210,17 @@ public class MensajeService {
 				if (mensajes.size()>0){
 	
 					// Inicio Otorga Puntos por Fidelizacion		
+					try{
+						RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+						registrarPuntosDTO.setCodigoUsuario(Long.toString(usuario));
+						registrarPuntosDTO.setServicio("mensajesEnviadosPorUsuario");
 					
-					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-					registrarPuntosDTO.setCodigoUsuario(Long.toString(usuario));
-					registrarPuntosDTO.setServicio("mensajesEnviadosPorUsuario");
-				
-					client = ClientBuilder.newClient();
-					targetMensaje = client.target(servicioRegistrarServicio);
-					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);			
-				
+						client = ClientBuilder.newClient();
+						targetMensaje = client.target(servicioRegistrarServicio);
+						RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);			
+					}catch(Exception exc){
+						System.out.println("Fidelizacion deshabilidado");
+					}
 					// Fin Otorga Puntos por Fidelizacion				
 
 				}
@@ -267,15 +271,17 @@ public class MensajeService {
 				if (mensajes.size()>0){
 				
 					// Inicio Otorga Puntos por Fidelizacion		
+					try{
+						RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+						registrarPuntosDTO.setCodigoUsuario(Long.toString(usuario));
+						registrarPuntosDTO.setServicio("mensajesRecibidosPorUsuario");
 					
-					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-					registrarPuntosDTO.setCodigoUsuario(Long.toString(usuario));
-					registrarPuntosDTO.setServicio("mensajesRecibidosPorUsuario");
-				
-					client = ClientBuilder.newClient();
-					targetMensaje = client.target(servicioRegistrarServicio);
-					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);			
-				
+						client = ClientBuilder.newClient();
+						targetMensaje = client.target(servicioRegistrarServicio);
+						RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);			
+					}catch(Exception exc){
+						System.out.println("Fidelizacion deshabilidado");
+					}
 					// Fin Otorga Puntos por Fidelizacion				
 				}
 				
@@ -327,14 +333,17 @@ public class MensajeService {
 						if (resuPara!=null && resuPara.getCodigo()==0){
 							respuestaMensajeDTO = mensajeBeanLocal.enviarMensaje(resuDesde.getUsuarios().get(0), resuPara.getUsuarios().get(0), mDTO.getTexto());
 							// Inicio Otorga Puntos por Fidelizacion
-							RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-							registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-							registrarPuntosDTO.setServicio("crearNuevoMensaje");
-						
-							client = ClientBuilder.newClient();
-							targetMensaje = client.target(servicioRegistrarServicio);
-							RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+							try{
+								RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+								registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+								registrarPuntosDTO.setServicio("crearNuevoMensaje");
 							
+								client = ClientBuilder.newClient();
+								targetMensaje = client.target(servicioRegistrarServicio);
+								RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+							}catch(Exception exc){
+								System.out.println("Fidelizacion deshabilidado");
+							}
 							// Fin Otorga Puntos por Fidelizacion
 						}else{			
 							respuestaMensajeDTO.setCodigo(3);
@@ -412,15 +421,17 @@ public class MensajeService {
 							mensajeBeanLocal.insertarOActualizar(mensajeActualizar);
 							
 							// Inicio Otorga Puntos por Fidelizacion
+							try{
+								RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+								registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+								registrarPuntosDTO.setServicio("actualizarMensaje");
 							
-							RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-							registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-							registrarPuntosDTO.setServicio("actualizarMensaje");
-						
-							client = ClientBuilder.newClient();
-							targetMensaje = client.target(servicioRegistrarServicio);
-							RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-							
+								client = ClientBuilder.newClient();
+								targetMensaje = client.target(servicioRegistrarServicio);
+								RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+							}catch(Exception exc){
+								System.out.println("Fidelizacion deshabilidado");
+							}
 							// Fin Otorga Puntos por Fidelizacion
 							
 						}else{
@@ -538,15 +549,17 @@ public class MensajeService {
 								respuestaMensajeDTO = notificacionBeanLocal.enviarMensaje(resuDesde.getUsuarios().get(0),resuPara.getUsuarios().get(0),mDTO.getTexto());
 								
 								// Inicio Otorga Puntos por Fidelizacion
+								try{
+									RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+									registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+									registrarPuntosDTO.setServicio("enviarCorreo");
 								
-								RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-								registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-								registrarPuntosDTO.setServicio("enviarCorreo");
-							
-								client = ClientBuilder.newClient();
-								targetMensaje = client.target(servicioRegistrarServicio);
-								RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-								
+									client = ClientBuilder.newClient();
+									targetMensaje = client.target(servicioRegistrarServicio);
+									RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+								}catch(Exception exc){
+									System.out.println("Fidelizacion deshabilidado");
+								}
 								// Fin Otorga Puntos por Fidelizacion
 							}else{
 								respuestaMensajeDTO.setCodigo(3);
@@ -636,15 +649,17 @@ public class MensajeService {
 								amigoBeanLocal.insertar(amigo);
 	
 								// Inicio Otorga Puntos por Fidelizacion
+								try{
+									RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+									registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
+									registrarPuntosDTO.setServicio("crearAmigo");
 								
-								RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-								registrarPuntosDTO.setCodigoUsuario(usuarioDTO.getCodigo().toString());
-								registrarPuntosDTO.setServicio("crearAmigo");
-							
-								client = ClientBuilder.newClient();
-								targetMensaje = client.target(servicioRegistrarServicio);
-								RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
-								
+									client = ClientBuilder.newClient();
+									targetMensaje = client.target(servicioRegistrarServicio);
+									RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);		
+								}catch(Exception exc){
+									System.out.println("Fidelizacion deshabilidado");
+								}
 								// Fin Otorga Puntos por Fidelizacion
 							
 							}else{			

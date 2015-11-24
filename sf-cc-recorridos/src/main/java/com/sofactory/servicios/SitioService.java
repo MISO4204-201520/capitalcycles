@@ -39,13 +39,17 @@ public class SitioService {
 		
 			if (respuestaSitioDTO!=null && respuestaSitioDTO.getSitios()!=null && !respuestaSitioDTO.getSitios().isEmpty()){
 				// Inicio Otorga Puntos por Fidelizacion
-				RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
-				registrarPuntosDTO.setCodigoUsuario(codigoUsuario);
-				registrarPuntosDTO.setServicio("encontrarSitios");
-			
-				Client client = ClientBuilder.newClient();
-				WebTarget targetMensaje = client.target(servicioRegistrarServicio);
-				RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);
+				try{
+					RegistrarPuntosDTO registrarPuntosDTO = new RegistrarPuntosDTO();
+					registrarPuntosDTO.setCodigoUsuario(codigoUsuario);
+					registrarPuntosDTO.setServicio("encontrarSitios");
+				
+					Client client = ClientBuilder.newClient();
+					WebTarget targetMensaje = client.target(servicioRegistrarServicio);
+					RespuestaDTO resuDTO = targetMensaje.request("application/json").post(Entity.entity(registrarPuntosDTO, MediaType.APPLICATION_JSON),RespuestaDTO.class);
+				}catch(Exception exc){
+					System.out.println("Fidelizacion deshabilidado");
+				}
 				// Fin Otorga Puntos por Fidelizacion
 			}
 			return respuestaSitioDTO;

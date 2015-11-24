@@ -74,6 +74,10 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 
 	private boolean visibleFacebook;
 	private boolean visibleTwitter;
+	private boolean visibleMenuBicicletas;
+	private boolean visibleMenuFidelizacion;
+	private boolean visibleMenuSitios;
+	private boolean visibleMenuAlquileres;
 	
 	@PostConstruct
 	private void iniciar(){
@@ -88,6 +92,10 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 				prop.load(input);
 				String variabilidadTwitter = prop.getProperty("gestionusuario.redessociales.twitter.excludes");
 				String variabilidadFacebook= prop.getProperty("gestionusuario.redessociales.facebook.excludes");
+				String variabilidadConfigurador= prop.getProperty("configuradorbicicletas.excludes");
+				String variabilidadFidelizacion= prop.getProperty("extension.fidelizacion.excludes");
+				String variabilidadSitios = prop.getProperty("recorridos.sitios.excludes");
+				String variabilidadAlquileres = prop.getProperty("recorridos.alquileres.excludes");
 				if (variabilidadFacebook!=null){
 					if (!new Boolean(variabilidadFacebook)){
 						visibleFacebook=true;
@@ -103,6 +111,38 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 					}
 				}else{
 					visibleTwitter=true;
+				}
+				
+				if (variabilidadConfigurador!=null){
+					if (!new Boolean(variabilidadConfigurador)){
+						visibleMenuBicicletas=true;
+					}
+				}else{
+					visibleMenuBicicletas=true;
+				}
+				
+				if (variabilidadFidelizacion!=null){
+					if (!new Boolean(variabilidadFidelizacion)){
+						visibleMenuFidelizacion=true;
+					}
+				}else{
+					visibleMenuFidelizacion=true;
+				}
+				
+				if (variabilidadSitios!=null){
+					if (!new Boolean(variabilidadSitios)){
+						visibleMenuSitios=true;
+					}
+				}else{
+					visibleMenuSitios=true;
+				}
+				
+				if (variabilidadAlquileres!=null){
+					if (!new Boolean(variabilidadAlquileres)){
+						visibleMenuAlquileres=true;
+					}
+				}else{
+					visibleMenuAlquileres=true;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -487,5 +527,37 @@ public class AutenticarUsuarioManagedBean implements Serializable{
 
 	public void setVisibleTwitter(boolean visibleTwitter) {
 		this.visibleTwitter = visibleTwitter;
+	}
+
+	public boolean isVisibleMenuBicicletas() {
+		return visibleMenuBicicletas;
+	}
+
+	public void setVisibleMenuBicicletas(boolean visibleMenuBicicletas) {
+		this.visibleMenuBicicletas = visibleMenuBicicletas;
+	}
+
+	public boolean isVisibleMenuFidelizacion() {
+		return visibleMenuFidelizacion;
+	}
+
+	public void setVisibleMenuFidelizacion(boolean visibleMenuFidelizacion) {
+		this.visibleMenuFidelizacion = visibleMenuFidelizacion;
+	}
+
+	public boolean isVisibleMenuSitios() {
+		return visibleMenuSitios;
+	}
+
+	public void setVisibleMenuSitios(boolean visibleMenuSitios) {
+		this.visibleMenuSitios = visibleMenuSitios;
+	}
+
+	public boolean isVisibleMenuAlquileres() {
+		return visibleMenuAlquileres;
+	}
+
+	public void setVisibleMenuAlquileres(boolean visibleMenuAlquileres) {
+		this.visibleMenuAlquileres = visibleMenuAlquileres;
 	}
 }

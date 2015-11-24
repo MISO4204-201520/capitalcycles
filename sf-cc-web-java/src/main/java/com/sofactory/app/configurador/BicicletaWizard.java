@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -48,42 +49,65 @@ public class BicicletaWizard implements Serializable {
 	
 	private String postCrearConfiguracion = "http://localhost:8080/sf-cc-configurador-bici/rest/gestionarCBService/crearConfiguracion";
 	
+	private boolean visible;
+	
 	@PostConstruct
 	private void iniciar(){
-		InputStream in = BicicletaWizard.class.getResourceAsStream(ARCHIVO_CONFIGURACION);
-		if (in!=null){
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream input = classLoader.getResourceAsStream("features_excludes.properties");
+		if (input!=null){
+			Properties prop = new Properties();
 			try {
-				List<String> partesAConfigurar = UtilidadGeneral.partes(in);
-				if (partesAConfigurar!=null && !partesAConfigurar.isEmpty()){
-					StringBuilder strPartes = new StringBuilder();
-					int cont=0;
-					for (String parte:partesAConfigurar){
-						strPartes.append(parte);
-						if (cont++<partesAConfigurar.size()-1){
-							strPartes.append(",");
-						}
+				prop.load(input);
+				String variabilidadBicicletas = prop.getProperty("configuradorbicicletas.excludes");
+				if (variabilidadBicicletas!=null){
+					if (!new Boolean(variabilidadBicicletas)){
+						visible=true;
 					}
-					Client client = ClientBuilder.newClient();
-					WebTarget messages = client.target(getEncontrarListadoPartes+strPartes.toString());
-					RespuestaBicicletaDTO respuesta = messages.request("application/json").get(RespuestaBicicletaDTO.class);
-					if (respuesta!=null){
-						if (respuesta.getCodigo()==0){
-							listadoPartesDTOs = respuesta.getListadoPartesDTOs();
-						}else{
-							FacesContext.getCurrentInstance().addMessage(null, 
-									new FacesMessage(
-											FacesMessage.SEVERITY_ERROR, 
-											null, 
-											respuesta.getMensaje()));
-						}
-					}
+				}else{
+					visible=true;
 				}
-				
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}	
+			}
+		}
+		
+		if (visible){
+			InputStream in = BicicletaWizard.class.getResourceAsStream(ARCHIVO_CONFIGURACION);
+			if (in!=null){
+				try {
+					List<String> partesAConfigurar = UtilidadGeneral.partes(in);
+					if (partesAConfigurar!=null && !partesAConfigurar.isEmpty()){
+						StringBuilder strPartes = new StringBuilder();
+						int cont=0;
+						for (String parte:partesAConfigurar){
+							strPartes.append(parte);
+							if (cont++<partesAConfigurar.size()-1){
+								strPartes.append(",");
+							}
+						}
+						Client client = ClientBuilder.newClient();
+						WebTarget messages = client.target(getEncontrarListadoPartes+strPartes.toString());
+						RespuestaBicicletaDTO respuesta = messages.request("application/json").get(RespuestaBicicletaDTO.class);
+						if (respuesta!=null){
+							if (respuesta.getCodigo()==0){
+								listadoPartesDTOs = respuesta.getListadoPartesDTOs();
+							}else{
+								FacesContext.getCurrentInstance().addMessage(null, 
+										new FacesMessage(
+												FacesMessage.SEVERITY_ERROR, 
+												null, 
+												respuesta.getMensaje()));
+							}
+						}
+					}
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}	
+			}
 		}
 	}
 
@@ -177,5 +201,13 @@ public class BicicletaWizard implements Serializable {
 
 	public void setNombreConfiguracion(String nombreConfiguracion) {
 		this.nombreConfiguracion = nombreConfiguracion;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 }
