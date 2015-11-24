@@ -11,5 +11,6 @@ public interface ReporteBeanLocal {
 	Reporte obtener(Long id);
 	
 	List<?> obtenerDatos(Reporte reporte, String codigoUsuario);
-
+	
+	List<Reporte> obtenerTodos();
 }

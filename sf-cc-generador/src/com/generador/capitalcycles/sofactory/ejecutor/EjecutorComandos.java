@@ -13,12 +13,18 @@ public class EjecutorComandos {
 			String line = null;
 			while ((line = in.readLine()) != null) {  
 				System.out.println(line);
-			} 
-			
-			p = Runtime.getRuntime().exec("shell/mavenWeb.cmd "+rutaMaven+" "+rutaProyecto); 
-			in = new BufferedReader(  
+			}
+		} catch (IOException ioe) {
+			System.out.println (ioe);
+		}
+	}
+	
+	public static void ejecutarMavenWeb(String rutaMaven, String rutaProyecto){
+		try {
+			Process p = Runtime.getRuntime().exec("shell/mavenWeb.cmd "+rutaMaven+" "+rutaProyecto); 
+			BufferedReader in = new BufferedReader(  
 					new InputStreamReader(p.getInputStream()));  
-			line = null;
+			String line = null;
 			while ((line = in.readLine()) != null) {  
 				System.out.println(line);
 			} 

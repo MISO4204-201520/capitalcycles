@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,6 +18,7 @@ import com.generador.capitalcycles.sofactory.archivo.ManejadorArchivos;
 import com.generador.capitalcycles.sofactory.archivo.ManejadorArchivos.TipoPropiedades;
 import com.generador.capitalcycles.sofactory.ejecutor.EjecutorComandos;
 import com.generador.capitalcycles.sofactory.generador.GeneradorPropiedades;
+import com.sofactory.util.PropertiesUtil;
 
 
 public class Ventana extends JFrame implements ActionListener{
@@ -61,14 +63,8 @@ public class Ventana extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
-
-	public static void main(String[] args){
-		new Ventana();
-	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if("Continuar".equals(arg0.getActionCommand())){
@@ -86,10 +82,21 @@ public class Ventana extends JFrame implements ActionListener{
 				
 				EjecutorComandos.ejecutarMaven(propiedades.get("maven.dir"),
 						propiedades.get("project.src"));
+				
+				Properties prop = PropertiesUtil.obtener("/src/main/resources/features.properties");
+				if (Boolean.parseBoolean(prop.getProperty("proyectobicicletas.frontend.web"))){
+					EjecutorComandos.ejecutarMavenWeb(propiedades.get("maven.dir"),
+						propiedades.get("project.src"));
+				}
 				EjecutorComandos.ejecutarJboss(propiedades.get("server.dir"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
+
+	public static void main(String[] args){
+		new Ventana();
+	}
+
 }

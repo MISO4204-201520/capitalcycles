@@ -76,4 +76,24 @@ public class ReporteServicio {
         exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(new FileOutputStream(archivo)));
         exporter.exportReport();
 	}
+	
+	@GET
+	@Path("todos")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ReportesDTO obtenerTodos(){
+		ReportesDTO respuesta = new ReportesDTO(0, "OK");
+		
+		List<Reporte> reportes = reporteBean.obtenerTodos();
+		
+		respuesta.setReportes(new ArrayList<Reporte>());
+		ReporteDTO dto;
+		for(Reporte reporte : reportes){
+			dto = new ReporteDTO();
+			dto.setId(reporte.getId());
+			dto.setNombre(reporte.getNombre());
+			respuesta.getReportes().add(dto);
+		}
+		
+		return respuesta;
+	}
 }
