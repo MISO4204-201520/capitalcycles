@@ -6,6 +6,8 @@ public class ReporteDTO extends RequestDTO{
 	
 	private String reporte;
 
+	private String nombre;
+	
 	public Long getId() {
 		return id;
 	}
@@ -20,5 +22,13 @@ public class ReporteDTO extends RequestDTO{
 
 	public void setReporte(String reporte) {
 		this.reporte = reporte;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 }

@@ -99,7 +99,7 @@
 								<h:outputText value="#{gestionarUsuarioManagedBean.errorMensaje}" styleClass="requerido" rendered="#{gestionarUsuarioManagedBean.verError}"/>
 								<br />
 								<p:commandButton value="Empieza"
-									action="#{gestionarUsuarioManagedBean.crear}" update="formRegistrarUsuario" />
+									action="#{gestionarUsuarioManagedBean.crear}" update="formRegistrarUsuario :formAutenticar" />
 							</h:panelGroup>
 						</p:panel>
 					</h:form>

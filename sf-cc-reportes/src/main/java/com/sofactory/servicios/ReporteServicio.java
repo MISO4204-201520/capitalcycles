@@ -3,6 +3,7 @@ package com.sofactory.servicios;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import com.sofactory.dtos.ReporteDTO;
+import com.sofactory.dtos.ReportesDTO;
 import com.sofactory.entidades.Reporte;
 import com.sofactory.negocio.interfaces.ReporteBeanLocal;
 import com.sofactory.reportes.HibernateQueryResultDataSource;
@@ -85,13 +88,13 @@ public class ReporteServicio {
 		
 		List<Reporte> reportes = reporteBean.obtenerTodos();
 		
-		respuesta.setReportes(new ArrayList<Reporte>());
+		respuesta.setReporte(new ArrayList<ReporteDTO>());
 		ReporteDTO dto;
 		for(Reporte reporte : reportes){
 			dto = new ReporteDTO();
 			dto.setId(reporte.getId());
 			dto.setNombre(reporte.getNombre());
-			respuesta.getReportes().add(dto);
+			respuesta.getReporte().add(dto);
 		}
 		
 		return respuesta;

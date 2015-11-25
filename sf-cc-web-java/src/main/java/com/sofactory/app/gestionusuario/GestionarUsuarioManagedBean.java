@@ -143,6 +143,7 @@ public class GestionarUsuarioManagedBean implements Serializable{
 		errorMensaje = "";
 		verError = false;
 		String reglaNavegacion = null;
+		usuarioManagedBean.setLogged(false);
 		if (usuarioDTO.getCorreo()==null || (usuarioDTO.getCorreo()!=null && 
 				UtilidadCorreo.validarFormatoCorreo(usuarioDTO.getCorreo().trim()))){
 			if (usuarioDTO.getCredencialNueva().equals(usuarioDTO.getConfirmacionCredencialNueva())){
@@ -192,6 +193,7 @@ public class GestionarUsuarioManagedBean implements Serializable{
 									usuarioAutenticado.setCorreo(respuestaAut.getCorreo());
 									usuarioAutenticado.setCredencial(respuestaAut.getCredencial());
 									usuarioManagedBean.setUsuarioDTO(usuarioAutenticado);
+									usuarioManagedBean.setLogged(true);
 									FacesContext context = FacesContext.getCurrentInstance();
 									context.getExternalContext().getFlash().setKeepMessages(true);
 									usuarioAutenticado.setFoto(respuestaAut.getFoto());
